@@ -1,0 +1,73 @@
+﻿<Window x:Class="KalkulatorPrzekroju.WindowFactors"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KalkulatorPrzekroju"
+        mc:Ignorable="d"
+        Title="Factors" Height="540" Width="600" WindowStyle="ToolWindow" MinWidth="600" MaxWidth="600" MaxHeight="540" MinHeight="540">
+    <Grid Margin="0">
+        <GroupBox x:Name="groupBoxSLS_Crack" Header="Factors for crack control according to EN 1992-1-1 p. 7.3.4." VerticalAlignment="Top" Height="115" Margin="0,180,-0.4,0">
+            <Grid Margin="0">
+                <Label x:Name="label6_Copy" Content="Coefficient which takes account of the bond properties of the bonded reinforcement: k =" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="textBox_crack_k1" HorizontalAlignment="Left" Height="23" Margin="490,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_crack_k1_LostFocus" TabIndex="7"/>
+                <Label x:Name="label5_Copy2" Content="1" HorizontalAlignment="Left" Margin="468,17,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <Label x:Name="label6_Copy1" Content="Coefficient which takes account of the distribution of strain: k = (automatically calculated)" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label5_Copy3" Content="2" HorizontalAlignment="Left" Margin="333,43,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <Label x:Name="label6_Copy2" Content="Coefficient k =" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label5_Copy4" Content="3" HorizontalAlignment="Left" Margin="75,69,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_crack_k3" HorizontalAlignment="Left" Height="23" Margin="98,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_crack_k3_LostFocus" TabIndex="8"/>
+                <Label x:Name="label6_Copy3" Content="Coefficient k =" HorizontalAlignment="Left" Margin="200,62,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label5_Copy5" Content="4" HorizontalAlignment="Left" Margin="266,69,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_crack_k4" HorizontalAlignment="Left" Height="23" Margin="288,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_crack_k4_LostFocus" TabIndex="9"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupBoxULS" Header="Factors for ULS" VerticalAlignment="Top" Height="175" Margin="0">
+            <Grid Margin="0">
+                <Label x:Name="label5" Content="cc" HorizontalAlignment="Left" Margin="287,105,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <Label x:Name="label" Content="Partial factors for materials according to EN 1992-1-1 p. 2.4.2.4." HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label1" Content="Persistent &amp; Transient design situations:" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label1_Copy" Content="Accidental design situations:" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label2" Content="γ =" HorizontalAlignment="Left" Margin="250,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label3" Content=" C" HorizontalAlignment="Left" Margin="252,48,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_gammaC_PT" HorizontalAlignment="Left" Height="23" Margin="277,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" MaxLines="1" MaxLength="5" TextAlignment="Center" LostFocus="textBox_gammaC_PT_LostFocus" TabIndex="1"/>
+                <Label x:Name="label2_Copy" Content="γ =" HorizontalAlignment="Left" Margin="336,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label3_Copy" Content=" S" HorizontalAlignment="Left" Margin="338,48,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_gammaS_PT" HorizontalAlignment="Left" Height="23" Margin="363,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" MaxLines="1" MaxLength="5" TextAlignment="Center" LostFocus="textBox_gammaS_PT_LostFocus" TabIndex="2"/>
+                <Label x:Name="label2_Copy1" Content="γ =" HorizontalAlignment="Left" Margin="250,61,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label3_Copy1" Content=" C" HorizontalAlignment="Left" Margin="252,73,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_gammaC_ACC" HorizontalAlignment="Left" Height="23" Margin="277,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" MaxLines="1" MaxLength="5" TextAlignment="Center" LostFocus="textBox_gammaC_ACC_LostFocus" TabIndex="3"/>
+                <Label x:Name="label2_Copy2" Content="γ =" HorizontalAlignment="Left" Margin="336,61,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label3_Copy2" Content=" S" HorizontalAlignment="Left" Margin="338,73,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_gammaS_ACC" HorizontalAlignment="Left" Height="23" Margin="363,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" MaxLines="1" MaxLength="5" TextAlignment="Center" LostFocus="textBox_gammaS_ACC_LostFocus" TabIndex="4"/>
+                <Label x:Name="label4" Content="Coefficient according to EN 1992-1-1 p. 3.1.6." HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label2_Copy3" Content="α    =" HorizontalAlignment="Left" Margin="277,94,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="textBox_alfaCC" HorizontalAlignment="Left" Height="23" Margin="320,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLines="1" MaxLength="5" LostFocus="textBox_alfaCC_LostFocus" TabIndex="5"/>
+                <Label x:Name="label5_Copy" Content="ct" HorizontalAlignment="Left" Margin="287,131,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <Label x:Name="label2_Copy4" Content="α    =" HorizontalAlignment="Left" Margin="277,120,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="textBox_alfaCT" HorizontalAlignment="Left" Height="23" Margin="320,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_alfaCT_LostFocus" TabIndex="6"/>
+                <Label x:Name="label4_Copy" Content="Coefficient according to EN 1992-1-1 p. 3.1.7." HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupBoxSLS_Creep" Header="Factors for stress control according to EN 1992-1-1 p. 7.2." VerticalAlignment="Top" Height="90" Margin="0,300,0,0">
+            <Grid Margin="0">
+                <Label x:Name="label6_Copy4" Content="Factor for limitation of compressive stresses in concrete: k =" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label5_Copy6" Content="1" HorizontalAlignment="Left" Margin="314,17,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_stress_k1" HorizontalAlignment="Left" Height="23" Margin="336,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_stress_k1_LostFocus" TabIndex="10"/>
+                <Label x:Name="label6_Copy5" Content="Factor for limitation of tension stresses in reinforcement steel: k =" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label5_Copy7" Content="3" HorizontalAlignment="Left" Margin="344,43,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <TextBox x:Name="textBox_stress_k3" HorizontalAlignment="Left" Height="23" Margin="367,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_stress_k3_LostFocus" TabIndex="11"/>
+            </Grid>
+        </GroupBox>
+        <Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Right" Margin="0,0,229,12" Width="75" Height="20" VerticalAlignment="Bottom" Click="buttonSave_Click" TabIndex="13"/>
+        <Button x:Name="buttonRestoreDef" Content="Restore Defaults" Margin="0,0,12,12" Width="100" HorizontalAlignment="Right" Height="20" VerticalAlignment="Bottom" TabIndex="15" Click="buttonRestoreDef_Click"/>
+        <Button x:Name="buttonClose" Content="Close" Margin="0,0,132,12" HorizontalAlignment="Right" Width="75" Height="20" VerticalAlignment="Bottom" Click="buttonClose_Click" TabIndex="14"/>
+        <GroupBox x:Name="groupBoxGeneral" Header="General" VerticalAlignment="Top" Height="65" Margin="0,395,0,0">
+            <Grid Margin="0">
+                <Label x:Name="label6_Copy6" Content="No. of points per interaction curve per one side of graph: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="textBox_general_NoOfPoints" HorizontalAlignment="Left" Height="23" Margin="325,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_general_NoOfPoints_LostFocus" TabIndex="12"/>
+            </Grid>
+        </GroupBox>
+
+    </Grid>
+</Window>
