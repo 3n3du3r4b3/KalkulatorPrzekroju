@@ -294,6 +294,19 @@ namespace KalkulatorPrzekroju
         }
 
 
+        //PRZYCISKI
+        private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
+        {
+            PlotModel MyModel = new PlotModel();
+            IList<DataPoint> Points = new List<DataPoint>();
+            DataPoint punkt = new DataPoint(1.25, 2.5);
+            DataPointSeries punkty;
+
+            //MyModel.Series.Add(Points);
+            PlotView_ULS_MS.Model = MyModel;
+        }
+
+
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
     }
