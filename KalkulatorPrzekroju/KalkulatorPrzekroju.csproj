@@ -63,6 +63,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreepCoefficient.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="SLS.cs" />
     <Compile Include="Solver.cs" />
