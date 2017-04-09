@@ -300,10 +300,13 @@ namespace KalkulatorPrzekroju
             PlotModel MyModel = new PlotModel();
             IList<DataPoint> Points = new List<DataPoint>();
             DataPoint punkt = new DataPoint(1.25, 2.5);
-            DataPointSeries punkty;
+            IList<DataPoint> punkty = new List<DataPoint>();
+            
+            punkty.Add(punkt);
 
             //MyModel.Series.Add(Points);
             PlotView_ULS_MS.Model = MyModel;
+            PlotView_ULS_MS.Model.Series;
         }
 
 
