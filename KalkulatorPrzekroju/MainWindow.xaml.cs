@@ -342,7 +342,7 @@ namespace KalkulatorPrzekroju
 
             for (int i = 0; i < tablicaPunktowULS.Length; i++)
             {
-                punkty.Points.Add(new DataPoint(tablicaPunktowULS[i][0],tablicaPunktowULS[i][1]));
+                punkty.Points.Add(new DataPoint(tablicaPunktowULS[i][1],tablicaPunktowULS[i][0]));
             }
 
             //MyModel.Series.Add(Points);
