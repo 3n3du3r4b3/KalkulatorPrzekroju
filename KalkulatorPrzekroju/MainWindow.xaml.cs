@@ -297,16 +297,62 @@ namespace KalkulatorPrzekroju
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
-            PlotModel MyModel = new PlotModel();
-            IList<DataPoint> Points = new List<DataPoint>();
-            DataPoint punkt = new DataPoint(1.25, 2.5);
-            IList<DataPoint> punkty = new List<DataPoint>();
+            Section section1;
+            if (comboBox_As2_spac_no_1.Text == "spacing")
+            {
+                section1 = new Section(
+                   new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+                   new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+                   Double.Parse(textBox_width_1.Text),
+                   Double.Parse(textBox_height_1.Text),
+                   Double.Parse(comboBox_diameter_As1_1.Text),
+                   Double.Parse(textBox_spac_no_As1_1.Text),
+                   Double.Parse(textBox_cover_As1_1.Text),
+                   Double.Parse(comboBox_diameter_As2_1.Text),
+                   Double.Parse(textBox_spac_no_As2_1.Text),
+                   Double.Parse(textBox_cover_As2_1.Text)
+                   );
+            }
+            else if (comboBox_As2_spac_no_1.Text == "no of bars")
+            {
+                section1 = new Section(
+                   new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+                   new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+                   Double.Parse(textBox_width_1.Text),
+                   Double.Parse(textBox_height_1.Text),
+                   Double.Parse(comboBox_diameter_As1_1.Text),
+                   Int32.Parse(textBox_spac_no_As1_1.Text),
+                   Double.Parse(textBox_cover_As1_1.Text),
+                   Double.Parse(comboBox_diameter_As2_1.Text),
+                   Int32.Parse(textBox_spac_no_As2_1.Text),
+                   Double.Parse(textBox_cover_As2_1.Text)
+                   );
+            }
+            else
+                section1 = null;
             
-            punkty.Add(punkt);
+
+            PlotModel MyModel = new PlotModel { Title = "ULS M/N Curvature"};
+            LineSeries punkty = new LineSeries();
+
+            double[][] tablicaPunktowULS = ULS.GetULS_MN_Curve(
+                section1,
+                ULS.DesignSituation.PersistentAndTransient,
+                wspolczynniki.NoOfPoints);
+
+            for (int i = 0; i < tablicaPunktowULS.Length; i++)
+            {
+                punkty.Points.Add(new DataPoint(tablicaPunktowULS[i][0],tablicaPunktowULS[i][1]));
+            }
 
             //MyModel.Series.Add(Points);
             PlotView_ULS_MS.Model = MyModel;
-            PlotView_ULS_MS.Model.Series;
+            PlotView_ULS_MS.Model.Axes.Add(new OxyPlot.Axes.LinearAxis
+                { Position=OxyPlot.Axes.AxisPosition.Bottom, Minimum = -1000, Maximum = 8000 });
+            PlotView_ULS_MS.Model.Axes.Add(new OxyPlot.Axes.LinearAxis
+                { Position = OxyPlot.Axes.AxisPosition.Left, Minimum = -2000, Maximum = 2000 });
+
+            PlotView_ULS_MS.Model.Series.Add(punkty);
         }
 
 
