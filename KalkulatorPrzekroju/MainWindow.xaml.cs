@@ -27,9 +27,10 @@ namespace KalkulatorPrzekroju
         Factors wspolczynniki;
         AllConcrete betony = new AllConcrete(AllConcrete.LoadType.DAT);
         Steel stal = new Steel(Steel.classes.B500B);
-        Concrete beton1;
-        Concrete beton2;
+        MainPlotView PlotModel_ULS_MN;
+
         string format = "0.##";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -332,27 +333,37 @@ namespace KalkulatorPrzekroju
                 section1 = null;
             
 
-            PlotModel MyModel = new PlotModel { Title = "ULS M/N Curvature"};
+            PlotModel MyModel = new PlotModel();
             LineSeries punkty = new LineSeries();
+            ScatterSeries punkty2 = new ScatterSeries();
 
             double[][] tablicaPunktowULS = ULS.GetULS_MN_Curve(
                 section1,
                 ULS.DesignSituation.PersistentAndTransient,
                 wspolczynniki.NoOfPoints);
 
+            double[][] tab2 = ULS.GetULS_MN_Curve(
+                section1.reversedSection,
+                ULS.DesignSituation.PersistentAndTransient,
+                wspolczynniki.NoOfPoints
+                );
+
             for (int i = 0; i < tablicaPunktowULS.Length; i++)
             {
                 punkty.Points.Add(new DataPoint(tablicaPunktowULS[i][1],tablicaPunktowULS[i][0]));
+                punkty2.Points.Add(new ScatterPoint(tab2[i][1], tab2[i][0]));
             }
-
-            //MyModel.Series.Add(Points);
+            
+            /* MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
+                { Position=OxyPlot.Axes.AxisPosition.None, Minimum = -2000, Maximum = 2000 });
             MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
-                { Position=OxyPlot.Axes.AxisPosition.Bottom, Minimum = -2000, Maximum = 2000 });
-            MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
-                { Position = OxyPlot.Axes.AxisPosition.Left, Minimum = -1000, Maximum = 8000 });
+                { Position = OxyPlot.Axes.AxisPosition.None, Minimum = -1000, Maximum = 8000 });    */
 
             MyModel.Series.Add(punkty);
-
+            MyModel.Series.Add(punkty2);
+            punkty.Color = OxyColors.Red;
+            punkty.StrokeThickness = 1;
+            punkty2.MarkerSize = 2;
             PlotView_ULS_MS.Model = MyModel;
         }
 
