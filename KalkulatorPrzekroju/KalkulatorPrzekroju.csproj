@@ -64,6 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CreepCoefficient.cs" />
+    <Compile Include="MainPlotView.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="SLS.cs" />
     <Compile Include="Solver.cs" />
