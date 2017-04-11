@@ -346,13 +346,14 @@ namespace KalkulatorPrzekroju
             }
 
             //MyModel.Series.Add(Points);
-            PlotView_ULS_MS.Model = MyModel;
-            PlotView_ULS_MS.Model.Axes.Add(new OxyPlot.Axes.LinearAxis
-                { Position=OxyPlot.Axes.AxisPosition.Bottom, Minimum = -1000, Maximum = 8000 });
-            PlotView_ULS_MS.Model.Axes.Add(new OxyPlot.Axes.LinearAxis
-                { Position = OxyPlot.Axes.AxisPosition.Left, Minimum = -2000, Maximum = 2000 });
+            MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
+                { Position=OxyPlot.Axes.AxisPosition.Bottom, Minimum = -2000, Maximum = 2000 });
+            MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
+                { Position = OxyPlot.Axes.AxisPosition.Left, Minimum = -1000, Maximum = 8000 });
 
-            PlotView_ULS_MS.Model.Series.Add(punkty);
+            MyModel.Series.Add(punkty);
+
+            PlotView_ULS_MS.Model = MyModel;
         }
 
 
