@@ -182,11 +182,15 @@
             </TabItem>
             <TabItem Header="SLS Crack Width">
                 <Grid Background="#FFE5E5E5">
+                    <oxy:PlotView x:Name="PlotView_SLS_Crack"/>
+
                     <Button x:Name="button_SaveToPDF_SLS_Crack" Content="Save To PDF" HorizontalAlignment="Left" Margin="5,0,0,5" VerticalAlignment="Bottom" Width="75" Opacity="0.5"/>
                 </Grid>
             </TabItem>
             <TabItem Header="SLS Stresses">
                 <Grid Background="#FFE5E5E5">
+                    <oxy:PlotView x:Name="PlotView_SLS_Stresess"/>
+                    
                     <Button x:Name="button_SaveToPDF_SLS_Stresses" Content="Save To PDF" HorizontalAlignment="Left" Margin="5,0,0,5" VerticalAlignment="Bottom" Width="75" Opacity="0.5"/>
                 </Grid>
             </TabItem>

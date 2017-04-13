@@ -28,6 +28,7 @@ namespace KalkulatorPrzekroju
         AllConcrete betony = new AllConcrete(AllConcrete.LoadType.DAT);
         Steel stal = new Steel(Steel.classes.B500B);
         MainPlotView PlotModel_ULS_MN;
+        Section section1;
 
         string format = "0.##";
 
@@ -298,7 +299,6 @@ namespace KalkulatorPrzekroju
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
-            Section section1;
             if (comboBox_As2_spac_no_1.Text == "spacing")
             {
                 section1 = new Section(
@@ -332,11 +332,6 @@ namespace KalkulatorPrzekroju
             else
                 section1 = null;
             
-
-            PlotModel MyModel = new PlotModel();
-            LineSeries punkty = new LineSeries();
-            ScatterSeries punkty2 = new ScatterSeries();
-
             double[][] tablicaPunktowULS = ULS.GetULS_MN_Curve(
                 section1,
                 ULS.DesignSituation.PersistentAndTransient,
@@ -348,23 +343,48 @@ namespace KalkulatorPrzekroju
                 wspolczynniki.NoOfPoints
                 );
 
-            for (int i = 0; i < tablicaPunktowULS.Length; i++)
-            {
-                punkty.Points.Add(new DataPoint(tablicaPunktowULS[i][1],tablicaPunktowULS[i][0]));
-                punkty2.Points.Add(new ScatterPoint(tab2[i][1], tab2[i][0]));
-            }
-            
+            double[][] tabSLS_Crack = SLS.GetSLS_Crack_Curve(
+                section1,
+                wspolczynniki.NoOfPoints,
+                0.2,
+                0.4,
+                wspolczynniki.Crack_k1
+                );
+
+       /*     double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
+                section1,
+                wspolczynniki.NoOfPoints,
+                0.8
+                );
+
+            double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
+                section1,
+                wspolczynniki.NoOfPoints,
+                0.6
+                );
+*/
+            MainPlotView diagram1 = new MainPlotView();
+            diagram1.AddLineSerie(tablicaPunktowULS, "Section 1");
+            diagram1.AddPointSerie(tab2, "Section reversed");
+            MainPlotView diagram2 = new MainPlotView();
+            diagram2.AddLineSerie(tabSLS_Crack, "Section 1");
+            MainPlotView diagram3 = new MainPlotView();
+            //diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
+            //diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
+
             /* MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
                 { Position=OxyPlot.Axes.AxisPosition.None, Minimum = -2000, Maximum = 2000 });
             MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
                 { Position = OxyPlot.Axes.AxisPosition.None, Minimum = -1000, Maximum = 8000 });    */
-
-            MyModel.Series.Add(punkty);
-            MyModel.Series.Add(punkty2);
-            punkty.Color = OxyColors.Red;
-            punkty.StrokeThickness = 1;
-            punkty2.MarkerSize = 2;
-            PlotView_ULS_MS.Model = MyModel;
+            /*
+        MyModel.Series.Add(punkty);
+        MyModel.Series.Add(punkty2);
+        punkty.Color = OxyColors.Red;
+        punkty.StrokeThickness = 1;
+        punkty2.MarkerSize = 2; */
+            PlotView_ULS_MS.Model = diagram1.wykres;
+            PlotView_SLS_Crack.Model = diagram2.wykres;
+            PlotView_SLS_Stresess.Model = diagram3.wykres;
         }
 
 
