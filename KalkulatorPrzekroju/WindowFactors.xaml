@@ -15,7 +15,7 @@
                 <Label x:Name="label6_Copy1" Content="Coefficient which takes account of the distribution of strain: k = (automatically calculated)" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label5_Copy3" Content="2" HorizontalAlignment="Left" Margin="333,43,0,0" VerticalAlignment="Top" FontSize="8"/>
                 <Label x:Name="label6_Copy2" Content="Coefficient k =" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label5_Copy4" Content="3" HorizontalAlignment="Left" Margin="75,69,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <Label x:Name="label5_Copy4" Content="3" HorizontalAlignment="Left" Margin="76,69,0,0" VerticalAlignment="Top" FontSize="8"/>
                 <TextBox x:Name="textBox_crack_k3" HorizontalAlignment="Left" Height="23" Margin="98,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_crack_k3_LostFocus" TabIndex="8"/>
                 <Label x:Name="label6_Copy3" Content="Coefficient k =" HorizontalAlignment="Left" Margin="200,62,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label5_Copy5" Content="4" HorizontalAlignment="Left" Margin="266,69,0,0" VerticalAlignment="Top" FontSize="8"/>
@@ -55,7 +55,7 @@
                 <Label x:Name="label5_Copy6" Content="1" HorizontalAlignment="Left" Margin="314,17,0,0" VerticalAlignment="Top" FontSize="8"/>
                 <TextBox x:Name="textBox_stress_k1" HorizontalAlignment="Left" Height="23" Margin="336,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_stress_k1_LostFocus" TabIndex="10"/>
                 <Label x:Name="label6_Copy5" Content="Factor for limitation of tension stresses in reinforcement steel: k =" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label5_Copy7" Content="3" HorizontalAlignment="Left" Margin="344,43,0,0" VerticalAlignment="Top" FontSize="8"/>
+                <Label x:Name="label5_Copy7" Content="3" HorizontalAlignment="Left" Margin="345,43,0,0" VerticalAlignment="Top" FontSize="8"/>
                 <TextBox x:Name="textBox_stress_k3" HorizontalAlignment="Left" Height="23" Margin="367,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_stress_k3_LostFocus" TabIndex="11"/>
             </Grid>
         </GroupBox>
