@@ -373,7 +373,7 @@ namespace KalkulatorPrzekroju
             double min = SilaKrytycznaRozciagajaca(section, situation);
             double[][] results = new double[NoOfPoints][];
 
-            for (int i = 0; i <= NoOfPoints; i++)
+            for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
@@ -398,7 +398,7 @@ namespace KalkulatorPrzekroju
             double min = SilaKrytycznaRozciagajaca(section, situation);
             double[][] results = new double[NoOfPoints][];
 
-            for (int i = 0; i <= NoOfPoints; i++)
+            for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 results[i] = new double[2];

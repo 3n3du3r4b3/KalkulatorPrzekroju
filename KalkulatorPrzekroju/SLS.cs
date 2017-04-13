@@ -623,12 +623,15 @@ namespace KalkulatorPrzekroju
             double min = GetSilaOsiowaKrytycznaStal(section, 1.0);
             double[][] results = new double[NoOfPoints][];
 
-            for (int i = 0; i <= NoOfPoints; i++)
+            for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetSilaOsiowaKrytycznaBeton(section, Ned);
+                results[results.Length - i - 1] = new double[2];
+                results[results.Length - i - 1][0] = Ned;
+                results[results.Length - i - 1][1] = -SLS.GetSilaOsiowaKrytycznaBeton(section.reversedSection, Ned);
             }
 
             return results;
@@ -647,12 +650,15 @@ namespace KalkulatorPrzekroju
             double min = GetSilaOsiowaKrytycznaStal(section, wspRedukcjiStal);
             double[][] results = new double[NoOfPoints][];
 
-            for (int i = 0; i <= NoOfPoints; i++)
+            for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetSilaOsiowaKrytycznaStal(section, Ned);
+                results[results.Length - i - 1] = new double[2];
+                results[results.Length - i - 1][0] = Ned;
+                results[results.Length - i - 1][1] = -SLS.GetSilaOsiowaKrytycznaStal(section.reversedSection, Ned);
             }
 
             return results;
@@ -671,7 +677,7 @@ namespace KalkulatorPrzekroju
         {
             double max = GetSilaOsiowaKrytycznaBeton(section, 1.0);
             double min = GetSilaOsiowaKrytycznaRysa(section, rysaGraniczna, kt, k1);
-            double[][] results = new double[NoOfPoints][];
+            double[][] results = new double[2*NoOfPoints+1][];
 
             for (int i = 0; i <= NoOfPoints; i++)
             {
@@ -679,6 +685,9 @@ namespace KalkulatorPrzekroju
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetMomentKrytycznyRysa(section, Ned, rysaGraniczna, kt, k1);
+                results[results.Length - i - 1] = new double[2];
+                results[results.Length - i - 1][0] = Ned;
+                results[results.Length - i - 1][1] = -SLS.GetMomentKrytycznyRysa(section.reversedSection, Ned, rysaGraniczna, kt, k1);
             }
 
             return results;
