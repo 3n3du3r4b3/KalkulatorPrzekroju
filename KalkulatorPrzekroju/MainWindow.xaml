@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="MainWindow" Height="540" Width="960" MinWidth="960" MinHeight="540">
+        Title="MainWindow" Height="560" Width="960" MinWidth="960" MinHeight="540">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -15,7 +15,7 @@
             <MenuItem x:Name="MenuItem_File" Header="File" Height="30">
                 <MenuItem x:Name="MenuItem_FileNew" Header="New..."/>
                 <MenuItem x:Name="menuItem_Open" Header="Open..."/>
-                <MenuItem x:Name="menuItem_Save" Header="Save"/>
+                <MenuItem x:Name="menuItem_Save" Header="Save" Click="menuItem_Save_Click"/>
                 <MenuItem x:Name="menuItem_SaveAs" Header="Save As..."/>
                 <MenuItem x:Name="menuItem_Close" Header="Close" Click="menuItem_Close_Click"/>
             </MenuItem>
@@ -78,6 +78,11 @@
                                     <ComboBox x:Name="comboBox_As2_spac_no_1" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="comboBox_As2_spac_no_1_SelectionChanged" TabIndex="9"/>
                                 </Grid>
                             </GroupBox>
+                            <GroupBox x:Name="groupBox_DesignSit" Header="Design Situation" Margin="10,325,204,0" Height="65" VerticalAlignment="Top">
+                                <Grid>
+                                    <ComboBox x:Name="comboBox_DesignSituation_1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" TabIndex="11"/>
+                                </Grid>
+                            </GroupBox>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Section 2" TabIndex="3">
@@ -130,6 +135,11 @@
                                         <ComboBox x:Name="comboBox_Steel_2" HorizontalAlignment="Left" Margin="272,10,0,0" VerticalAlignment="Top" Width="120" TabIndex="12"/>
                                     </Grid>
                                 </GroupBox>
+                                <GroupBox x:Name="groupBox_DesignSit2" Header="Design Situation" Margin="10,325,204,0" Height="65" VerticalAlignment="Top">
+                                    <Grid>
+                                        <ComboBox x:Name="comboBox_DesignSituation_2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" TabIndex="11"/>
+                                    </Grid>
+                                </GroupBox>
                             </Grid>
                         </Grid>
                     </TabItem>
@@ -170,13 +180,15 @@
         <TabControl x:Name="tabControl" Margin="455,35,0,0" TabIndex="9">
             <TabItem Header="ULS M/N" TabIndex="10">
                 <Grid Background="#FFE5E5E5">
-                    <oxy:PlotView x:Name="PlotView_ULS_MS"/>
+                    <oxy:PlotView x:Name="PlotView_ULS_MN"/>
 
                     <Button x:Name="button_SaveToPDF_ULS_MN" Content="Save To PDF" HorizontalAlignment="Left" Margin="5,0,0,5" VerticalAlignment="Bottom" Width="75" Opacity="0.5"/>
                 </Grid>
             </TabItem>
             <TabItem Header="ULS V/N">
                 <Grid Background="#FFE5E5E5">
+                    <oxy:PlotView x:Name="PlotView_ULS_VN"/>
+                    
                     <Button x:Name="button_SaveToPDF_ULS_VN" Content="Save To PDF" HorizontalAlignment="Left" Margin="5,0,0,5" VerticalAlignment="Bottom" Width="75" Opacity="0.5"/>
                 </Grid>
             </TabItem>
@@ -190,7 +202,7 @@
             <TabItem Header="SLS Stresses">
                 <Grid Background="#FFE5E5E5">
                     <oxy:PlotView x:Name="PlotView_SLS_Stresess"/>
-                    
+
                     <Button x:Name="button_SaveToPDF_SLS_Stresses" Content="Save To PDF" HorizontalAlignment="Left" Margin="5,0,0,5" VerticalAlignment="Bottom" Width="75" Opacity="0.5"/>
                 </Grid>
             </TabItem>

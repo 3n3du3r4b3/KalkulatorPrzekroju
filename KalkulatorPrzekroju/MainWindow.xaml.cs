@@ -16,19 +16,21 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using OxyPlot;
 using OxyPlot.Series;
+using Microsoft.Win32;
 
 namespace KalkulatorPrzekroju
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [Serializable]
     public partial class MainWindow : Window
     {
         Factors wspolczynniki;
         AllConcrete betony = new AllConcrete(AllConcrete.LoadType.DAT);
         Steel stal = new Steel(Steel.classes.B500B);
-        MainPlotView PlotModel_ULS_MN;
         Section section1;
+        Section section2;
 
         string format = "0.##";
 
@@ -57,12 +59,10 @@ namespace KalkulatorPrzekroju
 
             comboBox_As1_spac_no_1.Items.Add("spacing");
             comboBox_As1_spac_no_1.Items.Add("no of bars");
-            comboBox_As2_spac_no_1.Items.Add("spacing");
-            comboBox_As2_spac_no_1.Items.Add("no of bars");
-            comboBox_As1_spac_no_2.Items.Add("spacing");
-            comboBox_As1_spac_no_2.Items.Add("no of bars");
-            comboBox_As2_spac_no_2.Items.Add("spacing");
-            comboBox_As2_spac_no_2.Items.Add("no of bars");
+            comboBox_As2_spac_no_1.ItemsSource = comboBox_As1_spac_no_1.Items;
+            comboBox_As1_spac_no_2.ItemsSource = comboBox_As1_spac_no_1.Items;
+            comboBox_As2_spac_no_2.ItemsSource = comboBox_As1_spac_no_1.Items;
+
             comboBox_As1_spac_no_1.SelectedIndex = 0;
             comboBox_As2_spac_no_1.SelectedIndex = 0;
             comboBox_As1_spac_no_2.SelectedIndex = 0;
@@ -83,6 +83,12 @@ namespace KalkulatorPrzekroju
             }
             comboBox_Steel_1.SelectedIndex = 0;
             comboBox_Steel_2.SelectedIndex = 0;
+
+            comboBox_DesignSituation_1.Items.Add("Accidental");
+            comboBox_DesignSituation_1.Items.Add("Persistent & Transient");
+            comboBox_DesignSituation_2.ItemsSource = comboBox_DesignSituation_1.Items;
+            comboBox_DesignSituation_1.SelectedIndex = 1;
+            comboBox_DesignSituation_2.SelectedIndex = 1;
         }
         // załadowanie średnic pretow z pliku
         private List<double> LoadBarDiameters()
@@ -177,6 +183,19 @@ namespace KalkulatorPrzekroju
         private void menuItem_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        
+        private void menuItem_Save_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                using (Stream output = File.Create(saveFileDialog1.FileName))
+                {
+                    //BinaryFormatter formatter = new BinaryFormatter();
+                    //formatter.Serialize(output, this);
+                }
+            }
         }
 
         //kontrola wprowadzania danych przez uzytkownika
@@ -334,12 +353,12 @@ namespace KalkulatorPrzekroju
             
             double[][] tablicaPunktowULS = ULS.GetULS_MN_Curve(
                 section1,
-                ULS.DesignSituation.PersistentAndTransient,
+                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints);
 
             double[][] tab2 = ULS.GetULS_MN_Curve(
                 section1.reversedSection,
-                ULS.DesignSituation.PersistentAndTransient,
+                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
@@ -351,26 +370,42 @@ namespace KalkulatorPrzekroju
                 wspolczynniki.Crack_k1
                 );
 
-       /*     double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
+            double[][] tabVRdc1 = ULS.GetULS_VRdcN_Curve(
                 section1,
-                wspolczynniki.NoOfPoints,
-                0.8
+                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
+                wspolczynniki.NoOfPoints
                 );
 
-            double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
+            double[][] tabVRd1 = ULS.GetULS_VRdN_Curve(
                 section1,
+                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints,
-                0.6
+                new Stirrups(2,12,section1.currentSteel,300,90)
                 );
-*/
+
+            /*     double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
+                     section1,
+                     wspolczynniki.NoOfPoints,
+                     0.8
+                     );
+
+                 double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
+                     section1,
+                     wspolczynniki.NoOfPoints,
+                     0.6
+                     );
+     */
             MainPlotView diagram1 = new MainPlotView();
             diagram1.AddLineSerie(tablicaPunktowULS, "Section 1");
             diagram1.AddPointSerie(tab2, "Section reversed");
             MainPlotView diagram2 = new MainPlotView();
             diagram2.AddLineSerie(tabSLS_Crack, "Section 1");
-            MainPlotView diagram3 = new MainPlotView();
+            //MainPlotView diagram3 = new MainPlotView();
             //diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
             //diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
+            MainPlotView diagramVN = new MainPlotView();
+            diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c");
+            diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s");
 
             /* MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
                 { Position=OxyPlot.Axes.AxisPosition.None, Minimum = -2000, Maximum = 2000 });
@@ -382,10 +417,12 @@ namespace KalkulatorPrzekroju
         punkty.Color = OxyColors.Red;
         punkty.StrokeThickness = 1;
         punkty2.MarkerSize = 2; */
-            PlotView_ULS_MS.Model = diagram1.wykres;
+            PlotView_ULS_MN.Model = diagram1.wykres;
             PlotView_SLS_Crack.Model = diagram2.wykres;
-            PlotView_SLS_Stresess.Model = diagram3.wykres;
+            PlotView_ULS_VN.Model = diagramVN.wykres;
+            //PlotView_SLS_Stresess.Model = diagram3.wykres;
         }
+
 
 
 
