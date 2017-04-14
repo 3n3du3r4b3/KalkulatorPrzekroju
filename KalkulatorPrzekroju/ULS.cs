@@ -11,7 +11,7 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Określa sytuację obliczeniową oraz dobiera współcznniki obliczeniowe dla wybranej sytuacji.
         /// </summary>
-        public enum DesignSituation { PersistentAndTransient, Accidental }
+        public enum DesignSituation { Accidental, PersistentAndTransient }
 
         /// <summary>Funkcja zwraca wartość pozytywnego lub negatywnego momentu krytycznego dla siły NEd</summary>
         /// <param name="section"> obiekt typu section reprezentujący przekrój</param>
@@ -257,6 +257,11 @@ namespace KalkulatorPrzekroju
 
             VRdc = Math.Max(VRdcMin, VRdc);
 
+            //korekta ze wzgledu na punkt 6.2 EN
+            double ni = 0.6 * (1 - fck / 250);
+            double VEdmax = 0.5 * bw * d * ni * fcd;
+            VRdc = Math.Min(VRdc, VEdmax);
+
             return VRdc * 1000;
         }
 
@@ -285,7 +290,7 @@ namespace KalkulatorPrzekroju
 
             double VRdc = NosnoscBetonuNaScinanie(section, NEd, situation);
 
-            double d = (section.h - section.a1) / 1000;                             // wysokosc uzyteczna przekroju w metrach
+            double d = (section.h - section.a1) / 1000;         // wysokosc uzyteczna przekroju w metrach
             double Asw = stirrups.Asw / 1000 / 1000;
             double s = stirrups.Swd / 1000;
             double z = 0.9 * d;           // ramię sił wewnętrznych - trzeba sprawdzić jak to analizować, dla czystego zginania z=0.9d
@@ -340,9 +345,9 @@ namespace KalkulatorPrzekroju
         {
             double max = SilaKrytycznaSciskajaca(section, situation);
             double min = SilaKrytycznaRozciagajaca(section, situation);
-            double[][] results = new double[2 * NoOfPoints + 1][];
+            double[][] results = new double[2 * NoOfPoints][];
 
-            for (int i = 0; i <= NoOfPoints; i++)
+            for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 if (Ned == 0)
@@ -371,14 +376,17 @@ namespace KalkulatorPrzekroju
         {
             double max = SilaKrytycznaSciskajaca(section, situation);
             double min = SilaKrytycznaRozciagajaca(section, situation);
-            double[][] results = new double[NoOfPoints][];
+            double[][] results = new double[2*NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = min + (max - min) / NoOfPoints * i;
+                double Ned = max - (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = ULS.NosnoscBetonuNaScinanie(section, Ned, situation);
+                results[results.Length - i - 1] = new double[2];
+                results[results.Length - i - 1][0] = Ned;
+                results[results.Length - i - 1][1] = -ULS.NosnoscBetonuNaScinanie(section.reversedSection, Ned, situation);
             }
 
             return results;
@@ -396,19 +404,21 @@ namespace KalkulatorPrzekroju
         {
             double max = SilaKrytycznaSciskajaca(section, situation);
             double min = SilaKrytycznaRozciagajaca(section, situation);
-            double[][] results = new double[NoOfPoints][];
+            double[][] results = new double[2*NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = min + (max - min) / NoOfPoints * i;
+                double Ned = max - (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = ULS.NosnoscCalkowitaNaScinanie(section, Ned, situation, stirrups);
+                results[results.Length - i - 1] = new double[2];
+                results[results.Length - i - 1][0] = Ned;
+                results[results.Length - i - 1][1] = -ULS.NosnoscCalkowitaNaScinanie(section.reversedSection, Ned, situation, stirrups);
             }
 
             return results;
         }
-
-
+        
     }
 }

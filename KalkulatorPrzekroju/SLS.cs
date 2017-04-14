@@ -681,7 +681,7 @@ namespace KalkulatorPrzekroju
 
             for (int i = 0; i <= NoOfPoints; i++)
             {
-                double Ned = min + (max - min) / NoOfPoints * i;
+                double Ned = max - (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetMomentKrytycznyRysa(section, Ned, rysaGraniczna, kt, k1);
