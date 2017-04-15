@@ -139,8 +139,8 @@ namespace KalkulatorPrzekroju
             this.c1 = c1;
             this.fi2 = fi2;
             this.c2 = c2;
-            this.spacing1 = (b - 2 * c1) / (noOfBars1 - 1);
-            this.spacing2 = (b - 2 * c2) / (noOfBars2 - 1);
+            this.spacing1 = (b - 2 * c1 - fi1) / (noOfBars1 - 1);
+            this.spacing2 = (b - 2 * c2 - fi2) / (noOfBars2 - 1);
             currentConrete = concrete;
             currentSteel = steel;
             As1 = (fi1/2)*(fi1/2)*Math.PI*noOfBars1;
