@@ -39,7 +39,7 @@ namespace KalkulatorPrzekroju
             InitializeComponent();
 
             wspolczynniki = new Factors(Factors.Settings.zachowane);
-            SetControlls();
+            SetControlls(); /*
             Concrete bet = new Concrete(Concrete.classes.C40_50);
             Steel stl = new Steel(Steel.classes.B500B);
             Section sec = new Section(bet, stl, 1000, 1000, 25, 200.0, 50, 16, 200.0, 50);
@@ -67,7 +67,7 @@ namespace KalkulatorPrzekroju
             double mb = SLS.GetMomentKrytycznyBeton(sec, sb, 0.6);
             double mb2 = SLS.GetMomentKrytycznyBeton(sec.reversedSection, sb, 0.6);
             double ss = SLS.GetSilaOsiowaKrytycznaStal(sec, 0.8);
-            double ms = SLS.GetMomentKrytycznyStal(sec, ss, 0.8);
+            double ms = SLS.GetMomentKrytycznyStal(sec, ss, 0.8); */
         }
 
         private void SetControlls()

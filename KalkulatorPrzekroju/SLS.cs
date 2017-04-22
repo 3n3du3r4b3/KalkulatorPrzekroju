@@ -91,70 +91,37 @@ namespace KalkulatorPrzekroju
             if (SigmaBetonBottom >= -currentConcrete.fctm && SigmaBetonTop >= -currentConcrete.fctm)
             {
                 return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
-            } /*
-            else if (SigmaBetonBottom < -currentConcrete.fctm && SigmaBetonTop < -currentConcrete.fctm)
-            {
-                A_II = (As1 + As2);       // sprowadzone pole powierzchni przekroju w m2
-                                                          //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
-                S = (As1 * (h - a1) + As2 * a2);
-                // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
-                xc = S / A_II;
-                // sprowadzony moment bezwladnosci przekroju wzgledem srodka ciezkosci! w m4
-                Iy = alfaE * (As1 * (h - xc - a1) * (h - xc - a1) + (As2 * (xc - a2) * (xc - a2)));
-
-                // moment zginajacy w srodku ciezkosci przekroju
-                MEd_c = MEd + NEd * (0.5 * h - xc);
-
-                zTop = xc;                //odleglosc gornej krawedzi przekroju od srodka ciezkosci w mm
-                zBottom = xc - x;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci w mm
-
-                // naprezenia w betonie
-                SigmaBetonTop = 0;
-                SigmaBetonBottom = 0;
-
-                // naprezenia w stali
-                SigmaStalAs1 = Naprezenie(NEd, MEd_c, (xc - h + a1), Iy, A_II);
-                SigmaStalAs2 = Naprezenie(NEd, MEd_c, (zTop - a2), Iy, A_II);
-
-                if (As1 == 0)
-                    SigmaStalAs1 = 0;
-
-                if (As2 == 0)
-                    SigmaStalAs2 = 0;
-
-                faza = 2;
-
-                return new StressState(0, 0, SigmaStalAs1, SigmaStalAs2, 0, xc - 0.5 * h, faza);
-            } */
+            } 
             else
             {
                 A_II = A_I;
                 int licznik = 0;
-                int licznik_zwieksz = 0;
-                int licznik_zmniejsz = 0;
+                //int licznik_zwieksz = 0;
+                //int licznik_zmniejsz = 0;
+                double x1 = 0;
+                double x2 = h;
                 do
                 {
                     licznik++;
-                    if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) < 0 || SigmaBetonTop < 0)
+                    if (licznik != 1)
                     {
-                        x = x * 0.95;
-                        if (x < a2)
+                        if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) < 0 || SigmaBetonTop < 0)
                         {
-                            x = 0;
+                            x2 = x;
+                            if (x < a2)
+                            {
+                                x = 0;
+                            }
+                            //licznik_zmniejsz++;
                         }
-                        licznik_zmniejsz++;
-                    }
-                    else if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) == 0)
-                    { }
-                    else
-                    {
-                        if (x * 1.1 > h)
-                        {
-                            x = (x + h) / 2;
-                        }
+                        else if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) == 0)
+                        { }
                         else
-                            x = 1.1 * x;
-                        licznik_zwieksz++;
+                        {
+                            x1 = x;
+                            //licznik_zwieksz++;
+                        }
+                        x = (x1 + x2) / 2;
                     }
 
                     A_II = alfaE * (As1 + As2) + b * x;       // sprowadzone pole powierzchni przekroju w m2
