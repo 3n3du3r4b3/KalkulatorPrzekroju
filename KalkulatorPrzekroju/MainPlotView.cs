@@ -23,6 +23,7 @@ namespace KalkulatorPrzekroju
         public MainPlotView()
         {
             wykres = new PlotModel();
+            wykres.LegendPosition = LegendPosition.BottomLeft;
         }
 
         public void AddLineSerie(double[][] dataPoints, string name)
@@ -63,5 +64,17 @@ namespace KalkulatorPrzekroju
             }
             wykres.Series.Remove(seriaToDelete);
         }
+
+        public void SetGraph()
+        {
+            //wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
+            //wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
+            wykres.Axes[0].PositionAtZeroCrossing = true;
+            wykres.Axes[1].PositionAtZeroCrossing = true;
+            wykres.Axes[0].AxislineStyle = LineStyle.Solid;
+            wykres.Axes[1].AxislineStyle = LineStyle.Solid;
+            wykres.Axes[0].Layer = OxyPlot.Axes.AxisLayer.AboveSeries;
+            wykres.Axes[1].Layer = OxyPlot.Axes.AxisLayer.AboveSeries;
+            }
     }
 }

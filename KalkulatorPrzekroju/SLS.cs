@@ -8,6 +8,9 @@ namespace KalkulatorPrzekroju
 {
     static class SLS
     {
+        private static double dimfactor = 1000;         // scale factor do wymiarow: 1000 - jedn podst to mmm
+        private static double forcefactor = 1000;       // scale factor dla sil: 1000 - jedn podst to kN
+
         /// <summary>Funkcja zwraca naprężenia w MPa</summary>
         /// <param name="section">klasa reprezentująca obliczany przekrój</param>
         /// <param name="NEd">siła osiowa w kN </param>
@@ -17,8 +20,8 @@ namespace KalkulatorPrzekroju
         {
             Steel currentSteel = section.currentSteel;
             Concrete currentConcrete = section.currentConrete;
-            double dimfactor = 1000; // scale factor do wymiarow: 1000 - jedn podst to mmm
-            double forcefactor = 1000; // scale factor dla sil: 1000 - jedn podst to kN
+            //double dimfactor = 1000; // scale factor do wymiarow: 1000 - jedn podst to mmm
+            //double forcefactor = 1000; // scale factor dla sil: 1000 - jedn podst to kN
             double h = section.h / dimfactor;
             double b = section.b / dimfactor;
             double a1 = section.a1 / dimfactor;
@@ -60,8 +63,8 @@ namespace KalkulatorPrzekroju
             SigmaBetonBottom = NEd / A_I * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * zBottom;
 
             // naprezenia w stali
-            SigmaStalAs1 = alfaE * NEd / A_I * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zBottom - a1);
-            SigmaStalAs2 = alfaE * NEd / A_I * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zTop - a2);
+            SigmaStalAs1 = alfaE * (NEd / A_I * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zBottom + a1));
+            SigmaStalAs2 = alfaE * (NEd / A_I * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zTop - a2));
 
             if (As1 == 0)
                 SigmaStalAs1 = 0;
@@ -80,57 +83,54 @@ namespace KalkulatorPrzekroju
             }
             else
             {
-                x = SigmaBetonTop / (SigmaBetonTop + Math.Abs(SigmaBetonBottom)) * h;
+                x = (SigmaBetonTop / (SigmaBetonTop + Math.Abs(SigmaBetonBottom))) * h;
             }
 
             faza = 1;
 
             if (SigmaBetonBottom >= -currentConcrete.fctm && SigmaBetonTop >= -currentConcrete.fctm)
             {
-                return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, xc - 0.5 * h, faza);
-            }
-            // SPRAWDZAMY ZAŁOŻENIA FAZY I ORAZ ROZPATRUJEMY PRZYPADKI FAZY II
-            else if (SigmaBetonBottom <= 0 && SigmaBetonTop <= 0)
+                return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
+            } 
+            else
             {
-                //  PRZYPADEK GDY CAŁY PRZEKRÓJ JEST ROZCIĄGANY I PRZEKROCZONE JEST FCTM:
-                A_II = (As1 + As2);                // sprowadzone pole powierzchni przekroju w m2
-                                                   //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
-                S = (As1 * (h - a1) + As2 * a2);
-                // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
-                xc = S / A_II;
-                // sprowadzony moment bezwladnosci przekroju wzgledem srodka ciezkosci! w m4
-                Iy = (As1 * (h - xc - a1) * (h - xc - a1) + (As2 * (xc - a2) * (xc - a2)));
-
-                // moment zginajacy w srodku ciezkosci przekroju
-                MEd_c = MEd + NEd * (0.5 * h - xc);
-
-                zTop = xc;                  //odleglosc gornej krawedzi przekroju od srodka ciezkosci w mm
-                zBottom = 0.5 * h - xc;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci w mm
-
-                // naprezenia w stali
-                SigmaStalAs1 = NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zBottom - a1);
-                SigmaStalAs2 = NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zTop - a2);
-                SigmaBetonTop = 0;
-                SigmaBetonBottom = 0;
-                x = 0;
-                faza = 2;
-
-                return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, xc - 0.5 * h, faza);
-            }
-
-            if (NEd == 0)
-            {
-                // PRZYPADEK GDY SIŁA PODŁUŻNA JEST ZEROWA - CZYSTE ZGINANIE
+                A_II = A_I;
+                int licznik = 0;
+                //int licznik_zwieksz = 0;
+                //int licznik_zmniejsz = 0;
+                double x1 = 0;
+                double x2 = h;
                 do
                 {
-                    x = xc;
+                    licznik++;
+                    if (licznik != 1)
+                    {
+                        if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) < 0 || SigmaBetonTop < 0)
+                        {
+                            x2 = x;
+                            if (x < a2)
+                            {
+                                x = 0;
+                            }
+                            //licznik_zmniejsz++;
+                        }
+                        else if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) == 0)
+                        { }
+                        else
+                        {
+                            x1 = x;
+                            //licznik_zwieksz++;
+                        }
+                        x = (x1 + x2) / 2;
+                    }
+
                     A_II = alfaE * (As1 + As2) + b * x;       // sprowadzone pole powierzchni przekroju w m2
                                                               //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
                     S = b * x * x / 2 + alfaE * (As1 * (h - a1) + As2 * a2);
                     // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
                     xc = S / A_II;
                     // sprowadzony moment bezwladnosci przekroju wzgledem srodka ciezkosci! w m4
-                    Iy = b * x * x * x / 12 + b * x * (0.5 * x - xc) * (0.5 * x - xc) +
+                    Iy = b * x * x * x / 12 + b * x * (xc - 0.5 * x) * (xc - 0.5 * x) +
                     alfaE * (As1 * (h - xc - a1) * (h - xc - a1) + (As2 * (xc - a2) * (xc - a2)));
 
                     // moment zginajacy w srodku ciezkosci przekroju
@@ -140,71 +140,30 @@ namespace KalkulatorPrzekroju
                     zBottom = xc - x;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci w mm
 
                     // naprezenia w betonie
-                    SigmaBetonTop = NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * zTop;
-                    SigmaBetonBottom = NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * zBottom;
-                } while (Math.Abs(SigmaBetonBottom) > 0.001);
+                    SigmaBetonTop = Naprezenie(NEd, MEd_c, zTop, Iy, A_II);
+                    SigmaBetonBottom = Naprezenie(NEd, MEd_c, zBottom, Iy, A_II);
 
-                // naprezenia w stali
-                SigmaStalAs1 = alfaE * (NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (xc - h + a1));
-                SigmaStalAs2 = alfaE * (NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zTop - a2));
+                    // naprezenia w stali
+                    SigmaStalAs1 = alfaE * Naprezenie(NEd, MEd_c, (xc - h + a1), Iy, A_II);
+                    SigmaStalAs2 = alfaE * Naprezenie(NEd, MEd_c, (zTop - a2), Iy, A_II);
 
-                if (As1 == 0)
-                    SigmaStalAs1 = 0;
+                    if (As1 == 0)
+                        SigmaStalAs1 = 0;
 
-                if (As2 == 0)
-                    SigmaStalAs2 = 0;
+                    if (As2 == 0)
+                        SigmaStalAs2 = 0;
 
-                faza = 2;
-            }
-            else
-            {
-                double es1 = MEd / NEd + (h - a1 - 0.5 * h);     //mimośród całkowity od środka ciezkosci zbrojenia As1
-                                                                 // trzeba obliczyc rownanie 3go stopnia oraz wyliczyc wysokosc strefy sciskanej x
-                                                                 // b*x*x*x + 3*b*x*x*(es1-(h-a1))+6*alfaE*x*(As1*es1+As2*(es1-(h-a1-a2)))-6*alfaE*(As1*es1*(h-a1)+As2*(es1-(h-a1-a2))*a2)=0
-                double wa = b;
-                double wb = 3 * b * (es1 - (h - a1));
-                double wc = 6 * alfaE * (As1 * es1 + As2 * (es1 - (h - a1 - a2)));
-                double wd = -6 * alfaE * (As1 * es1 * (h - a1) + As2 * (es1 - (h - a1 - a2)) * a2);
-
-                x = Solver.RozwRownanie3goStopnia(wa, wb, wc, wd, 0, h);
-
-                if (x < 0)
-                {
-                    x = 0; //błąd, nie ma rozwiązania w tym zakresie lub są dwa... ?!
+                    faza = 2;
                 }
+                while ((Math.Abs(SigmaBetonBottom) > 0.001) && (x != 0));
 
-                A_II = alfaE * (As1 + As2) + b * x;       // sprowadzone pole powierzchni przekroju w m2
-                                                          //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
-                S = b * x * x / 2 + alfaE * (As1 * (h - a1) + As2 * a2);
-                // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
-                xc = S / A_II;
-                // sprowadzony moment bezwladnosci przekroju wzgledem srodka ciezkosci! w m4
-                Iy = b * x * x * x / 12 + b * x * (xc - 0.5 * x) * (xc - 0.5 * x) +
-                alfaE * (As1 * (h - xc - a1) * (h - xc - a1) + (As2 * (xc - a2) * (xc - a2)));
-
-                // moment zginajacy w srodku ciezkosci przekroju
-                MEd_c = MEd + NEd * (0.5 * h - xc);
-
-                zTop = xc;                //odleglosc gornej krawedzi przekroju od srodka ciezkosci w mm
-                zBottom = xc - x;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci w mm
-
-                // naprezenia w betonie
-                SigmaBetonTop = NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * zTop;
-                SigmaBetonBottom = NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * zBottom;
-
-                // naprezenia w stali
-                SigmaStalAs1 = alfaE * (NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (xc - h + a1));
-                SigmaStalAs2 = alfaE * (NEd / A_II * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zTop - a2));
-
-                if (As1 == 0)
-                    SigmaStalAs1 = 0;
-
-                if (As2 == 0)
-                    SigmaStalAs2 = 0;
-
-                faza = 2;
+                if (x == 0)
+                {
+                    return new StressState(0, 0, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
+                }
+                else
+                    return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
             }
-            return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, xc - 0.5 * h, faza);
         }
 
         /// <summary>
@@ -314,8 +273,9 @@ namespace KalkulatorPrzekroju
             else
                 srMax = k3 * c + k4 * (k1 * k2 * fi) / roPeff;      // w milimetrach
 
-            return srMax * deltaEpsilon;        //w milimetrach
+            double wk1 = srMax * deltaEpsilon;
 
+            return wk1;        //w milimetrach
         }
 
         /// <summary>
@@ -424,10 +384,10 @@ namespace KalkulatorPrzekroju
         /// <returns>Zwraca moment krytycny w kNm</returns>
         public static double GetMomentKrytycznyRysa(Section section, double NEd, double rysaGraniczna, double kt, double k1)
         {
-            double minMoment = SLS.GetStresses(section, NEd, 0).Mimosrod * NEd;
+            double minMoment = 1.1 * SLS.GetStresses(section, NEd, 0).Mimosrod * NEd;
             double maxMoment = minMoment + 100;
             double momentKryt = (maxMoment + minMoment) / 2;
-            double eps = 0.001;
+            double eps = 0.00001;
             double wk = SLS.GetCrackWidth(section, NEd, maxMoment, kt, k1);
 
             while (wk < rysaGraniczna)
@@ -457,7 +417,7 @@ namespace KalkulatorPrzekroju
 
                 momentKryt = (maxMoment + minMoment) / 2;
             }
-            return momentKryt;
+            return maxMoment;
         }
 
         /// <summary>
@@ -478,7 +438,7 @@ namespace KalkulatorPrzekroju
             StressState naprezenia = SLS.GetStresses(section, maxForce, maxForce * mimosrod);
 
             while (naprezenia.ConcreteTopStress < wspRedukcji * section.currentConrete.fck)// &&
-                //naprezenia.ConcreteBottomStress < wspRedukcji * section.currentConrete.fck)
+                                                                                           //naprezenia.ConcreteBottomStress < wspRedukcji * section.currentConrete.fck)
             {
                 minForce += 100;
                 maxForce += 100;
@@ -491,12 +451,12 @@ namespace KalkulatorPrzekroju
             {
                 naprezenia = SLS.GetStresses(section, maxForce, maxForce * mimosrod);
                 if (naprezenia.ConcreteTopStress == wspRedukcji * section.currentConrete.fck) // ||
-                    //naprezenia.ConcreteBottomStress == wspRedukcji * section.currentConrete.fck)
+                                                                                              //naprezenia.ConcreteBottomStress == wspRedukcji * section.currentConrete.fck)
                 {
                     return Force;
                 }
                 else if (naprezenia.ConcreteTopStress > wspRedukcji * section.currentConrete.fck) // ||
-                    //naprezenia.ConcreteBottomStress > wspRedukcji * section.currentConrete.fck)
+                                                                                                  //naprezenia.ConcreteBottomStress > wspRedukcji * section.currentConrete.fck)
                 {
                     maxForce = Force;
                 }
@@ -583,16 +543,46 @@ namespace KalkulatorPrzekroju
             {
                 minForce -= 100;
                 maxForce -= 100;
-                mimosrod = SLS.GetStresses(section, maxForce, 0).Mimosrod;
-                wk = SLS.GetCrackWidth(section, maxForce, maxForce * mimosrod, kt, k1);
+                double wk1 = SLS.GetCrackWidth(
+                    section,
+                    maxForce,
+                    maxForce * SLS.GetStresses(section, maxForce, 0).Mimosrod,
+                    kt,
+                    k1
+                    );
+                double wk2 = SLS.GetCrackWidth(
+                    section.reversedSection,
+                    maxForce,
+                    maxForce * SLS.GetStresses(section.reversedSection, maxForce, 0).Mimosrod,
+                    kt,
+                    k1
+                    );
+
+                wk = Math.Max(wk1, wk2);
             }
 
             Force = (minForce + maxForce) / 2;
 
             while (Math.Abs(maxForce - minForce) > eps)
             {
-                mimosrod = SLS.GetStresses(section, maxForce, 0).Mimosrod;
-                wk = SLS.GetCrackWidth(section, Force, Force * mimosrod, kt, k1);
+                double wk1 = SLS.GetCrackWidth(
+                    section,
+                    maxForce,
+                    maxForce * SLS.GetStresses(section, Force, 0).Mimosrod,
+                    kt,
+                    k1
+                    );
+
+                double wk2 = SLS.GetCrackWidth(
+                    section.reversedSection,
+                    maxForce,
+                    maxForce * SLS.GetStresses(section.reversedSection, Force, 0).Mimosrod,
+                    kt,
+                    k1
+                    );
+
+                wk = Math.Max(wk1, wk2);
+
                 if (wk == rysaGraniczna)
                 {
                     return Force;
@@ -609,7 +599,7 @@ namespace KalkulatorPrzekroju
             }
             return Force;
         }
-        
+
         /// <summary>
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interkacji MEk / NEk
         /// </summary>
@@ -619,7 +609,7 @@ namespace KalkulatorPrzekroju
         /// <returns></returns>
         public static double[][] GetSLS_StressConcrete_Curve(Section section, int NoOfPoints, double wspRedukcjiBeton)
         {
-            double max = GetSilaOsiowaKrytycznaBeton(section,wspRedukcjiBeton);
+            double max = GetSilaOsiowaKrytycznaBeton(section, wspRedukcjiBeton);
             double min = GetSilaOsiowaKrytycznaStal(section, 1.0);
             double[][] results = new double[NoOfPoints][];
 
@@ -677,9 +667,9 @@ namespace KalkulatorPrzekroju
         {
             double max = GetSilaOsiowaKrytycznaBeton(section, 1.0);
             double min = GetSilaOsiowaKrytycznaRysa(section, rysaGraniczna, kt, k1);
-            double[][] results = new double[2*NoOfPoints+1][];
+            double[][] results = new double[2 * NoOfPoints][];
 
-            for (int i = 0; i <= NoOfPoints; i++)
+            for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = max - (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
@@ -692,6 +682,19 @@ namespace KalkulatorPrzekroju
 
             return results;
         }
-        
+
+        /// <summary>
+        /// Funkcja zwraca wartość naprężenia na poziomie z od środka cięzkości przekroju
+        /// </summary>
+        /// <param name="N">Siła osiowa w kN</param>
+        /// <param name="M">Moment zginający w kNm</param>
+        /// <param name="z">Odległoś od środka ciężkości przekroju</param>
+        /// <param name="Iy">Moment bezwładności przekroju w m4</param>
+        /// <param name="A">Pole powierzchni przekroju w m2</param>
+        /// <returns>Wartość napręzenia na poziome z od środka ciężkości w MPa</returns>
+        private static double Naprezenie(double N, double M, double z, double Iy, double A)
+        {
+            return N / A * (forcefactor / (dimfactor * dimfactor)) + M / Iy * (forcefactor / (dimfactor * dimfactor)) * z;
+        }
     }
 }
