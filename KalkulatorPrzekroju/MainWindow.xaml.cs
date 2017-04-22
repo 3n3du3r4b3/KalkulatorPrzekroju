@@ -40,6 +40,34 @@ namespace KalkulatorPrzekroju
 
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls();
+            Concrete bet = new Concrete(Concrete.classes.C40_50);
+            Steel stl = new Steel(Steel.classes.B500B);
+            Section sec = new Section(bet, stl, 1000, 1000, 25, 200.0, 50, 16, 200.0, 50);
+            StressState st1 = SLS.GetStresses(sec, 6323.125, 2199.3);
+            st1 = SLS.GetStresses(sec, 2500, 0);
+            st1 = SLS.GetStresses(sec, 0, 2000);
+            SLS.GetStresses(sec, -1000, 0);
+            StressState st2 = SLS.GetStresses(sec.reversedSection, 6338.462, 1362.844);
+            StressState st3 = SLS.GetStresses(sec.reversedSection, 6338.5, 1374);
+            double st3w = SLS.GetCrackWidth(sec.reversedSection, 6338.5, 1374, 0.4, wspolczynniki.Crack_k1);
+            double st3wm = SLS.GetMomentKrytycznyRysa(sec.reversedSection, 6338.5, 0.2, 0.4, wspolczynniki.Crack_k1);
+            double s1 = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, wspolczynniki.Crack_k1);
+            Section secRev = sec.reversedSection;
+            double s2 = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, wspolczynniki.Crack_k1);
+            double s2r = SLS.GetSilaOsiowaKrytycznaRysa(secRev, 0.2, 0.4, wspolczynniki.Crack_k1);
+            double s2m = SLS.GetMomentKrytycznyRysa(sec, -3497.5100, 0.2, 0.4, wspolczynniki.Crack_k1);
+            StressState st11 = SLS.GetStresses(sec, -3497.5100,0);
+            double wk1 = SLS.GetCrackWidth(sec, -2623.06, 0, 0.4, wspolczynniki.Crack_k1);
+            double wk2 = SLS.GetCrackWidth(sec.reversedSection, -2623.06, 0, 0.4, wspolczynniki.Crack_k1);
+            double m1 = SLS.GetMomentKrytycznyRysa(sec, s2, 0.2, 0.4, wspolczynniki.Crack_k1);
+            double m2 = SLS.GetMomentKrytycznyRysa(sec.reversedSection, s2, 0.2, 0.4, wspolczynniki.Crack_k1);
+            double wks = SLS.GetCrackWidth(sec.reversedSection, s2, m2, 0.4, wspolczynniki.Crack_k1);
+            double wks2 = SLS.GetCrackWidth(sec, s2, m1, 0.4, wspolczynniki.Crack_k1);
+            double sb = SLS.GetSilaOsiowaKrytycznaBeton(sec, 0.6);
+            double mb = SLS.GetMomentKrytycznyBeton(sec, sb, 0.6);
+            double mb2 = SLS.GetMomentKrytycznyBeton(sec.reversedSection, sb, 0.6);
+            double ss = SLS.GetSilaOsiowaKrytycznaStal(sec, 0.8);
+            double ms = SLS.GetMomentKrytycznyStal(sec, ss, 0.8);
         }
 
         private void SetControlls()
@@ -421,6 +449,7 @@ namespace KalkulatorPrzekroju
             PlotView_SLS_Crack.Model = diagram2.wykres;
             PlotView_ULS_VN.Model = diagramVN.wykres;
             //PlotView_SLS_Stresess.Model = diagram3.wykres;
+            diagram1.SetGraph();
         }
 
 
