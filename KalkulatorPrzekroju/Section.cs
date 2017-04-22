@@ -85,7 +85,7 @@ namespace KalkulatorPrzekroju
         /// <summary>
     	/// Zwraca aktualny przekrój obrócony o 180 stopni
     	/// </summary>
-        public Section reversedSection { get { return new Section(currentConrete, currentSteel, b, h, fi2, spacing2, c2, fi1,spacing1,c1); } }
+        public Section reversedSection { get { return new Section(currentConrete, currentSteel, b, h, fi2, spacing2, c2, fi1, spacing1, c1); } }
        
         /// <summary>
         /// Konstruktor przekroju na podstawie rozstawu zbrojenia
@@ -98,7 +98,7 @@ namespace KalkulatorPrzekroju
         /// <param name="spacing1">Rozstaw prętów zbrojenia As1 w mm</param>
         /// <param name="c1">Otulina zbrojenia As1 w mm</param>
         /// <param name="fi2">Średnica zbrojenia As2 w mm</param>
-        /// <param name="spacing2">Rozstaw prętów zbrojenia As1 w mm</param>
+        /// <param name="spacing2">Rozstaw prętów zbrojenia As2 w mm</param>
         /// <param name="c2">Otulina zbrojenia As2 w mm</param>
         public Section(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double fi2, double spacing2, double c2)
         {
