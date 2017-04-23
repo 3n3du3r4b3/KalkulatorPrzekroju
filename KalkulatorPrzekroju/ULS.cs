@@ -180,7 +180,9 @@ namespace KalkulatorPrzekroju
             Steel currentSteel = section.currentSteel;
             double lambda, eta;
             double fck = currentConrete.fck;
-
+            double c2 = section.c2;
+            double c1 = section.c1;
+            
             if (fck <= 50)
             {
                 eta = 1;
@@ -192,13 +194,49 @@ namespace KalkulatorPrzekroju
                 lambda = 0.8 - ((fck - 50) / 400);
             }
 
-
-            return 1 * (((b * h * currentConrete.fck * eta * lambda / gammaC * alfaCC) / 1000) +
+            /*
+            return 1 * (((b * (h - c1) * currentConrete.fck * eta / gammaC * alfaCC) / 1000) +
                 (As1 + As2) * currentSteel.fyk / gammaS / 1000);
+                */
+            double N1 = (((b * (h - c1) * currentConrete.fck * eta * lambda / gammaC * alfaCC) / 1000) +
+                (As1 + As2) * currentSteel.fyk / gammaS / 1000);
+            double N2 = 1.3*(((b * h * currentConrete.fck * eta / gammaC * alfaCC) / 1000) +
+                (As1 + As2) * currentSteel.fyk / gammaS / 1000);
+            double N = (N1 + N2) / 2;
+
+
+            double Np = ULS.MomentKrytyczny(section, N, situation);
+            double Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
+            double delta = N1 - N2;
+
+            while (Math.Abs(delta) > 0.001)
+            {
+                N = (N1 + N2) / 2;
+                Np = ULS.MomentKrytyczny(section, N, situation);
+                Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
+                delta = N1 - N2;
+
+                if (Np > Nl)
+                {
+                    N1 = N;
+                }
+                else
+                {
+                    N2 = N;
+                }
+            }
+
+            return N;
         }
 
         public static double SilaKrytycznaRozciagajaca(Section section, DesignSituation situation)
         {
+            double b = section.b;
+            double h = section.h;
+            Concrete currentConrete = section.currentConrete;
+            double As1 = section.As1;
+            double As2 = section.As2;
+            Steel currentSteel = section.currentSteel;
             double gammaS;
             if (situation == DesignSituation.Accidental)
             {
@@ -209,7 +247,34 @@ namespace KalkulatorPrzekroju
                 gammaS = 1.15;
             }
 
-            return -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
+            //return -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
+            double N1 = -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
+            double N2 = 1.2 * -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
+            double N = (N1 + N2) / 2;
+
+
+            double Np = ULS.MomentKrytyczny(section, N, situation);
+            double Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
+            double delta = N1 - N2;
+
+            while (Math.Abs(delta) > 0.001)
+            {
+                N = (N1 + N2) / 2;
+                Np = ULS.MomentKrytyczny(section, N, situation);
+                Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
+                delta = N1 - N2;
+
+                if (Np > Nl)
+                {
+                    N1 = N;
+                }
+                else
+                {
+                    N2 = N;
+                }
+            }
+
+            return N;
         }
 
         /// <summary>
