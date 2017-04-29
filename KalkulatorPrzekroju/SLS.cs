@@ -67,10 +67,10 @@ namespace KalkulatorPrzekroju
             SigmaStalAs2 = alfaE * (NEd / A_I * (forcefactor / (dimfactor * dimfactor)) + MEd_c / Iy * (forcefactor / (dimfactor * dimfactor)) * (zTop - a2));
 
             if (As1 == 0)
-                SigmaStalAs1 = 0;
+                SigmaStalAs1 = -10 * currentSteel.fyk;
 
             if (As2 == 0)
-                SigmaStalAs2 = 0;
+                SigmaStalAs2 = -10 * currentSteel.fyk;
 
             //określenie wysokości strefy ściskanej
             if (SigmaBetonBottom <= 0 && SigmaBetonTop <= 0)
@@ -91,7 +91,11 @@ namespace KalkulatorPrzekroju
             if (SigmaBetonBottom >= -currentConcrete.fctm && SigmaBetonTop >= -currentConcrete.fctm)
             {
                 return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
-            } 
+            }
+            else if (As1 == 0)
+            {
+                return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, 2);
+            }
             else
             {
                 A_II = A_I;
@@ -148,10 +152,10 @@ namespace KalkulatorPrzekroju
                     SigmaStalAs2 = alfaE * Naprezenie(NEd, MEd_c, (zTop - a2), Iy, A_II);
 
                     if (As1 == 0)
-                        SigmaStalAs1 = 0;
+                        SigmaStalAs1 = -10 * currentSteel.fyk;
 
                     if (As2 == 0)
-                        SigmaStalAs2 = 0;
+                        SigmaStalAs2 = -10 * currentSteel.fyk;
 
                     faza = 2;
                 }
@@ -197,6 +201,10 @@ namespace KalkulatorPrzekroju
             if (naprezenia.Faza == 1)
             {
                 return 0;
+            }
+            if (As == 0)
+            {
+                return 100;
             }
 
             double hcEff1 = 2.5 * section.a2;
@@ -336,7 +344,7 @@ namespace KalkulatorPrzekroju
         /// <returns>Zwraca moment krytyczny w kNm</returns>
         public static double GetMomentKrytycznyBeton(Section section, double NEd, double wspRedukcji)
         {
-            double minMoment = SLS.GetStresses(section, 0, 0).Mimosrod * SLS.GetSilaOsiowaKrytycznaBeton(section, wspRedukcji);
+            double minMoment = -SLS.GetStresses(section, 0, 0).Mimosrod * SLS.GetSilaOsiowaKrytycznaBeton(section, wspRedukcji);
             double maxMoment = minMoment + 100;
             double momentKryt = (maxMoment + minMoment) / 2;
             double eps = 0.001;
@@ -484,15 +492,15 @@ namespace KalkulatorPrzekroju
             double Force = (minForce + maxForce) / 2;
 
             double mimosrod = SLS.GetStresses(section, maxForce, 0).Mimosrod;
-            StressState naprezenia = SLS.GetStresses(section, maxForce, maxForce * mimosrod);
+            StressState naprezenia = SLS.GetStresses(section, maxForce, -maxForce * mimosrod);
 
-            while (Math.Abs(naprezenia.SteelAs1Stress) < section.currentSteel.fyk * wspRedukcji &&
-                Math.Abs(naprezenia.SteelAs2Stress) < section.currentSteel.fyk * wspRedukcji)
+            while (naprezenia.SteelAs1Stress > -section.currentSteel.fyk * wspRedukcji &&
+                naprezenia.SteelAs2Stress > -section.currentSteel.fyk * wspRedukcji)
             {
                 mimosrod = SLS.GetStresses(section, maxForce, 0).Mimosrod;
                 minForce -= 100;
                 maxForce -= 100;
-                naprezenia = SLS.GetStresses(section, maxForce, maxForce * mimosrod);
+                naprezenia = SLS.GetStresses(section, maxForce, -maxForce * mimosrod);
             }
 
             Force = (minForce + maxForce) / 2;
@@ -500,14 +508,14 @@ namespace KalkulatorPrzekroju
             while (Math.Abs(maxForce - minForce) > eps)
             {
                 mimosrod = SLS.GetStresses(section, Force, 0).Mimosrod;
-                naprezenia = SLS.GetStresses(section, Force, Force * mimosrod);
-                if (Math.Abs(naprezenia.SteelAs1Stress) == wspRedukcji * section.currentSteel.fyk ||
-                    Math.Abs(naprezenia.SteelAs2Stress) == wspRedukcji * section.currentSteel.fyk)
+                naprezenia = SLS.GetStresses(section, Force, -Force * mimosrod);
+                if (naprezenia.SteelAs1Stress == -wspRedukcji * section.currentSteel.fyk ||
+                    naprezenia.SteelAs2Stress == -wspRedukcji * section.currentSteel.fyk)
                 {
                     return Force;
                 }
-                else if (Math.Abs(naprezenia.SteelAs1Stress) > wspRedukcji * section.currentSteel.fyk ||
-                    Math.Abs(naprezenia.SteelAs2Stress) > wspRedukcji * section.currentSteel.fyk)
+                else if (naprezenia.SteelAs1Stress < -wspRedukcji * section.currentSteel.fyk ||
+                    naprezenia.SteelAs2Stress < -wspRedukcji * section.currentSteel.fyk)
                 {
                     maxForce = Force;
                 }
@@ -610,18 +618,18 @@ namespace KalkulatorPrzekroju
         public static double[][] GetSLS_StressConcrete_Curve(Section section, int NoOfPoints, double wspRedukcjiBeton)
         {
             double max = GetSilaOsiowaKrytycznaBeton(section, wspRedukcjiBeton);
-            double min = GetSilaOsiowaKrytycznaStal(section, 1.0);
-            double[][] results = new double[NoOfPoints][];
+            double min = GetSilaOsiowaKrytycznaStal(section, 0.8);
+            double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = SLS.GetSilaOsiowaKrytycznaBeton(section, Ned);
+                results[i][1] = SLS.GetMomentKrytycznyBeton(section, Ned, wspRedukcjiBeton);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -SLS.GetSilaOsiowaKrytycznaBeton(section.reversedSection, Ned);
+                results[results.Length - i - 1][1] = -SLS.GetMomentKrytycznyBeton(section.reversedSection, Ned, wspRedukcjiBeton);
             }
 
             return results;
@@ -636,19 +644,19 @@ namespace KalkulatorPrzekroju
         /// <returns></returns>
         public static double[][] GetSLS_StressSteel_Curve(Section section, int NoOfPoints, double wspRedukcjiStal)
         {
-            double max = GetSilaOsiowaKrytycznaBeton(section, 1.0);
+            double max = GetSilaOsiowaKrytycznaBeton(section, 0.6);
             double min = GetSilaOsiowaKrytycznaStal(section, wspRedukcjiStal);
-            double[][] results = new double[NoOfPoints][];
+            double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
                 double Ned = min + (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = SLS.GetSilaOsiowaKrytycznaStal(section, Ned);
+                results[i][1] = SLS.GetMomentKrytycznyStal(section, Ned, wspRedukcjiStal);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -SLS.GetSilaOsiowaKrytycznaStal(section.reversedSection, Ned);
+                results[results.Length - i - 1][1] = -SLS.GetMomentKrytycznyStal(section.reversedSection, Ned, wspRedukcjiStal);
             }
 
             return results;

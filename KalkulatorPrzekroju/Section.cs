@@ -85,8 +85,26 @@ namespace KalkulatorPrzekroju
         /// <summary>
     	/// Zwraca aktualny przekrój obrócony o 180 stopni
     	/// </summary>
-        public Section reversedSection { get { return new Section(currentConrete, currentSteel, b, h, fi2, spacing2, c2, fi1, spacing1, c1); } }
-       
+        public Section reversedSection { get { return new Section(currentConrete, currentSteel, b, h, fi2, spacing2, c2, As2, fi1, spacing1, c1, As2); } }
+        
+        private Section(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double As1, double fi2, double spacing2, double c2, double As2)
+        {
+            this.b = b;
+            this.h = h;
+            this.fi1 = fi1;
+            this.c1 = c1;
+            this.spacing1 = spacing1;
+            this.fi2 = fi2;
+            this.c2 = c2;
+            this.spacing2 = spacing2;
+            currentConrete = concrete;
+            currentSteel = steel;
+            this.As1 = As1;
+            this.As2 = As2;
+            a1 = c1 + 0.5 * fi1;
+            a2 = c2 + 0.5 * fi2;
+        }
+
         /// <summary>
         /// Konstruktor przekroju na podstawie rozstawu zbrojenia
         /// </summary>

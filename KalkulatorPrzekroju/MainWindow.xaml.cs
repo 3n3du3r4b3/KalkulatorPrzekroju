@@ -79,11 +79,15 @@ namespace KalkulatorPrzekroju
                 comboBox_diameter_As2_1.Items.Add(item);
                 comboBox_diameter_As1_2.Items.Add(item);
                 comboBox_diameter_As2_2.Items.Add(item);
+                comboBox_diameter_AsStir_1.Items.Add(item);
+                comboBox_diameter_AsStir_2.Items.Add(item);
             }
-            comboBox_diameter_As1_1.SelectedIndex = 0;
-            comboBox_diameter_As2_1.SelectedIndex = 0;
-            comboBox_diameter_As1_2.SelectedIndex = 0;
-            comboBox_diameter_As2_2.SelectedIndex = 0;
+            comboBox_diameter_As1_1.SelectedIndex = 4;
+            comboBox_diameter_As2_1.SelectedIndex = 4;
+            comboBox_diameter_As1_2.SelectedIndex = 4;
+            comboBox_diameter_As2_2.SelectedIndex = 4;
+            comboBox_diameter_AsStir_1.SelectedIndex = 4;
+            comboBox_diameter_AsStir_2.SelectedIndex = 4;
 
             comboBox_As1_spac_no_1.Items.Add("spacing");
             comboBox_As1_spac_no_1.Items.Add("no of bars");
@@ -212,7 +216,7 @@ namespace KalkulatorPrzekroju
         {
             this.Close();
         }
-        
+
         private void menuItem_Save_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -274,7 +278,7 @@ namespace KalkulatorPrzekroju
                 Int32.TryParse(tb.Text, out input);
                 tb.Text = input.ToString(format);
             }
-            
+
         }
 
         private void textBox_spac_no_As2_1_LostFocus(object sender, RoutedEventArgs e)
@@ -342,6 +346,53 @@ namespace KalkulatorPrzekroju
             tb.Text = input.ToString(format);
         }
 
+        private void textBox_legs_2_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_legs_2;
+            int input;
+            Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_stir_spacing_2_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_stir_spacing_2;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_stir_angle_2_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_stir_angle_2;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_legs_1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_legs_1;
+            int input;
+            Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_stir_spacing_1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_stir_spacing_1;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_stir_angle_1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_stir_angle_1;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
 
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
@@ -378,14 +429,63 @@ namespace KalkulatorPrzekroju
             }
             else
                 section1 = null;
-            
-            double[][] tablicaPunktowULS = ULS.GetULS_MN_Curve(
+
+            if (comboBox_As2_spac_no_2.Text == "spacing")
+            {
+                section2 = new Section(
+                   new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+                   new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+                   Double.Parse(textBox_width_2.Text),
+                   Double.Parse(textBox_height_2.Text),
+                   Double.Parse(comboBox_diameter_As1_2.Text),
+                   Double.Parse(textBox_spac_no_As1_2.Text),
+                   Double.Parse(textBox_cover_As1_2.Text),
+                   Double.Parse(comboBox_diameter_As2_2.Text),
+                   Double.Parse(textBox_spac_no_As2_2.Text),
+                   Double.Parse(textBox_cover_As2_2.Text)
+                   );
+            }
+            else if (comboBox_As2_spac_no_2.Text == "no of bars")
+            {
+                section2 = new Section(
+                   new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+                   new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+                   Double.Parse(textBox_width_2.Text),
+                   Double.Parse(textBox_height_2.Text),
+                   Double.Parse(comboBox_diameter_As1_2.Text),
+                   Int32.Parse(textBox_spac_no_As1_2.Text),
+                   Double.Parse(textBox_cover_As1_2.Text),
+                   Double.Parse(comboBox_diameter_As2_2.Text),
+                   Int32.Parse(textBox_spac_no_As2_2.Text),
+                   Double.Parse(textBox_cover_As2_2.Text)
+                   );
+            }
+            else
+                section1 = null;
+
+            Stirrups stirrups1 = new Stirrups(
+                Int32.Parse(textBox_legs_1.Text),
+                Double.Parse(comboBox_diameter_AsStir_1.Text),
+                section1.currentSteel,
+                Double.Parse(textBox_stir_spacing_1.Text),
+                Double.Parse(textBox_stir_angle_1.Text)
+                );
+
+            Stirrups stirrups2 = new Stirrups(
+                Int32.Parse(textBox_legs_2.Text),
+                Double.Parse(comboBox_diameter_AsStir_2.Text),
+                section2.currentSteel,
+                Double.Parse(textBox_stir_spacing_2.Text),
+                Double.Parse(textBox_stir_angle_2.Text)
+                );
+
+            double[][] tab1_ULS = ULS.GetULS_MN_Curve(
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints);
 
-            double[][] tab2 = ULS.GetULS_MN_Curve(
-                section1.reversedSection,
+            double[][] tab2_ULS = ULS.GetULS_MN_Curve(
+                section2,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
@@ -408,29 +508,29 @@ namespace KalkulatorPrzekroju
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints,
-                new Stirrups(2,12,section1.currentSteel,300,90)
+                stirrups1
                 );
 
-            /*     double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
+            double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
                      0.8
                      );
-
-                 double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
+            
+            double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
                      0.6
                      );
-     */
+
             MainPlotView diagram1 = new MainPlotView();
-            diagram1.AddLineSerie(tablicaPunktowULS, "Section 1");
-            diagram1.AddPointSerie(tab2, "Section reversed");
+            diagram1.AddLineSerie(tab1_ULS, "Section 1");
+            diagram1.AddLineSerie(tab2_ULS, "Section 2");
             MainPlotView diagram2 = new MainPlotView();
             diagram2.AddLineSerie(tabSLS_Crack, "Section 1");
-            //MainPlotView diagram3 = new MainPlotView();
-            //diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
-            //diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
+            MainPlotView diagram3 = new MainPlotView();
+            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
+            diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
             MainPlotView diagramVN = new MainPlotView();
             diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c");
             diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s");
@@ -448,12 +548,9 @@ namespace KalkulatorPrzekroju
             PlotView_ULS_MN.Model = diagram1.wykres;
             PlotView_SLS_Crack.Model = diagram2.wykres;
             PlotView_ULS_VN.Model = diagramVN.wykres;
-            //PlotView_SLS_Stresess.Model = diagram3.wykres;
+            PlotView_SLS_Stresess.Model = diagram3.wykres;
             diagram1.SetGraph();
         }
-
-
-
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
     }
