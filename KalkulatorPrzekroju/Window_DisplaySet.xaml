@@ -1,16 +1,26 @@
-﻿<Window x:Class="KalkulatorPrzekroju.Window_DisplaySet"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="KalkulatorPrzekroju.Window_DisplaySet"
         mc:Ignorable="d"
-        Title="Window_DisplaySet" Height="300" Width="300">
+        Title="Window_DisplaySet" Height="300" Width="600">
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0,40">
             <TabItem Header="ULS M/N">
                 <Grid x:Name="grid_uls_mn" Background="#FFE5E5E5">
-                    
+                    <GroupBox x:Name="groupBox" Header="Section 1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="100" Width="230">
+                        <Grid Margin="0">
+                            <Label x:Name="label" Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label x:Name="label1" Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <ComboBox x:Name="comboBox_ULS_MN_LineWeight" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="120"/>
+
+                            <xctk:ColorPicker x:Name="colorPicker_ULS_MN_Line1" HorizontalAlignment="Left" Margin="90,40,0,0" VerticalAlignment="Top" Width="120"/>
+                        </Grid>
+                    </GroupBox>
+
                 </Grid>
             </TabItem>
             <TabItem Header="ULS V/N">
@@ -23,9 +33,9 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
-        <Button x:Name="button_Save" Content="Save" HorizontalAlignment="Left" Margin="10,0,0,11" Width="70" Height="20" VerticalAlignment="Bottom"/>
-        <Button x:Name="button_Close" Content="Close" HorizontalAlignment="Left" Margin="95,0,0,11" Width="70" Height="20" VerticalAlignment="Bottom" Click="button_Close_Click"/>
-        <Button x:Name="button_RestoreDef" Content="Restore Defaults" HorizontalAlignment="Left" Margin="180,0,0,11" Width="100" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_Save" Content="Save" HorizontalAlignment="Right" Margin="10,0,210,11" Width="70" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_Close" Content="Close" HorizontalAlignment="Right" Margin="95,0,125,11" Width="70" Height="20" VerticalAlignment="Bottom" Click="button_Close_Click"/>
+        <Button x:Name="button_RestoreDef" Content="Restore Defaults" HorizontalAlignment="Right" Margin="180,0,10,11" Width="100" Height="20" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

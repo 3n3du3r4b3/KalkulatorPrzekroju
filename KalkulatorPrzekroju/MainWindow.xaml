@@ -32,55 +32,71 @@
         <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="0,35,0,0.4" Width="450">
             <Grid>
                 <TabControl x:Name="tabControl1" Width="450" Margin="0,0,0,50" TabIndex="1">
-                    <TabItem Header="Section 1" TabIndex="2">
+                    <TabItem Header="Section 1" TabIndex="2" Height="22" Margin="-2,-2,-2.2,0" VerticalAlignment="Top">
                         <Grid x:Name="grid_Section_1" Background="#FFE5E5E5">
-                            <GroupBox x:Name="groupBox_Geometry" Header="Geometry" Margin="10,10,10,0" Height="100" VerticalAlignment="Top">
+                            <GroupBox x:Name="groupBox_Geometry" Header="Geometry" Margin="10,5,10,0" Height="100" VerticalAlignment="Top">
                                 <Grid>
                                     <Label x:Name="label" Content="Width: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_width_1" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_width_1_LostFocus" TabIndex="1"/>
+                                    <TextBox x:Name="textBox_width_1" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_width_1_LostFocus" TabIndex="1" Text="1000"/>
                                     <Label x:Name="label1" Content="mm" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top"/>
                                     <Label x:Name="label2" Content="Height: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_height_1" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_height_1_LostFocus" TabIndex="2"/>
+                                    <TextBox x:Name="textBox_height_1" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_height_1_LostFocus" TabIndex="2" Text="1000"/>
                                     <Label x:Name="label1_Copy" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
                                     <Label x:Name="label_Copy" Content="Cover bottom: " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_cover_As1_1" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As1_1_LostFocus" TabIndex="3"/>
+                                    <TextBox x:Name="textBox_cover_As1_1" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As1_1_LostFocus" TabIndex="3" Text="40"/>
                                     <Label x:Name="label1_Copy1" Content="mm" HorizontalAlignment="Left" Margin="179,41,0,0" VerticalAlignment="Top"/>
                                     <Label x:Name="label2_Copy" Content="Cover top: " HorizontalAlignment="Left" Margin="214,41,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_cover_As2_1" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As2_1_LostFocus" TabIndex="4"/>
+                                    <TextBox x:Name="textBox_cover_As2_1" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As2_1_LostFocus" TabIndex="4" Text="40"/>
                                     <Label x:Name="label1_Copy2" Content="mm" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_Materials" Header="Materials" Margin="10,255,10,0" Height="65" VerticalAlignment="Top">
+                            <GroupBox x:Name="groupBox_Materials" Header="Materials" Margin="10,250,204,0" Height="82" VerticalAlignment="Top">
                                 <Grid>
-                                    <Label x:Name="label3" Content="Concrete: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                                    <Label x:Name="label5" Content="Steel: " HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top"/>
-                                    <ComboBox x:Name="comboBox_Concrete_1" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="120" TabIndex="11"/>
-                                    <ComboBox x:Name="comboBox_Steel_1" HorizontalAlignment="Left" Margin="272,10,0,0" VerticalAlignment="Top" Width="120" TabIndex="12"/>
+                                    <Label x:Name="label3" Content="Concrete: " HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                                    <Label x:Name="label5" Content="Steel: " HorizontalAlignment="Left" Margin="32,30,0,-3.8" VerticalAlignment="Top"/>
+                                    <ComboBox x:Name="comboBox_Concrete_1" HorizontalAlignment="Left" Margin="79,5,0,0" VerticalAlignment="Top" Width="120" TabIndex="11" SelectedIndex="5"/>
+                                    <ComboBox x:Name="comboBox_Steel_1" HorizontalAlignment="Left" Margin="79,30,0,-0.8" VerticalAlignment="Top" Width="120" TabIndex="12"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_Reo_Bottom" Header="Bottom reinforcement" Margin="10,115,10,0" Height="65" VerticalAlignment="Top">
+                            <GroupBox x:Name="groupBox_Reo_Bottom" Header="Bottom reinforcement" Margin="10,110,10,0" Height="65" VerticalAlignment="Top">
                                 <Grid>
-                                    <ComboBox x:Name="comboBox_diameter_As1_1" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="5"/>
+                                    <ComboBox x:Name="comboBox_diameter_As1_1" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="5" SelectedIndex="6"/>
                                     <Label x:Name="label4" Content="Diameter: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                                     <Label x:Name="label6" Content="mm" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_spac_no_As1_1" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As1_1_LostFocus" TabIndex="7"/>
+                                    <TextBox x:Name="textBox_spac_no_As1_1" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As1_1_LostFocus" TabIndex="7" Text="200"/>
                                     <Label x:Name="label_spac_no_As1_1" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
                                     <ComboBox x:Name="comboBox_As1_spac_no_1" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="comboBox_As1_spac_no_1_SelectionChanged" TabIndex="6"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_Reo_Bottom_Copy" Header="Top reinforcement" Margin="10,185,10,0" Height="65" VerticalAlignment="Top">
+                            <GroupBox x:Name="groupBox_Reo_Bottom_Copy" Header="Top reinforcement" Margin="10,180,10,0" Height="65" VerticalAlignment="Top">
                                 <Grid>
-                                    <ComboBox x:Name="comboBox_diameter_As2_1" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="8"/>
+                                    <ComboBox x:Name="comboBox_diameter_As2_1" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="8" SelectedIndex="3"/>
                                     <Label x:Name="label7" Content="Diameter: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                                     <Label x:Name="label8" Content="mm" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_spac_no_As2_1" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As2_1_LostFocus" TabIndex="10"/>
+                                    <TextBox x:Name="textBox_spac_no_As2_1" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As2_1_LostFocus" TabIndex="10" Text="100"/>
                                     <Label x:Name="label_spac_no_As2_1" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
                                     <ComboBox x:Name="comboBox_As2_spac_no_1" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="comboBox_As2_spac_no_1_SelectionChanged" TabIndex="9"/>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_DesignSit" Header="Design Situation" Margin="10,325,204,0" Height="65" VerticalAlignment="Top">
+                            <GroupBox x:Name="groupBox_DesignSit" Header="Design Situation" Margin="10,340,204,0" Height="65" VerticalAlignment="Top">
                                 <Grid>
                                     <ComboBox x:Name="comboBox_DesignSituation_1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" TabIndex="11"/>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox x:Name="groupBox_Stirrups" Header="Stirrups" Margin="245,250,10,0" Height="155" VerticalAlignment="Top">
+                                <Grid>
+                                    <ComboBox x:Name="comboBox_diameter_AsStir_1" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="8" SelectedIndex="3"/>
+                                    <Label x:Name="label_stir1" Content="Diameter: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                    <Label x:Name="label_stir2" Content="mm" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top"/>
+                                    <Label x:Name="label_stir3" Content="No. of legs: " HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="textBox_legs_1" HorizontalAlignment="Left" Height="23" Margin="90,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" TextAlignment="Center" LostFocus="textBox_legs_1_LostFocus" TabIndex="10" Text="4"/>
+                                    <Label x:Name="label_stir4" Content="Spacing: " HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+                                    <Label x:Name="label_stir5" Content="mm" HorizontalAlignment="Left" Margin="144,70,0,0" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="textBox_stir_spacing_1" HorizontalAlignment="Left" Height="23" Margin="79,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_spacing_1_LostFocus" TabIndex="10" Text="200"/>
+                                    <Label x:Name="label_stir6" Content="Angle: " HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="textBox_stir_angle_1" HorizontalAlignment="Left" Height="23" Margin="79,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_1_LostFocus" TabIndex="10" Text="90"/>
+                                    <Label x:Name="label_stir7" Content="[ ° ]" HorizontalAlignment="Left" Margin="144,100,0,0" VerticalAlignment="Top"/>
+
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -91,53 +107,69 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid x:Name="grid_Section_1_Copy" Background="#FFE5E5E5">
-                                <GroupBox x:Name="groupBox_Geometry1" Header="Geometry" Margin="10,10,10,0" Height="100" VerticalAlignment="Top">
+                                <GroupBox x:Name="groupBox_Geometry1" Header="Geometry" Margin="10,5,10,0" Height="100" VerticalAlignment="Top">
                                     <Grid>
                                         <Label x:Name="label9" Content="Width: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                                        <TextBox x:Name="textBox_width_2" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_width_2_LostFocus" TabIndex="1"/>
+                                        <TextBox x:Name="textBox_width_2" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_width_2_LostFocus" TabIndex="1" Text="1000"/>
                                         <Label x:Name="label10" Content="mm" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top"/>
                                         <Label x:Name="label11" Content="Height: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top"/>
-                                        <TextBox x:Name="textBox_height_2" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_height_2_LostFocus" TabIndex="2"/>
+                                        <TextBox x:Name="textBox_height_2" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_height_2_LostFocus" TabIndex="2" Text="500"/>
                                         <Label x:Name="label1_Copy3" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
                                         <Label x:Name="label_Copy1" Content="Cover bottom: " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                                        <TextBox x:Name="textBox_cover_As1_2" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As1_2_LostFocus" TabIndex="3"/>
+                                        <TextBox x:Name="textBox_cover_As1_2" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As1_2_LostFocus" TabIndex="3" Text="50"/>
                                         <Label x:Name="label1_Copy4" Content="mm" HorizontalAlignment="Left" Margin="179,41,0,0" VerticalAlignment="Top"/>
                                         <Label x:Name="label2_Copy1" Content="Cover top: " HorizontalAlignment="Left" Margin="214,41,0,0" VerticalAlignment="Top"/>
-                                        <TextBox x:Name="textBox_cover_As2_2" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As2_2_LostFocus" TabIndex="4"/>
+                                        <TextBox x:Name="textBox_cover_As2_2" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_cover_As2_2_LostFocus" TabIndex="4" Text="50"/>
                                         <Label x:Name="label1_Copy5" Content="mm" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top"/>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox x:Name="groupBox_Reo_Bottom1" Header="Bottom reinforcement" Margin="10,115,10,0" Height="65" VerticalAlignment="Top">
+                                <GroupBox x:Name="groupBox_Reo_Bottom1" Header="Bottom reinforcement" Margin="10,110,10,0" Height="65" VerticalAlignment="Top">
                                     <Grid>
                                         <ComboBox x:Name="comboBox_diameter_As1_2" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="5"/>
                                         <Label x:Name="label14" Content="Diameter: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                                         <Label x:Name="label15" Content="mm" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top"/>
-                                        <TextBox x:Name="textBox_spac_no_As1_2" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As1_2_LostFocus" TabIndex="7"/>
+                                        <TextBox x:Name="textBox_spac_no_As1_2" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As1_2_LostFocus" TabIndex="7" Text="200"/>
                                         <Label x:Name="label_spac_no_As1_2" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
                                         <ComboBox x:Name="comboBox_As1_spac_no_2" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="comboBox_As1_spac_no_2_SelectionChanged" TabIndex="6"/>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox x:Name="groupBox_Reo_Top1" Header="Top reinforcement" Margin="10,185,10,0" Height="65" VerticalAlignment="Top">
+                                <GroupBox x:Name="groupBox_Reo_Top1" Header="Top reinforcement" Margin="10,180,10,0" Height="65" VerticalAlignment="Top">
                                     <Grid>
                                         <ComboBox x:Name="comboBox_diameter_As2_2" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="8"/>
                                         <Label x:Name="label16" Content="Diameter: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                                         <Label x:Name="label17" Content="mm" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top"/>
-                                        <TextBox x:Name="textBox_spac_no_As2_2" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As2_2_LostFocus" TabIndex="10"/>
+                                        <TextBox x:Name="textBox_spac_no_As2_2" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_spac_no_As2_2_LostFocus" TabIndex="10" Text="200"/>
                                         <Label x:Name="label_spac_no_As2_2" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
                                         <ComboBox x:Name="comboBox_As2_spac_no_2" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Width="100" SelectionChanged="comboBox_As2_spac_no_2_SelectionChanged" TabIndex="9"/>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox x:Name="groupBox_Materials1" Header="Materials" Margin="10,255,10,0" Height="65" VerticalAlignment="Top">
+                                <GroupBox x:Name="groupBox_Materials1" Header="Materials" Margin="10,250,204,0" Height="82" VerticalAlignment="Top">
                                     <Grid>
-                                        <Label x:Name="label12" Content="Concrete: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                                        <Label x:Name="label13" Content="Steel: " HorizontalAlignment="Left" Margin="225,10,0,0" VerticalAlignment="Top"/>
-                                        <ComboBox x:Name="comboBox_Concrete_2" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="120" TabIndex="11"/>
-                                        <ComboBox x:Name="comboBox_Steel_2" HorizontalAlignment="Left" Margin="272,10,0,0" VerticalAlignment="Top" Width="120" TabIndex="12"/>
+                                        <Label x:Name="label12" Content="Concrete: " HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                                        <Label x:Name="label13" Content="Steel: " HorizontalAlignment="Left" Margin="32,30,0,-3.8" VerticalAlignment="Top"/>
+                                        <ComboBox x:Name="comboBox_Concrete_2" HorizontalAlignment="Left" Margin="79,5,0,0" VerticalAlignment="Top" Width="120" TabIndex="11"/>
+                                        <ComboBox x:Name="comboBox_Steel_2" HorizontalAlignment="Left" Margin="79,30,0,-0.8" VerticalAlignment="Top" Width="120" TabIndex="12"/>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox x:Name="groupBox_DesignSit2" Header="Design Situation" Margin="10,325,204,0" Height="65" VerticalAlignment="Top">
+                                <GroupBox x:Name="groupBox_DesignSit2" Header="Design Situation" Margin="10,340,204,-0.2" Height="65" VerticalAlignment="Top">
                                     <Grid>
                                         <ComboBox x:Name="comboBox_DesignSituation_2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="200" TabIndex="11"/>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox x:Name="groupBox_Stirrups_s2" Header="Stirrups" Margin="245,250,10,0" Height="155" VerticalAlignment="Top">
+                                    <Grid>
+                                        <ComboBox x:Name="comboBox_diameter_AsStir_2" HorizontalAlignment="Left" Margin="79,10,0,0" VerticalAlignment="Top" Width="60" TabIndex="8" SelectedIndex="3"/>
+                                        <Label x:Name="label_stir8" Content="Diameter: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                        <Label x:Name="label_stir9" Content="mm" HorizontalAlignment="Left" Margin="144,10,0,0" VerticalAlignment="Top"/>
+                                        <Label x:Name="label_stir10" Content="No. of legs: " HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="textBox_legs_2" HorizontalAlignment="Left" Height="23" Margin="90,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="49" TextAlignment="Center" TabIndex="10" Text="4" LostFocus="textBox_legs_2_LostFocus"/>
+                                        <Label x:Name="label_stir11" Content="Spacing: " HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top"/>
+                                        <Label x:Name="label_stir12" Content="mm" HorizontalAlignment="Left" Margin="144,70,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="textBox_stir_spacing_2" HorizontalAlignment="Left" Height="23" Margin="79,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_spacing_2_LostFocus" TabIndex="10" Text="200"/>
+                                        <Label x:Name="label_stir13" Content="Angle: " HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="textBox_stir_angle_2" HorizontalAlignment="Left" Height="23" Margin="79,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_2_LostFocus" TabIndex="10" Text="90"/>
+                                        <Label x:Name="label_stir14" Content="[ ° ]" HorizontalAlignment="Left" Margin="144,100,0,0" VerticalAlignment="Top"/>
+
                                     </Grid>
                                 </GroupBox>
                             </Grid>
@@ -188,7 +220,7 @@
             <TabItem Header="ULS V/N">
                 <Grid Background="#FFE5E5E5">
                     <oxy:PlotView x:Name="PlotView_ULS_VN"/>
-                    
+
                     <Button x:Name="button_SaveToPDF_ULS_VN" Content="Save To PDF" HorizontalAlignment="Left" Margin="5,0,0,5" VerticalAlignment="Bottom" Width="75" Opacity="0.5"/>
                 </Grid>
             </TabItem>

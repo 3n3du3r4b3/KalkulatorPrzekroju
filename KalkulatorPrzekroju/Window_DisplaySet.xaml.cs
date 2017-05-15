@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using OxyPlot;
+using OxyPlot.Series;
+using Microsoft.Win32;
+using Xceed.Wpf.Toolkit;
 
 namespace KalkulatorPrzekroju
 {
@@ -22,8 +26,13 @@ namespace KalkulatorPrzekroju
         public Window_DisplaySet()
         {
             InitializeComponent();
+            Settings ustawienia = new Settings();
+            ustawienia.SaveToFile();
+            ustawienia.ReadFromFile();
+            colorPicker_ULS_MN_Line1.SelectedColor = ustawienia.ULSMN_Section1LineColor;
         }
 
+        //  obsługa przycisków
         private void button_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
