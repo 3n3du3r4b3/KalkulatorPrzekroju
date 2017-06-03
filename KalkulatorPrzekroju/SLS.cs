@@ -53,7 +53,7 @@ namespace KalkulatorPrzekroju
             alfaE * (As1 * (h - xc - a1) * (h - xc - a1) + (As2 * (xc - a2) * (xc - a2)));
 
             // moment zginajacy w srodku ciezkosci przekroju
-            MEd_c = MEd + NEd * (0.5 * h - xc);
+            MEd_c = MEd - NEd * (0.5 * h - xc);
 
             double zTop = xc;               //odleglosc gornej krawedzi przekroju od srodka ciezkosci
             double zBottom = xc - h;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci
@@ -94,39 +94,19 @@ namespace KalkulatorPrzekroju
             }
             else if (As1 == 0)
             {
-                return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, 2);
+                return new StressState(SigmaBetonTop, SigmaBetonBottom, 0, SigmaStalAs2, x, 0.5 * h - xc, 2);
             }
             else
             {
                 A_II = A_I;
-                int licznik = 0;
+                //int licznik = 0;
                 //int licznik_zwieksz = 0;
                 //int licznik_zmniejsz = 0;
                 double x1 = 0;
                 double x2 = h;
                 do
                 {
-                    licznik++;
-                    if (licznik != 1)
-                    {
-                        if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) < 0 || SigmaBetonTop < 0)
-                        {
-                            x2 = x;
-                            if (x < a2)
-                            {
-                                x = 0;
-                            }
-                            //licznik_zmniejsz++;
-                        }
-                        else if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) == 0)
-                        { }
-                        else
-                        {
-                            x1 = x;
-                            //licznik_zwieksz++;
-                        }
-                        x = (x1 + x2) / 2;
-                    }
+                    x = (x1 + x2) / 2;
 
                     A_II = alfaE * (As1 + As2) + b * x;       // sprowadzone pole powierzchni przekroju w m2
                                                               //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
@@ -138,7 +118,7 @@ namespace KalkulatorPrzekroju
                     alfaE * (As1 * (h - xc - a1) * (h - xc - a1) + (As2 * (xc - a2) * (xc - a2)));
 
                     // moment zginajacy w srodku ciezkosci przekroju
-                    MEd_c = MEd + NEd * (0.5 * h - xc);
+                    MEd_c = MEd - NEd * (0.5 * h - xc);
 
                     zTop = xc;                //odleglosc gornej krawedzi przekroju od srodka ciezkosci w mm
                     zBottom = xc - x;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci w mm
@@ -151,11 +131,21 @@ namespace KalkulatorPrzekroju
                     SigmaStalAs1 = alfaE * Naprezenie(NEd, MEd_c, (xc - h + a1), Iy, A_II);
                     SigmaStalAs2 = alfaE * Naprezenie(NEd, MEd_c, (zTop - a2), Iy, A_II);
 
+
+                    if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) < 0)
+                    {
+                        x2 = x;
+                    }
+                    else
+                    {
+                        x1 = x;
+                    }
+
                     if (As1 == 0)
-                        SigmaStalAs1 = -10 * currentSteel.fyk;
+                        SigmaStalAs1 = 0;
 
                     if (As2 == 0)
-                        SigmaStalAs2 = -10 * currentSteel.fyk;
+                        SigmaStalAs2 = 0;
 
                     faza = 2;
                 }
@@ -227,49 +217,29 @@ namespace KalkulatorPrzekroju
             deltaEpsilon = Math.Max(deltaEpsilon1, deltaEpsilon2);
 
             //określenie współczynnika k2
-            if (NEd == 0)
+            double epsilon1, epsilon2;
+
+            if (naprezenia.SteelAs1Stress * naprezenia.SteelAs2Stress < 0)
             {
                 k2 = 0.5;
             }
-            else if (naprezenia.ConcreteBottomStress == naprezenia.ConcreteTopStress && naprezenia.ConcreteBottomStress <= 0)
+            else if (naprezenia.SteelAs1Stress == naprezenia.SteelAs2Stress && naprezenia.SteelAs1Stress < 0)
             {
-                k2 = 1.0;
+                k2 = 1;
+            }
+            else if (naprezenia.SteelAs1Stress > 0)
+            {
+                k2 = 0;
             }
             else
             {
-                double epsilon1, epsilon2;
-
-                if (naprezenia.Faza == 1)
-                {
-                    epsilon1 = naprezenia.ConcreteBottomStress * section.currentConrete.Ecm;
-                    epsilon2 = naprezenia.ConcreteTopStress * section.currentConrete.Ecm;
-                    if (epsilon2 > 0)
-                    {
-                        epsilon2 = 0;
-                    }
-                    k2 = (epsilon1 + epsilon2) / (2 * epsilon1);
-                }
-                else
-                {
-                    if (As != 0)
-                    {
-                        double epsilonAs1 = naprezenia.SteelAs1Stress * Es;
-                        double epsilonAs2 = naprezenia.SteelAs2Stress * Es;
-                        epsilon1 = epsilonAs1 * (h - x) / (h - x - section.a1);
-                        epsilon2 = epsilonAs2 * (x) / (x - section.a2);
-                        if (epsilon2 > 0)
-                        {
-                            epsilon2 = 0;
-                        }
-                        k2 = (epsilon1 + epsilon2) / (2 * epsilon1);
-                    }
-                    else
-                    {
-                        epsilon1 = 0;
-                        epsilon2 = 0;
-                        k2 = 0;
-                    }
-                }
+                double epsilonAs1 = naprezenia.SteelAs1Stress * Es;
+                double epsilonAs2 = naprezenia.SteelAs2Stress * Es;
+                double epsEdge1 = Math.Abs((epsilonAs1 - epsilonAs2) / (h - section.a1 - section.a2) * section.a1 - epsilonAs1);
+                double epsEdge2 = Math.Abs((epsilonAs2 - epsilonAs1) / (h - section.a1 - section.a2) * section.a2 - epsilonAs2);
+                epsilon1 = Math.Max(epsEdge1, epsEdge2);
+                epsilon2 = Math.Min(epsEdge1, epsEdge2);
+                k2 = (epsilon1 + epsilon2) / (2 * epsilon1);
             }
 
             double maxSpace = 5 * (c + 0.5 * fi);
