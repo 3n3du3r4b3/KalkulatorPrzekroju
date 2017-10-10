@@ -552,6 +552,13 @@ namespace KalkulatorPrzekroju
             diagram1.SetGraph();
         }
 
+        private void button_Creep_Click(object sender, RoutedEventArgs e)
+        {
+            double cr = CreepCoefficient.CreepCoefficientCalc(section1, 40, 1, 3, 10000);
+            CreepWindow crWindow = new CreepWindow();
+            crWindow.Show(cr);
+        }
+
         // KONIEC OPROGRAMOWANIA KONTROLEK
     }
 }

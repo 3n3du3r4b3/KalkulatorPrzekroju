@@ -1,0 +1,12 @@
+﻿<Window x:Class="KalkulatorPrzekroju.CreepWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KalkulatorPrzekroju"
+        mc:Ignorable="d"
+        Title="Creep" Height="540" Width="600" WindowStyle="ToolWindow" MinWidth="600" MaxWidth="600" MaxHeight="540" MinHeight="540">
+    <Grid>
+        <TextBox x:Name="textBox_creep" HorizontalAlignment="Left" Height="23" Margin="270,270,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="1"/>
+    </Grid>
+</Window>

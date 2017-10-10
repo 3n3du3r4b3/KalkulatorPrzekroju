@@ -46,3 +46,4 @@ C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\W
 C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\KalkulatorPrzekroju.g.resources
 C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\KalkulatorPrzekroju.Properties.Resources.resources
 C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\KalkulatorPrzekroju.csproj.GenerateResource.Cache
+C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\CreepWindow.g.cs
