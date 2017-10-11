@@ -19,11 +19,11 @@ namespace KalkulatorPrzekroju
     /// </summary>
     public partial class CreepWindow : Window
     {
-        double cr;
+        double[] cr;
 
         string format = "0.###";
 
-        public void Show(double ccr)
+        public void Show(double[] ccr)
         {
             this.cr = ccr;
             this.Show();
@@ -37,7 +37,7 @@ namespace KalkulatorPrzekroju
 
         private void CoeffShow()
         {
-            textBox_creep.Text = cr.ToString(format);
+            textBox_creep.Text = cr[1].ToString(format);
         }
 
     }
