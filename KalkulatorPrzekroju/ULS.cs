@@ -60,8 +60,8 @@ namespace KalkulatorPrzekroju
             double epsilon_c2 = currentConcrete.epsilon_c2;         //w promilach
             double epsilon_cu2 = currentConcrete.epsilon_cu2;       //w promilach
             double epsilon_c3 = currentConcrete.epsilon_c3;         //w promilach
-            double K = Math.Min(1.0, Es * epsilon_c3 / fyd);
-            double C = Es * epsilon_cu2 / fyd;
+            double K = Math.Min(1.0, Es * epsilon_c3 / 1000 / fyd);
+            double C = Es * epsilon_cu2 / 1000 / fyd;
 
             alfa1 = As1 * fyd / S;
             alfa2 = As2 * fyd / S;
@@ -116,8 +116,8 @@ namespace KalkulatorPrzekroju
                         {
                             // rownanie kwadratowe
                             Bn = C * alfa2 + C * alfa1 - nEd;
-                            double ksi1 = (-Bn - Math.Sqrt(Bn * Bn - 4 * lambda * eta * (C * alfa2 * delta2 + C * alfa1))) / (2 * lambda * eta);
-                            double ksi2 = (-Bn + Math.Sqrt(Bn * Bn - 4 * lambda * eta * (C * alfa2 * delta2 + C * alfa1))) / (2 * lambda * eta);
+                            double ksi1 = (-Bn - Math.Sqrt(Bn * Bn - 4 * lambda * eta * -(C * alfa2 * delta2 + C * alfa1))) / (2 * lambda * eta);
+                            double ksi2 = (-Bn + Math.Sqrt(Bn * Bn - 4 * lambda * eta * -(C * alfa2 * delta2 + C * alfa1))) / (2 * lambda * eta);
                             if (ksi1 < 0 && ksi2 < 0)
                             {
                                 ksi = 0;
@@ -134,6 +134,7 @@ namespace KalkulatorPrzekroju
                             {
                                 ksi = Math.Max(ksi1, ksi2);
                             }
+                            k2 = C * (ksi - delta2) / ksi;
                             mRd1 = lambda * eta * ksi * (1 - 0.5 * lambda * ksi) + k2 * alfa2 * (1 - delta2);
                             MRd = (mRd1 - 0.5 * nEd * (1 - delta1)) * S * d;
                         }
