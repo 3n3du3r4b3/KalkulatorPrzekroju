@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,10 +41,11 @@ namespace KalkulatorPrzekroju
 
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls(); /*
-            Concrete bet = new Concrete(Concrete.classes.C40_50);
+            Concrete bet = new Concrete(Concrete.classes.C25_30);
             Steel stl = new Steel(Steel.classes.B500B);
-            Section sec = new Section(bet, stl, 1000, 1000, 25, 200.0, 50, 16, 200.0, 50);
-            StressState st1 = SLS.GetStresses(sec, 6323.125, 2199.3);
+            Section sec = new Section(bet, stl, 1000, 200, 20, 100.0, 40, 25, 100.0, 40);
+            double mrd1 = ULS.MomentKrytyczny(sec, 1184.9, ULS.DesignSituation.PersistentAndTransient); */
+            /*StressState st1 = SLS.GetStresses(sec, 6323.125, 2199.3);
             st1 = SLS.GetStresses(sec, 2500, 0);
             st1 = SLS.GetStresses(sec, 0, 2000);
             SLS.GetStresses(sec, -1000, 0);
@@ -68,6 +70,7 @@ namespace KalkulatorPrzekroju
             double mb2 = SLS.GetMomentKrytycznyBeton(sec.reversedSection, sb, 0.6);
             double ss = SLS.GetSilaOsiowaKrytycznaStal(sec, 0.8);
             double ms = SLS.GetMomentKrytycznyStal(sec, ss, 0.8); */
+            
         }
 
         private void SetControlls()
@@ -482,11 +485,12 @@ namespace KalkulatorPrzekroju
             double[][] tab1_ULS = ULS.GetULS_MN_Curve(
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
-                wspolczynniki.NoOfPoints);
+                wspolczynniki.NoOfPoints
+                );
 
             double[][] tab2_ULS = ULS.GetULS_MN_Curve(
                 section2,
-                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
+                (ULS.DesignSituation)comboBox_DesignSituation_2.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 

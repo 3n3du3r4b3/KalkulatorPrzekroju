@@ -70,11 +70,11 @@ namespace KalkulatorPrzekroju
 
         public void SaveToFile()
         {
-            using (Stream output = File.Create(@"data/settings.dat"))
+            /*using (Stream output = File.Create(@"data/settings.dat"))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(output, this);
-            }
+            }*/
         }
 
         public void ReadFromFile()
