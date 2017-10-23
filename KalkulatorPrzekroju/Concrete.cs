@@ -74,6 +74,10 @@ namespace KalkulatorPrzekroju
         /// Współczynnik określający efektywną wytrzymałość betonu (dla prostokątnego rozkłądu naprężeń)
         /// </summary>
         public double chi { get; private set; }
+        /// <summary>
+        /// Potęga krzywizny
+        /// </summary>
+        public double n { get; private set; }
 
         public enum classes {C12_15=0, C16_20=1, C20_25=2, C25_30=3, C30_37=4, C35_45=5, C40_50=6, C45_55=7, C50_60=8, C55_67=9, C60_75=10, C70_85=11, C80_95=12, C90_105=13, }
         
@@ -96,6 +100,15 @@ namespace KalkulatorPrzekroju
             epsilon_cu3 = betony.concreteData[i][11];
             eta = betony.concreteData[i][12];
             chi = betony.concreteData[i][13];
+
+            if (fck <50)
+            {
+                n = 2;
+            }
+            else
+            {
+                n = 1.4 + 23.4 * Math.Pow(0.01 * (90 - fck), 4);
+            }
         }
     }
 }

@@ -13,6 +13,43 @@ namespace KalkulatorPrzekroju
         /// </summary>
         public enum DesignSituation { Accidental, PersistentAndTransient }
 
+        private static double sigmaC(double fcd, double epsilon, double epsilonC2, double epsilonCU2, double n)
+        {
+            double sigma;
+
+            if (epsilon >= 0 && epsilon < epsilonC2)
+            {
+                sigma = fcd * (1 - Math.Pow(1 - epsilon / epsilonC2, n));
+            }
+            else if (epsilonC2 <= epsilon && epsilon <= epsilonCU2)
+            {
+                sigma = fcd;
+            }
+            else
+            {
+                sigma = 0;
+            }
+            return sigma;
+        }
+
+        private static double sigmaS(double epsilon, double Es, double fyd)
+        {
+            if (Math.Abs(epsilon)/1000 < fyd/Es)
+            {
+                return epsilon * Es / 1000;
+            }
+            else
+            {
+                return Math.Abs(epsilon)/epsilon * fyd;
+            }
+            
+        }
+
+        private static double epsilonR(double epsilonCU2, double r, double x, double d)
+        {
+            return epsilonCU2 * (r + x - d) / x;
+        }
+
         /// <summary>Funkcja zwraca wartość pozytywnego lub negatywnego momentu krytycznego dla siły NEd</summary>
         /// <param name="section"> obiekt typu section reprezentujący przekrój</param>
         /// <param name="NEd"> siła podłużna w kN </param>
@@ -42,120 +79,69 @@ namespace KalkulatorPrzekroju
             double As1 = section.As1 / 1000000;     // w metrach kwadratowych
             double As2 = section.As2 / 1000000;     // w metrach kwadratowych
 
-            double mRd1, MRd;
-
-            double d, alfa1, alfa2, delta1, delta2;
             double fyk = currentSteel.fyk;          // w MPa
             double Es = currentSteel.Es;            // w MPa
-            double Ecm = currentConcrete.Ecm;       // w MPa
+            //double Ecm = currentConcrete.Ecm;       // w MPa
             double fck = currentConcrete.fck;       // w MPa
             double fcd = fck / gammaC * alfaCC;     // w MPa
-            double fyd = fyk / gammaS;              // w MPa
-            d = h - a1;
+            double fyd = fyk / gammaS;
+            double n = currentConcrete.n;
 
-            double S = fcd * b * d;                          // w megaNiutonach
-            //Nmax = fcd * b * h / 1000 + (As1 + As2) * fyd / 1000;   // w kiloNiutonach!
-            double nEd = NEd / S / 1000;                                   // kiloNiuton / megaNiuton!
-            double eta, lambda;
-            double epsilon_c2 = currentConcrete.epsilon_c2;         //w promilach
-            double epsilon_cu2 = currentConcrete.epsilon_cu2;       //w promilach
-            double epsilon_c3 = currentConcrete.epsilon_c3;         //w promilach
-            double K = Math.Min(1.0, Es * epsilon_c3 / 1000 / fyd);
-            double C = Es * epsilon_cu2 / 1000 / fyd;
+            double eps = 0.000001;
+            double d = h - a1;
+            double epsilonC2 = currentConcrete.epsilon_c2;
+            double epsilonCU2 = currentConcrete.epsilon_cu2;
+            double x1 = 0;
+            double x2 = (epsilonCU2 / epsilonC2 + 10) * h;
 
-            alfa1 = As1 * fyd / S;
-            alfa2 = As2 * fyd / S;
-            delta1 = a1 / d;
-            delta2 = a2 / d;
+            double rAs2 = d - a2;
+            double Pc = 0;
+            double x, range;
+            int k = 100;
+            double NRd = 0;
 
-            if (fck <= 50)
+            NEd = NEd / 1000;
+
+            do
             {
-                eta = 1;
-                lambda = 0.8;
-            }
-            else
-            {
-                eta = 1.0 - ((fck - 50) / 200);
-                lambda = 0.8 - ((fck - 50) / 400);
-            }
-
-            //SPRAWDZENIE CZY PRZYPADEK "CT" CZY "CC"
-            if (nEd < (lambda * eta + alfa2))
-            {
-                //zachodzi przypadek CT
-                // HIPOTEZA I:
-                double ksi = (nEd - alfa2 + alfa1) / (lambda * eta);
-
-                if ((C * (1 - ksi) / ksi) >= 1 && (C * (ksi - delta2) / ksi) >= 1)
+                x = (x1 + x2) / 2;
+                Pc = 0;
+                range = Math.Min(x, h);
+                for (int i = 0; i < k; i++)
                 {
-                    double k2 = 1.0;
-                    mRd1 = lambda * eta * ksi * (1 - 0.5 * lambda * ksi) + k2 * alfa2 * (1 - delta2);
-                    MRd = (mRd1 - 0.5 * nEd * (1 - delta1)) * S * d;
+                    double ri = d - range / k * (i + 0.5);
+                    Pc += sigmaC(fcd, epsilonR(epsilonCU2, ri, x, d), epsilonC2, epsilonCU2, n) * b * range / k;
+                }
+
+                double PAs1 = As1 * sigmaS(epsilonR(epsilonCU2, 0, x, d), Es, fyd);
+                double PAs2 = As2 * sigmaS(epsilonR(epsilonCU2, d - a2, x, d), Es, fyd);
+                NRd = Pc + PAs2 + PAs1;
+
+                if (NRd >= NEd)
+                {
+                    x2 = x;
                 }
                 else
                 {
-                    double Bn = alfa2 + C * alfa1 - nEd;
-                    ksi = (Math.Sqrt(Bn * Bn + 4 * lambda * eta * C * alfa1) - Bn) / (2 * lambda * eta);
-                    double k2 = 1.0;
-                    if ((C * (1 - ksi) / ksi) < 1 && (C * (ksi - delta2) / ksi) >= 1)
-                    {
-                        mRd1 = lambda * eta * ksi * (1 - 0.5 * lambda * ksi) + k2 * alfa2 * (1 - delta2);
-                        MRd = (mRd1 - 0.5 * nEd * (1 - delta1)) * S * d;
-                    }
-                    else
-                    {
-                        Bn = C * alfa2 - alfa1 - nEd;
-                        ksi = (Math.Sqrt(Bn * Bn + 4 * lambda * eta * C * alfa2 * delta2) - Bn) / (2 * lambda * eta);
-                        if ((C * (1 - ksi) / ksi) >= 1 && (C * (ksi - delta2) / ksi) < 1)
-                        {
-                            k2 = C * (ksi - delta2) / ksi;
-                            mRd1 = lambda * eta * ksi * (1 - 0.5 * lambda * ksi) + k2 * alfa2 * (1 - delta2);
-                            MRd = (mRd1 - 0.5 * nEd * (1 - delta1)) * S * d;
-                        }
-                        else
-                        {
-                            // rownanie kwadratowe
-                            Bn = C * alfa2 + C * alfa1 - nEd;
-                            double ksi1 = (-Bn - Math.Sqrt(Bn * Bn - 4 * lambda * eta * -(C * alfa2 * delta2 + C * alfa1))) / (2 * lambda * eta);
-                            double ksi2 = (-Bn + Math.Sqrt(Bn * Bn - 4 * lambda * eta * -(C * alfa2 * delta2 + C * alfa1))) / (2 * lambda * eta);
-                            if (ksi1 < 0 && ksi2 < 0)
-                            {
-                                ksi = 0;
-                            }
-                            else if (ksi1 < 0)
-                            {
-                                ksi = ksi2;
-                            }
-                            else if (ksi2 < 0)
-                            {
-                                ksi = ksi1;
-                            }
-                            else
-                            {
-                                ksi = Math.Max(ksi1, ksi2);
-                            }
-                            k2 = C * (ksi - delta2) / ksi;
-                            mRd1 = lambda * eta * ksi * (1 - 0.5 * lambda * ksi) + k2 * alfa2 * (1 - delta2);
-                            MRd = (mRd1 - 0.5 * nEd * (1 - delta1)) * S * d;
-                        }
-                    }
+                    x1 = x;
                 }
-            }
-            else if (((lambda * eta + alfa2) < nEd) && (nEd < ((eta * (1 + delta1) + K * (alfa1 + alfa2)))))
-            {
-                //zachodzi przypadek CC
-                double mrd1_1 = (lambda * eta * (1 - 0.5 * lambda) + alfa2 * (1 - delta2));
-                double mrd1_2 = 0.5 * eta * (1 - delta1 * delta1) + K * alfa2 * (1 - delta2);
-                mRd1 = Math.Min(mrd1_1, mrd1_2);
-                MRd = (mRd1 - 0.5 * nEd * (1 - delta1)) * S * d;
-            }
-            else
-            {
-                mRd1 = 0;
-                MRd = 0;
-            }
 
-            return MRd * 1000;      //w kiloNiutonoMetrach!
+            } while (Math.Abs(NEd - NRd) > eps);
+            
+            double Pcz = 0;
+            for (int i = 0; i < k; i++)
+            {
+                double ri = d - range / k * (i + 0.5);
+                double sC = sigmaC(fcd, epsilonR(epsilonCU2, ri, x, d), epsilonC2, epsilonCU2, n);
+                Pcz += sC * b * (range / k) * ri;
+            }
+            
+            double MAs2 = As2 * sigmaS(epsilonR(epsilonCU2, d - a2, x, d), Es, fyd) * (d - a2);
+            double Ms1 = Pcz + MAs2;
+            
+            double MRd = Ms1 - NEd * (d - 0.5 * h);
+
+            return MRd*1000;
         }
 
         public static double SilaKrytycznaSciskajaca(Section section, DesignSituation situation)
@@ -172,7 +158,7 @@ namespace KalkulatorPrzekroju
                 gammaS = 1.15;
             }
             double alfaCC = 0.85;
-
+            
             double b = section.b;
             double h = section.h;
             Concrete currentConrete = section.currentConrete;
@@ -183,6 +169,9 @@ namespace KalkulatorPrzekroju
             double fck = currentConrete.fck;
             double c2 = section.c2;
             double c1 = section.c1;
+            double epsilon = currentConrete.epsilon_cu2;
+            double Es = currentSteel.Es;
+            double fyd = currentSteel.fyk / gammaS;
             
             if (fck <= 50)
             {
@@ -195,39 +184,9 @@ namespace KalkulatorPrzekroju
                 lambda = 0.8 - ((fck - 50) / 400);
             }
 
-            /*
-            return 1 * (((b * (h - c1) * currentConrete.fck * eta / gammaC * alfaCC) / 1000) +
-                (As1 + As2) * currentSteel.fyk / gammaS / 1000);
-                */
-            double N1 = (((b * (h - c1) * currentConrete.fck * eta * lambda / gammaC * alfaCC) / 1000) +
-                (As1 + As2) * currentSteel.fyk / gammaS / 1000);
-            double N2 = 1.3*(((b * h * currentConrete.fck * eta / gammaC * alfaCC) / 1000) +
-                (As1 + As2) * currentSteel.fyk / gammaS / 1000);
-            double N = (N1 + N2) / 2;
+            return (((b * h * currentConrete.fck / gammaC * alfaCC) / 1000) + (As1 + As2) * fyd / 1000);
+            //return (((b * h * currentConrete.fck / gammaC * alfaCC) / 1000) + (As1 + As2) * sigmaS(epsilon, Es, fyd) / 1000);
 
-
-            double Np = ULS.MomentKrytyczny(section, N, situation);
-            double Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
-            double delta = N1 - N2;
-
-            while (Math.Abs(delta) > 0.001)
-            {
-                N = (N1 + N2) / 2;
-                Np = ULS.MomentKrytyczny(section, N, situation);
-                Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
-                delta = N1 - N2;
-
-                if (Np > Nl)
-                {
-                    N1 = N;
-                }
-                else
-                {
-                    N2 = N;
-                }
-            }
-
-            return N;
         }
 
         public static double SilaKrytycznaRozciagajaca(Section section, DesignSituation situation)
@@ -248,34 +207,7 @@ namespace KalkulatorPrzekroju
                 gammaS = 1.15;
             }
 
-            //return -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
-            double N1 = -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
-            double N2 = 1.2 * -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
-            double N = (N1 + N2) / 2;
-
-
-            double Np = ULS.MomentKrytyczny(section, N, situation);
-            double Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
-            double delta = N1 - N2;
-
-            while (Math.Abs(delta) > 0.001)
-            {
-                N = (N1 + N2) / 2;
-                Np = ULS.MomentKrytyczny(section, N, situation);
-                Nl = -ULS.MomentKrytyczny(section.reversedSection, N, situation);
-                delta = N1 - N2;
-
-                if (Np > Nl)
-                {
-                    N1 = N;
-                }
-                else
-                {
-                    N2 = N;
-                }
-            }
-
-            return N;
+            return -((section.As1 + section.As2) * (section.currentSteel.fyk / gammaS) / 1000);
         }
 
         /// <summary>
@@ -412,14 +344,11 @@ namespace KalkulatorPrzekroju
             double max = SilaKrytycznaSciskajaca(section, situation);
             double min = SilaKrytycznaRozciagajaca(section, situation);
             double[][] results = new double[2 * NoOfPoints][];
-
+            
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = min + (max - min) / NoOfPoints * i;
-                if (Ned == 0)
-                {
-                    Ned = 0.01;
-                }
+                double Ned = min + (max - min) / (NoOfPoints-1) * i;
+                
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = ULS.MomentKrytyczny(section, Ned, situation);

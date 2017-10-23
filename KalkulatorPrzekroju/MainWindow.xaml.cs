@@ -40,11 +40,12 @@ namespace KalkulatorPrzekroju
             InitializeComponent();
 
             wspolczynniki = new Factors(Factors.Settings.zachowane);
-            SetControlls(); /*
-            Concrete bet = new Concrete(Concrete.classes.C25_30);
-            Steel stl = new Steel(Steel.classes.B500B);
-            Section sec = new Section(bet, stl, 1000, 200, 20, 100.0, 40, 25, 100.0, 40);
-            double mrd1 = ULS.MomentKrytyczny(sec, 1184.9, ULS.DesignSituation.PersistentAndTransient); */
+            SetControlls(); 
+            Concrete bet = new Concrete(Concrete.classes.C12_15);
+            Steel stl = new Steel(Steel.classes.B500A);
+            Section sec = new Section(bet, stl, 1000, 1000, 20, 200.0, 40, 0, 100.0, 40);
+            double ncr = ULS.SilaKrytycznaSciskajaca(sec, ULS.DesignSituation.PersistentAndTransient);
+            double mrd1 = ULS.MomentKrytyczny(sec, 7400, ULS.DesignSituation.PersistentAndTransient); 
             /*StressState st1 = SLS.GetStresses(sec, 6323.125, 2199.3);
             st1 = SLS.GetStresses(sec, 2500, 0);
             st1 = SLS.GetStresses(sec, 0, 2000);
@@ -520,21 +521,21 @@ namespace KalkulatorPrzekroju
                      wspolczynniki.NoOfPoints,
                      0.8
                      );
-            
+            /*
             double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
                      0.6
                      );
-
+              */       
             MainPlotView diagram1 = new MainPlotView();
             diagram1.AddLineSerie(tab1_ULS, "Section 1");
             diagram1.AddLineSerie(tab2_ULS, "Section 2");
             MainPlotView diagram2 = new MainPlotView();
             diagram2.AddLineSerie(tabSLS_Crack, "Section 1");
             MainPlotView diagram3 = new MainPlotView();
-            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
-            diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
+            //diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
+            //diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
             MainPlotView diagramVN = new MainPlotView();
             diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c");
             diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s");
