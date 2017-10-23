@@ -32,7 +32,7 @@
         <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="0,35,0,0.4" Width="450">
             <Grid>
                 <TabControl x:Name="tabControl1" Width="450" Margin="0,0,0,50" TabIndex="1">
-                    <TabItem Header="Section 1" TabIndex="2" Height="22" Margin="-2,-2,-2.2,0" VerticalAlignment="Top">
+                    <TabItem Header="Section 1" TabIndex="2">
                         <Grid x:Name="grid_Section_1" Background="#FFE5E5E5">
                             <GroupBox x:Name="groupBox_Geometry" Header="Geometry" Margin="10,5,10,0" Height="100" VerticalAlignment="Top">
                                 <Grid>
