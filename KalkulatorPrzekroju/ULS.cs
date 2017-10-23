@@ -87,12 +87,12 @@ namespace KalkulatorPrzekroju
             double fyd = fyk / gammaS;
             double n = currentConcrete.n;
 
-            double eps = 0.000001;
+            double eps = 0.00001;
             double d = h - a1;
             double epsilonC2 = currentConcrete.epsilon_c2;
             double epsilonCU2 = currentConcrete.epsilon_cu2;
             double x1 = 0;
-            double x2 = (epsilonCU2 / epsilonC2 + 10) * h;
+            double x2 = 100000 * h;
 
             double rAs2 = d - a2;
             double Pc = 0;
@@ -184,8 +184,8 @@ namespace KalkulatorPrzekroju
                 lambda = 0.8 - ((fck - 50) / 400);
             }
 
-            return (((b * h * currentConrete.fck / gammaC * alfaCC) / 1000) + (As1 + As2) * fyd / 1000);
-            //return (((b * h * currentConrete.fck / gammaC * alfaCC) / 1000) + (As1 + As2) * sigmaS(epsilon, Es, fyd) / 1000);
+            //return (((b * h * currentConrete.fck / gammaC * alfaCC) / 1000) + (As1 + As2) * fyd / 1000);
+            return (((b * h * currentConrete.fck / gammaC * alfaCC) / 1000) + (As1 + As2) * sigmaS(epsilon, Es, fyd) / 1000);
 
         }
 
