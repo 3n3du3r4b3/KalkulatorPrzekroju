@@ -9,9 +9,9 @@ namespace KalkulatorPrzekroju
 {
     class Section
     {
-    	/// <summary>
-    	/// Szerokość przekroju w mm
-    	/// </summary>
+        /// <summary>
+        /// Szerokość przekroju w mm
+        /// </summary>
         public double b { get; private set; }
         /// <summary>
     	/// Wysokość przekroju w mm
@@ -44,28 +44,28 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Średnica zbrojenia As1 w mm
         /// </summary>
-        public double fi1 {get; private set;}
+        public double fi1 { get; private set; }
         /// <summary>
         /// Średnica zbrojenia As2 w mm
         /// </summary>
-        public double fi2 {get; private set;}
+        public double fi2 { get; private set; }
         /// <summary>
         /// Otulina zbrojenia As1 w mm
         /// </summary>
-        public double c1 {get; private set;}
+        public double c1 { get; private set; }
         /// <summary>
         /// Otulina zbrojenia As2 w mm
         /// </summary>
-        public double c2 {get; private set;}
+        public double c2 { get; private set; }
         /// <summary>
         /// Rozstaw prętów zbrojenia As1 w mm
         /// </summary>
-        public double spacing1 {get; private set;}
+        public double spacing1 { get; private set; }
         /// <summary>
         /// Rozstaw prętów zbrojenia As2 w mm
         /// </summary>
-        public double spacing2 {get; private set;}
-        
+        public double spacing2 { get; private set; }
+
         /*
         /// <summary>
     	/// Współczynnik częściowy betonu
@@ -81,12 +81,12 @@ namespace KalkulatorPrzekroju
     	/// </summary>
         public double gammaS { get; private set; }
         */
-       
+
         /// <summary>
-    	/// Zwraca aktualny przekrój obrócony o 180 stopni
-    	/// </summary>
-        public Section reversedSection { get { return new Section(currentConrete, currentSteel, b, h, fi2, spacing2, c2, As2, fi1, spacing1, c1, As2); } }
-        
+        /// Zwraca aktualny przekrój obrócony o 180 stopni
+        /// </summary>
+        public Section reversedSection { get { return new Section(currentConrete, currentSteel, b, h, fi2, spacing2, c2, As2, fi1, spacing1, c1, As1); } }
+
         private Section(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double As1, double fi2, double spacing2, double c2, double As2)
         {
             this.b = b;
@@ -101,8 +101,20 @@ namespace KalkulatorPrzekroju
             currentSteel = steel;
             this.As1 = As1;
             this.As2 = As2;
-            a1 = c1 + 0.5 * fi1;
-            a2 = c2 + 0.5 * fi2;
+            if (As1 == 0)
+            {
+                c1 = 0;
+                a1 = 0;
+            }
+            else
+                a1 = c1 + 0.5 * fi1;
+            if (As2 == 0)
+            {
+                a2 = 0;
+                c2 = 0;
+            }
+            else
+                a2 = c2 + 0.5 * fi2;
         }
 
         /// <summary>
@@ -124,16 +136,28 @@ namespace KalkulatorPrzekroju
             this.h = h;
             this.fi1 = fi1;
             this.c1 = c1;
-            this.spacing1=spacing1;
+            this.spacing1 = spacing1;
             this.fi2 = fi2;
             this.c2 = c2;
-            this.spacing2=spacing2;
+            this.spacing2 = spacing2;
             currentConrete = concrete;
             currentSteel = steel;
-            As1 = (fi1/2)*(fi1/2)*Math.PI*b/spacing1;
-            As2 = (fi2/2)*(fi2/2)*Math.PI*b/spacing2;
-            a1 = c1+0.5*fi1;
-            a2 = c2+0.5*fi2;
+            As1 = (fi1 / 2) * (fi1 / 2) * Math.PI * b / spacing1;
+            As2 = (fi2 / 2) * (fi2 / 2) * Math.PI * b / spacing2;
+            if (As1 == 0)
+            {
+                c1 = 0;
+                a1 = 0;
+            }
+            else
+                a1 = c1 + 0.5 * fi1;
+            if (As2 == 0)
+            {
+                a2 = 0;
+                c2 = 0;
+            }
+            else
+                a2 = c2 + 0.5 * fi2;
         }
         
         /// <summary>

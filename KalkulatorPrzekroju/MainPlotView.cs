@@ -23,7 +23,7 @@ namespace KalkulatorPrzekroju
         public MainPlotView()
         {
             wykres = new PlotModel();
-            wykres.LegendPosition = LegendPosition.BottomLeft;
+            wykres.LegendPosition = LegendPosition.TopLeft;
         }
 
         public void AddLineSerie(double[][] dataPoints, string name)
