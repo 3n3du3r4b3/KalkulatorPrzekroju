@@ -41,11 +41,17 @@ namespace KalkulatorPrzekroju
 
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls(); /*
-            Concrete bet = new Concrete(Concrete.classes.C12_15);
+            Concrete bet = new Concrete(Concrete.classes.C25_30);
             Steel stl = new Steel(Steel.classes.B500A);
-            Section sec = new Section(bet, stl, 1000, 1000, 20, 200.0, 40, 0, 100.0, 40);
-            double ncr = ULS.SilaKrytycznaSciskajaca(sec, ULS.DesignSituation.PersistentAndTransient);
-            double mrd1 = ULS.MomentKrytyczny(sec, 7400, ULS.DesignSituation.PersistentAndTransient); */
+            Section sec = new Section(bet, stl, 1000, 200, 25, 100.0, 40, 20, 100.0, 40);
+            double nmax = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.3, 0.4, 0.8);
+            double mmax = SLS.GetMomentKrytycznyRysa(sec, nmax, 0.3, 0.4, 0.8);
+            double wkm = SLS.GetCrackWidth(sec, nmax, mmax, 0.4, 0.8);
+            */
+       /*     ULS.GetULS_MN_Curve(sec, ULS.DesignSituation.PersistentAndTransient, 100);
+            double ncrs = ULS.SilaKrytycznaSciskajaca(sec, ULS.DesignSituation.PersistentAndTransient);
+            double ncr = ULS.SilaKrytycznaRozciagajaca(sec, ULS.DesignSituation.PersistentAndTransient);
+            double mrd1 = ULS.MomentKrytyczny(sec, -2000, ULS.DesignSituation.PersistentAndTransient);*/
             /*StressState st1 = SLS.GetStresses(sec, 6323.125, 2199.3);
             st1 = SLS.GetStresses(sec, 2500, 0);
             st1 = SLS.GetStresses(sec, 0, 2000);
@@ -503,6 +509,14 @@ namespace KalkulatorPrzekroju
                 wspolczynniki.Crack_k1
                 );
 
+            double[][] tabSLS_NonCrack = SLS.GetSLS_Crack_Curve(
+                section1,
+                wspolczynniki.NoOfPoints,
+                0,
+                0.4,
+                wspolczynniki.Crack_k1
+                );
+
             double[][] tabVRdc1 = ULS.GetULS_VRdcN_Curve(
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
@@ -532,10 +546,11 @@ namespace KalkulatorPrzekroju
             diagram1.AddLineSerie(tab1_ULS, "Section 1");
             diagram1.AddLineSerie(tab2_ULS, "Section 2");
             MainPlotView diagram2 = new MainPlotView();
-            diagram2.AddLineSerie(tabSLS_Crack, "Section 1");
+            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - wk = 0.2mm");
+            diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked");
             MainPlotView diagram3 = new MainPlotView();
-            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Concrete stress");
-            diagram3.AddLineSerie(tabSLS_SteelStress, "Steel stress");
+            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress");
+            diagram3.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress");
             MainPlotView diagramVN = new MainPlotView();
             diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c");
             diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s");
