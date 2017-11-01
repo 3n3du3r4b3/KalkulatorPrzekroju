@@ -7,6 +7,25 @@
         mc:Ignorable="d"
         Title="Creep" Height="540" Width="600" WindowStyle="ToolWindow" MinWidth="600" MaxWidth="600" MaxHeight="540" MinHeight="540">
     <Grid>
-        <TextBox x:Name="textBox_creep" HorizontalAlignment="Left" Height="23" Margin="270,270,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="1"/>
+        <TextBox x:Name="textBox_creep1" HorizontalAlignment="Left" Height="23" Margin="330,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="1"/>
+        <TextBox x:Name="textBox_creep2" HorizontalAlignment="Left" Height="23" Margin="330,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep3" HorizontalAlignment="Left" Height="23" Margin="330,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep4" HorizontalAlignment="Left" Height="23" Margin="330,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep5" HorizontalAlignment="Left" Height="23" Margin="330,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep6" HorizontalAlignment="Left" Height="23" Margin="330,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep7" HorizontalAlignment="Left" Height="23" Margin="330,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep8" HorizontalAlignment="Left" Height="23" Margin="330,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep9" HorizontalAlignment="Left" Height="23" Margin="330,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_creep10" HorizontalAlignment="Left" Height="23" Margin="330,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day1" HorizontalAlignment="Left" Height="23" Margin="270,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="1"/>
+        <TextBox x:Name="textBox_day2" HorizontalAlignment="Left" Height="23" Margin="270,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day3" HorizontalAlignment="Left" Height="23" Margin="270,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day4" HorizontalAlignment="Left" Height="23" Margin="270,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day5" HorizontalAlignment="Left" Height="23" Margin="270,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day6" HorizontalAlignment="Left" Height="23" Margin="270,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day7" HorizontalAlignment="Left" Height="23" Margin="270,190,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day8" HorizontalAlignment="Left" Height="23" Margin="270,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day9" HorizontalAlignment="Left" Height="23" Margin="270,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
+        <TextBox x:Name="textBox_day10" HorizontalAlignment="Left" Height="23" Margin="270,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" TabIndex="2"/>
     </Grid>
 </Window>

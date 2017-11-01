@@ -26,10 +26,10 @@ namespace KalkulatorPrzekroju
         public Window_DisplaySet()
         {
             InitializeComponent();
-            Settings ustawienia = new Settings();
+            /*Settings ustawienia = new Settings();
             ustawienia.SaveToFile();
             ustawienia.ReadFromFile();
-            colorPicker_ULS_MN_Line1.SelectedColor = ustawienia.ULSMN_Section1LineColor;
+            colorPicker_ULS_MN_Line1.SelectedColor = ustawienia.ULSMN_Section1LineColor;*/
         }
 
         //  obsługa przycisków
