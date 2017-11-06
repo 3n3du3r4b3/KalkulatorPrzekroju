@@ -592,7 +592,7 @@ namespace KalkulatorPrzekroju
             double[] day = new double[Convert.ToInt32(divide)];
             for (double i = 1; i <= divide; i++)
             {
-                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)));
+                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)),0);
                 day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
             }
             CreepWindow crWindow = new CreepWindow();
@@ -607,7 +607,7 @@ namespace KalkulatorPrzekroju
             double[] day = new double[Convert.ToInt32(divide)];
             for (double i = 1; i <= divide; i++)
             {
-                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i -1)/ (divide-1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)));
+                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i -1)/ (divide-1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)),0);
                 day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
             }
             CreepWindow crWindow = new CreepWindow();

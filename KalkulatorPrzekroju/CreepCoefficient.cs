@@ -21,8 +21,9 @@ namespace KalkulatorPrzekroju
         public double fi_end { get; private set; }
         public double tend { get; private set; }*/
 
-        public static double CreepCoefficientCalc(Section section, double RH, double u, double t0, double tend)
+        public static double CreepCoefficientCalc(Section section, double RH, double u, double t00, double tend, double cem)
         {
+            double t0 = cemt(t00,cem);
             double Ac = section.b * section.h;
             double fcm = section.currentConrete.fcm;
             double h0 = 2 * Ac / (u); //B.6
@@ -31,6 +32,11 @@ namespace KalkulatorPrzekroju
             double beta_C = betaC(beta_H, tend, t0);
             double fi_end = fi0 * beta_C;
             return fi_end;
+        }
+
+        private static double cemt(double t0, double cem)
+        {
+            return t0 * Math.Max(Math.Pow(9/Math.Pow((2+t0),(1.2)),(cem)),0.5);
         }
 
         private static double alpha1(double fcm)
