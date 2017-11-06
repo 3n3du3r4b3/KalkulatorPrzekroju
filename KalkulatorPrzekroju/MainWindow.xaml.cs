@@ -43,10 +43,11 @@ namespace KalkulatorPrzekroju
             SetControlls(); 
             Concrete bet = new Concrete(Concrete.classes.C12_15);
             Steel stl = new Steel(Steel.classes.B500A);
-            Section sec = new Section(bet, stl, 1000, 1000, 40, 100.0, 40, 12, 100.0, 40);
+            Section sec = new Section(bet, stl, 1000, 1000, 40, 50, 40, 10, 100.0, 40);
             double nmax = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, 0.8);
-            double mmax = SLS.GetMomentKrytycznyRysa(sec, nmax, 0.2, 0.4, 0.8);
-            double wkm1 = SLS.GetCrackWidth(sec, nmax, mmax, 0.4, 0.8);
+            //double mmax = SLS.GetMomentKrytycznyRysa(sec,-853.8253884230121, 0.2, 0.4, 0.8);
+            StressState str = SLS.GetStresses(sec, -853.8253884230121, -337.59354350134885);
+            double wkm1 = SLS.GetCrackWidth(sec, nmax, nmax, 0.4, 0.8);
             double wkm2 = SLS.GetCrackWidth(sec, nmax, 921, 0.4, 0.8);
         }
 

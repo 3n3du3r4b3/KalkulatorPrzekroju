@@ -83,7 +83,14 @@ namespace KalkulatorPrzekroju
             }
             else
             {
-                x = (SigmaBetonTop / (SigmaBetonTop + Math.Abs(SigmaBetonBottom))) * h;
+                if (SigmaBetonTop>0)
+                {
+                    x = (SigmaBetonTop / (SigmaBetonTop + Math.Abs(SigmaBetonBottom))) * h;
+                }
+                else
+                {
+                    x = (SigmaBetonBottom / (SigmaBetonBottom + Math.Abs(SigmaBetonTop))) * h;
+                }
             }
 
             faza = 1;

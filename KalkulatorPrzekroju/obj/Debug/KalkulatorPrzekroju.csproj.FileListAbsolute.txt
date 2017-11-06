@@ -48,3 +48,5 @@ C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\K
 C:\Users\Marcin\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\KalkulatorPrzekroju.csproj.GenerateResource.Cache
 C:\Users\tomsl\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\bin\Debug\Xceed.Wpf.Toolkit.dll
 C:\Users\tomsl\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\KalkulatorPrzekroju.csproj.CoreCompileInputs.cache
+C:\Users\tomsl\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\CreepWindow.g.cs
+C:\Users\tomsl\Source\Repos\KalkulatorPrzekroju\KalkulatorPrzekroju\obj\Debug\CreepWindow.baml
