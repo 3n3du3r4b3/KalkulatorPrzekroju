@@ -40,44 +40,14 @@ namespace KalkulatorPrzekroju
             InitializeComponent();
 
             wspolczynniki = new Factors(Factors.Settings.zachowane);
-            SetControlls(); /*
-            Concrete bet = new Concrete(Concrete.classes.C25_30);
+            SetControlls(); 
+            Concrete bet = new Concrete(Concrete.classes.C12_15);
             Steel stl = new Steel(Steel.classes.B500A);
-            Section sec = new Section(bet, stl, 1000, 200, 25, 100.0, 40, 20, 100.0, 40);
-            double nmax = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.3, 0.4, 0.8);
-            double mmax = SLS.GetMomentKrytycznyRysa(sec, nmax, 0.3, 0.4, 0.8);
-            double wkm = SLS.GetCrackWidth(sec, nmax, mmax, 0.4, 0.8);
-            */
-       /*     ULS.GetULS_MN_Curve(sec, ULS.DesignSituation.PersistentAndTransient, 100);
-            double ncrs = ULS.SilaKrytycznaSciskajaca(sec, ULS.DesignSituation.PersistentAndTransient);
-            double ncr = ULS.SilaKrytycznaRozciagajaca(sec, ULS.DesignSituation.PersistentAndTransient);
-            double mrd1 = ULS.MomentKrytyczny(sec, -2000, ULS.DesignSituation.PersistentAndTransient);*/
-            /*StressState st1 = SLS.GetStresses(sec, 6323.125, 2199.3);
-            st1 = SLS.GetStresses(sec, 2500, 0);
-            st1 = SLS.GetStresses(sec, 0, 2000);
-            SLS.GetStresses(sec, -1000, 0);
-            StressState st2 = SLS.GetStresses(sec.reversedSection, 6338.462, 1362.844);
-            StressState st3 = SLS.GetStresses(sec.reversedSection, 6338.5, 1374);
-            double st3w = SLS.GetCrackWidth(sec.reversedSection, 6338.5, 1374, 0.4, wspolczynniki.Crack_k1);
-            double st3wm = SLS.GetMomentKrytycznyRysa(sec.reversedSection, 6338.5, 0.2, 0.4, wspolczynniki.Crack_k1);
-            double s1 = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, wspolczynniki.Crack_k1);
-            Section secRev = sec.reversedSection;
-            double s2 = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, wspolczynniki.Crack_k1);
-            double s2r = SLS.GetSilaOsiowaKrytycznaRysa(secRev, 0.2, 0.4, wspolczynniki.Crack_k1);
-            double s2m = SLS.GetMomentKrytycznyRysa(sec, -3497.5100, 0.2, 0.4, wspolczynniki.Crack_k1);
-            StressState st11 = SLS.GetStresses(sec, -3497.5100,0);
-            double wk1 = SLS.GetCrackWidth(sec, -2623.06, 0, 0.4, wspolczynniki.Crack_k1);
-            double wk2 = SLS.GetCrackWidth(sec.reversedSection, -2623.06, 0, 0.4, wspolczynniki.Crack_k1);
-            double m1 = SLS.GetMomentKrytycznyRysa(sec, s2, 0.2, 0.4, wspolczynniki.Crack_k1);
-            double m2 = SLS.GetMomentKrytycznyRysa(sec.reversedSection, s2, 0.2, 0.4, wspolczynniki.Crack_k1);
-            double wks = SLS.GetCrackWidth(sec.reversedSection, s2, m2, 0.4, wspolczynniki.Crack_k1);
-            double wks2 = SLS.GetCrackWidth(sec, s2, m1, 0.4, wspolczynniki.Crack_k1);
-            double sb = SLS.GetSilaOsiowaKrytycznaBeton(sec, 0.6);
-            double mb = SLS.GetMomentKrytycznyBeton(sec, sb, 0.6);
-            double mb2 = SLS.GetMomentKrytycznyBeton(sec.reversedSection, sb, 0.6);
-            double ss = SLS.GetSilaOsiowaKrytycznaStal(sec, 0.8);
-            double ms = SLS.GetMomentKrytycznyStal(sec, ss, 0.8); */
-            
+            Section sec = new Section(bet, stl, 1000, 1000, 40, 100.0, 40, 12, 100.0, 40);
+            double nmax = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, 0.8);
+            double mmax = SLS.GetMomentKrytycznyRysa(sec, nmax, 0.2, 0.4, 0.8);
+            double wkm1 = SLS.GetCrackWidth(sec, nmax, mmax, 0.4, 0.8);
+            double wkm2 = SLS.GetCrackWidth(sec, nmax, 921, 0.4, 0.8);
         }
 
         private void SetControlls()
@@ -160,7 +130,7 @@ namespace KalkulatorPrzekroju
         }
 
 
-        // OPROGRAMOWANIE KONTROLEK
+        /// OPROGRAMOWANIE KONTROLEK
         private void comboBox_As1_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBox_As1_spac_no_1.SelectedIndex == 0)
@@ -208,7 +178,7 @@ namespace KalkulatorPrzekroju
                 label_spac_no_As2_2.Visibility = Visibility.Hidden;
             }
         }
-
+        
         //oprogramowanie menu
         private void MenuItemSettingsFactors_Click(object sender, RoutedEventArgs e)
         {

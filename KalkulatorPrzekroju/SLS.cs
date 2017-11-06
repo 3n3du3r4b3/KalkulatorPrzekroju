@@ -98,6 +98,8 @@ namespace KalkulatorPrzekroju
             }
             else
             {
+                bool reversed = false;
+
                 A_II = A_I;
                 //int licznik = 0;
                 //int licznik_zwieksz = 0;
@@ -107,6 +109,11 @@ namespace KalkulatorPrzekroju
                 do
                 {
                     x = (x1 + x2) / 2;
+
+                    if (x < 0.000001 * h)
+                    {
+                        x = 0;
+                    }
 
                     A_II = alfaE * (As1 + As2) + b * x;       // sprowadzone pole powierzchni przekroju w m2
                                                               //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
@@ -124,15 +131,23 @@ namespace KalkulatorPrzekroju
                     zBottom = xc - x;        //odleglosc dolnej krawedzi strefy ściskanej od srodka ciezkosci w mm
 
                     // naprezenia w betonie
-                    SigmaBetonTop = Naprezenie(NEd, MEd_c, zTop, Iy, A_II);
-                    SigmaBetonBottom = Naprezenie(NEd, MEd_c, zBottom, Iy, A_II);
+                    if (x < 0.000001 * h)
+                    {
+                        SigmaBetonBottom = 0;
+                        SigmaBetonTop = 0;
+                    }
+                    else
+                    {
+                        SigmaBetonTop = Naprezenie(NEd, MEd_c, zTop, Iy, A_II);
+                        SigmaBetonBottom = Naprezenie(NEd, MEd_c, zBottom, Iy, A_II);
+                    }
 
                     // naprezenia w stali
                     SigmaStalAs1 = alfaE * Naprezenie(NEd, MEd_c, (xc - h + a1), Iy, A_II);
                     SigmaStalAs2 = alfaE * Naprezenie(NEd, MEd_c, (zTop - a2), Iy, A_II);
 
 
-                    if (Naprezenie(NEd, MEd_c, (xc - x), Iy, A_II) < 0)
+                    if (SigmaBetonBottom < 0)
                     {
                         x2 = x;
                     }
@@ -148,15 +163,36 @@ namespace KalkulatorPrzekroju
                         SigmaStalAs2 = 0;
 
                     faza = 2;
+
+                    if (Math.Abs(x1 - x2) < 0.0001 * h && MEd_c < 0)
+                    {
+                        reversed = true;
+                        section = section.reversedSection;
+                        a1 = section.a1 / dimfactor;
+                        a2 = section.a2 / dimfactor;
+                        As1 = section.As1 / (dimfactor * dimfactor);
+                        As2 = section.As2 / (dimfactor * dimfactor);
+                        x1 = 0;
+                        x2 = h;
+                        MEd = -MEd;
+                    }
                 }
-                while ((Math.Abs(SigmaBetonBottom) > 0.001) && (x != 0));
+                while ((Math.Abs(SigmaBetonBottom) > 0.001) && (x > 0.000001 * h));
 
                 if (x == 0)
                 {
-                    return new StressState(0, 0, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
+                    if (!reversed)
+                        return new StressState(0, 0, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
+                    else
+                        return new StressState(0, 0, SigmaStalAs2, SigmaStalAs1, x, -(0.5 * h - xc), faza);
                 }
                 else
-                    return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
+                {
+                    if (!reversed)
+                        return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs1, SigmaStalAs2, x, 0.5 * h - xc, faza);
+                    else
+                        return new StressState(SigmaBetonBottom, SigmaBetonTop, SigmaStalAs2, SigmaStalAs1, x, -(0.5 * h - xc), faza);
+                }
             }
         }
 
@@ -194,7 +230,8 @@ namespace KalkulatorPrzekroju
             }
             if (As == 0)
             {
-                return 100;
+                //return 100;
+                As = 0.000001;
             }
 
             double hcEff1 = 2.5 * section.a2;
@@ -222,11 +259,11 @@ namespace KalkulatorPrzekroju
             if (naprezenia.SteelAs1Stress * naprezenia.SteelAs2Stress < 0)
             {
                 k2 = 0.5;
-            }
-            else if (naprezenia.SteelAs1Stress == naprezenia.SteelAs2Stress && naprezenia.SteelAs1Stress < 0)
+            }/*
+            else if (naprezenia.SteelAs1Stress < 0 && naprezenia.SteelAs1Stress < 0)
             {
                 k2 = 1;
-            }
+            }*/
             else if (naprezenia.SteelAs1Stress > 0)
             {
                 k2 = 0;
@@ -236,7 +273,7 @@ namespace KalkulatorPrzekroju
                 double epsilonAs1 = naprezenia.SteelAs1Stress * Es;
                 double epsilonAs2 = naprezenia.SteelAs2Stress * Es;
                 double epsEdge1 = Math.Abs((epsilonAs1 - epsilonAs2) / (h - section.a1 - section.a2) * section.a1 - epsilonAs1);
-                double epsEdge2 = Math.Abs((epsilonAs2 - epsilonAs1) / (h - section.a1 - section.a2) * section.a2 - epsilonAs2);
+                double epsEdge2 = Math.Abs((epsilonAs1 - epsilonAs2) / (h - section.a1 - section.a2) * section.a2 + epsilonAs2);
                 epsilon1 = Math.Max(epsEdge1, epsEdge2);
                 epsilon2 = Math.Min(epsEdge1, epsEdge2);
                 k2 = (epsilon1 + epsilon2) / (2 * epsilon1);
@@ -386,22 +423,89 @@ namespace KalkulatorPrzekroju
 
             if (NEd < Force1)
             {
-                Moment0 = NEd * (h / 2 - xc2);
+                double wkP, wkL;
+                double moment = NEd * (h / 2 - xc2);
+                wkP = SLS.GetCrackWidth(section, NEd, moment, kt, k1);
+                wkL = SLS.GetCrackWidth(section.reversedSection, NEd, -moment, kt, k1);
+
+                double mom11, mom22, momLL, momPP, momCC;
+                mom11 = moment;
+                mom22 = moment;
+
+                if (wkP > wkL)
+                {
+                    while (wkP > wkL)
+                    {
+                        mom11 -= 0.01 * Math.Abs(NEd);
+                        wkP = SLS.GetCrackWidth(section, NEd, mom11, kt, k1);
+                        wkL = SLS.GetCrackWidth(section.reversedSection, NEd, -mom11, kt, k1);
+                    }
+                }
+                else if (wkP < wkL)
+                {
+                    while (wkP < wkL)
+                    {
+                        mom11 += 0.01 * Math.Abs(NEd);
+                        wkP = SLS.GetCrackWidth(section, NEd, mom11, kt, k1);
+                        wkL = SLS.GetCrackWidth(section.reversedSection, NEd, -mom11, kt, k1);
+                    }
+                }
+                else
+                    moment = mom11;
+
+                momLL = Math.Min(mom11, mom22);
+                momPP = Math.Max(mom11, mom22);
+                momCC = (momPP + momLL) / 2;
+
+                while (Math.Abs(wkP - wkL) > 0.000001 || wkL == 0 || wkP == 0)
+                {
+                    wkP = SLS.GetCrackWidth(section, NEd, momCC, kt, k1);
+                    wkL = SLS.GetCrackWidth(section.reversedSection, NEd, -momCC, kt, k1);
+
+                    if (wkP > wkL)
+                        momPP = momCC;
+                    else
+                        momLL = momCC;
+
+                    momCC = (momPP + momLL) / 2;
+                    moment = momCC;
+                }
+
+                Moment0 = moment;
             }
             else
             {
                 Moment0 = NEd * (h / 2 - xc1);
             }
 
-            double momP = Moment0;
-            double momL = Moment0;
+            double mom1 = Moment0;
+            double mom2 = Moment0;
             double wk0 = GetCrackWidth(section, NEd, Moment0, kt, k1);
-            
-            do {
-            momP += 100;
-            wk0 = GetCrackWidth(section, NEd, momP, kt, k1);
-            } while (wk0 <= rysaGraniczna);
-            
+            double delta;
+            bool warunek;
+
+            if (wk0 > rysaGraniczna)
+                delta = -0.01*Math.Abs(NEd);
+            else
+                delta = 0.01*Math.Abs(NEd);
+
+            do
+            {
+                mom1 += delta;
+                double wkS = GetCrackWidth(section, NEd, mom1, kt, k1);
+                
+                if (delta > 0 && wkS <= rysaGraniczna)
+                    warunek = true;
+                else if (delta < 0 && wkS >= rysaGraniczna)
+                    warunek = true;
+                else
+                    warunek = false;
+
+            } while (warunek);
+
+            double momP = Math.Max(mom1, mom2);
+            double momL = Math.Min(mom1, mom2);
+
             double momC = (momL + momP) / 2;
             double eps = 0.00001;
             while (Math.Abs(momP - momL) > eps)
@@ -436,10 +540,10 @@ namespace KalkulatorPrzekroju
             double As1 = section.As1 / 1000 / 1000;
             double As2 = section.As2 / 1000 / 1000;
             double alfaE = section.currentSteel.Es / section.currentConrete.Ecm;
-            
+
             double A = b * h;                                      // pole pow przekroju betonu w m2
             double A_I = A + alfaE * (As1 + As2);                  // sprowadzone pole powierzchni przekroju w m2
-                                                            //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
+                                                                   //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
             double S = b * h * h / 2 + alfaE * (As1 * (h - a1) + As2 * a2);
             // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
             double xc = S / A_I;
@@ -467,13 +571,13 @@ namespace KalkulatorPrzekroju
             double As1 = section.As1 / 1000 / 1000;
             double As2 = section.As2 / 1000 / 1000;
             double alfaE = section.currentSteel.Es / section.currentConrete.Ecm;
-            
+
             double A_I = b * h + alfaE * (As1 + As2);                  // sprowadzone pole powierzchni przekroju w m2
-                                                                   //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
+                                                                       //sprowadzony moment statyczny przekroju względem górnej krawędzi przekroju w m3
             double S1 = b * h * h / 2 + alfaE * (As1 * (h - a1) + As2 * a2);
             // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
             double xc1 = S1 / A_I;
-            
+
             double Force1 = A_I * section.currentConrete.fctm;
             double Force2 = (As1 + As2) * wspRedukcji * section.currentSteel.fyk;
 
@@ -507,7 +611,7 @@ namespace KalkulatorPrzekroju
             double S1 = b * h * h / 2 + alfaE * (As1 * (h - a1) + As2 * a2);
             // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
             double xc1 = S1 / A_I;
-            
+
             double A_II = As1 + As2;
             double S2 = (As1 * (h - a1) + As2 * a2);
             double xc2 = S2 / A_II; // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
@@ -515,7 +619,7 @@ namespace KalkulatorPrzekroju
             double Force1 = 0.999 * SilaRysujacaOsiowa(section);
             double Moment1 = Force1 * (h / 2 - xc1);
             //StressState str1 = GetStresses(section, Force1, Moment1);
-            
+
             double Force2 = -section.currentSteel.fyk * A_II * 1000;
             double Moment2 = Force2 * (h / 2 - xc2);
             //StressState str2 = GetStresses(section, Force2, Moment2);
@@ -534,13 +638,61 @@ namespace KalkulatorPrzekroju
                 momentForce = Force2 * (h / 2 - xc2);
             }
 
-            double wk; // = SLS.GetCrackWidth(section, minForce, momentForce, kt, k1);
+            double wk, wkP, wkL; // = SLS.GetCrackWidth(section, minForce, momentForce, kt, k1);
             double Force = (Force1 + Force2) / 2;
             //StressState str = GetStresses(section, Force, momentForce);
+            double moment = Force * (h / 2 - xc2);
             while (Math.Abs(maxForce - minForce) > eps)
             {
-                wk = SLS.GetCrackWidth(section, Force, Force * (h / 2 - xc2), kt, k1);
-                
+                moment = Force * (h / 2 - xc2);
+                wkP = SLS.GetCrackWidth(section, Force, moment, kt, k1);
+                wkL = SLS.GetCrackWidth(section.reversedSection, Force, -moment, kt, k1);
+
+                double mom1, mom2, momL, momP, momC;
+                mom1 = moment;
+                mom2 = moment;
+
+                if (wkP > wkL)
+                {
+                    while (wkP > wkL)
+                    {
+                        mom1 -= 0.01 * Math.Abs(Force);
+                        wkP = SLS.GetCrackWidth(section, Force, mom1, kt, k1);
+                        wkL = SLS.GetCrackWidth(section.reversedSection, Force, -mom1, kt, k1);
+                    }
+                }
+                else if (wkP < wkL)
+                {
+                    while (wkP < wkL)
+                    {
+                        mom1 += 0.01 * Math.Abs(Force);
+                        wkP = SLS.GetCrackWidth(section, Force, mom1, kt, k1);
+                        wkL = SLS.GetCrackWidth(section.reversedSection, Force, -mom1, kt, k1);
+                    }
+                }
+                else
+                    moment = mom1;
+
+                momL = Math.Min(mom1, mom2);
+                momP = Math.Max(mom1, mom2);
+                momC = (momP + momL) / 2;
+
+                while (Math.Abs(wkP - wkL) > 0.000001 || wkL == 0 || wkP == 0)
+                {
+                    wkP = SLS.GetCrackWidth(section, Force, momC, kt, k1);
+                    wkL = SLS.GetCrackWidth(section.reversedSection, Force, -momC, kt, k1);
+
+                    if (wkP > wkL)
+                        momP = momC;
+                    else
+                        momL = momC;
+
+                    momC = (momP + momL) / 2;
+                    moment = momC;
+                }
+
+                wk = Math.Max(wkP, wkL);
+
                 if (wk > rysaGraniczna)
                 {
                     minForce = Force;
@@ -551,8 +703,9 @@ namespace KalkulatorPrzekroju
                 }
                 Force = (maxForce + minForce) / 2;
             }
-            //double wk1 = GetCrackWidth(section, Force, momentForce, 0.4, 0.8);
-            return maxForce;
+            wkP = GetCrackWidth(section, Force, moment, kt, k1);
+            wkL = GetCrackWidth(section.reversedSection, Force, -moment, kt, k1);
+            return Force;
         }
 
         /// <summary>
@@ -565,12 +718,12 @@ namespace KalkulatorPrzekroju
         public static double[][] GetSLS_StressConcrete_Curve(Section section, int NoOfPoints, double wspRedukcjiBeton)
         {
             double max = GetSilaOsiowaKrytycznaBeton(section, wspRedukcjiBeton);
-            double min = 0.5*GetSilaOsiowaKrytycznaStal(section, 0.8);
+            double min = 0.5 * GetSilaOsiowaKrytycznaStal(section, 0.8);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = min + (max - min) / (NoOfPoints-1) * i;
+                double Ned = min + (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetMomentKrytycznyBeton(section, Ned, wspRedukcjiBeton);
@@ -591,13 +744,13 @@ namespace KalkulatorPrzekroju
         /// <returns></returns>
         public static double[][] GetSLS_StressSteel_Curve(Section section, int NoOfPoints, double wspRedukcjiStal)
         {
-            double max = 0.25*GetSilaOsiowaKrytycznaBeton(section, 0.6);
+            double max = 0.25 * GetSilaOsiowaKrytycznaBeton(section, 0.6);
             double min = GetSilaOsiowaKrytycznaStal(section, wspRedukcjiStal);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = max - (max - min) / (NoOfPoints-1) * i;
+                double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetMomentKrytycznyStal(section, Ned, wspRedukcjiStal);
@@ -620,19 +773,23 @@ namespace KalkulatorPrzekroju
         /// <returns></returns>
         public static double[][] GetSLS_Crack_Curve(Section section, int NoOfPoints, double rysaGraniczna, double kt, double k1)
         {
-            double max = 0.25*GetSilaOsiowaKrytycznaBeton(section, 1.0);
+            double max = 0.25 * GetSilaOsiowaKrytycznaBeton(section, 1.0);
             double min = GetSilaOsiowaKrytycznaRysa(section, rysaGraniczna, kt, k1);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = max - (max - min) / (NoOfPoints-1) * i;
+                double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = SLS.GetMomentKrytycznyRysa(section, Ned, rysaGraniczna, kt, k1);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
                 results[results.Length - i - 1][1] = -SLS.GetMomentKrytycznyRysa(section.reversedSection, Ned, rysaGraniczna, kt, k1);
+                if (i == 98)
+                {
+                    //bool nic = true;
+                }
             }
 
             return results;
