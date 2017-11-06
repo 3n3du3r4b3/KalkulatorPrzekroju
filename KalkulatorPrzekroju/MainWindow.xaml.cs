@@ -375,6 +375,38 @@ namespace KalkulatorPrzekroju
             tb.Text = input.ToString(format);
         }
 
+        private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_RH;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_u_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_u;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_Cst_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_Cst;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_Cse_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_Cse;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -543,17 +575,34 @@ namespace KalkulatorPrzekroju
             diagram1.SetGraph();
         }
 
-        private void button_Creep_Click(object sender, RoutedEventArgs e)
+        private void button_Creep1_Click(object sender, RoutedEventArgs e)
         {
-            double[] crCoeff = { 40, 1, 3, 10000 };
-            int divide = 10;
-            double[] cr = new double[divide];
-            for (int i = 0; i < divide; i++)
+            //double[] crCoeff = { 40, 1, 100, 10000 };
+            double divide = 10;
+            double[] cr = new double[Convert.ToInt32(divide)];
+            double[] day = new double[Convert.ToInt32(divide)];
+            for (double i = 1; i <= divide; i++)
             {
-                cr[i] = CreepCoefficient.CreepCoefficientCalc(section1, crCoeff[0], crCoeff[1], crCoeff[2], crCoeff[2]+(i/divide)*(crCoeff[3]- crCoeff[2]));
+                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)),0);
+                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
             }
             CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr);
+            crWindow.Show(cr,day);
+        }
+
+        private void button_Creep2_Click(object sender, RoutedEventArgs e)
+        {
+            //double[] crCoeff = { 40, 1, 100, 10000 };
+            double divide = 10;
+            double[] cr = new double[Convert.ToInt32(divide)];
+            double[] day = new double[Convert.ToInt32(divide)];
+            for (double i = 1; i <= divide; i++)
+            {
+                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i -1)/ (divide-1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)),0);
+                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
+            }
+            CreepWindow crWindow = new CreepWindow();
+            crWindow.Show(cr,day);
         }
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
