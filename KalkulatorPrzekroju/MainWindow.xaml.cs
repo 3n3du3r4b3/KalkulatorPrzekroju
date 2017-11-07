@@ -29,7 +29,6 @@ namespace KalkulatorPrzekroju
     public partial class MainWindow : Window
     {
         Factors wspolczynniki;
-        AllConcrete betony = new AllConcrete(AllConcrete.LoadType.DAT);
         Steel stal = new Steel(Steel.classes.B500B);
         Section section1;
         Section section2;
@@ -39,7 +38,6 @@ namespace KalkulatorPrzekroju
         public MainWindow()
         {
             InitializeComponent();
-            //betony.saveToDatFile();
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls(); 
             Concrete bet = new Concrete(Concrete.classes.C12_15);
@@ -81,11 +79,12 @@ namespace KalkulatorPrzekroju
             comboBox_As2_spac_no_1.SelectedIndex = 0;
             comboBox_As1_spac_no_2.SelectedIndex = 0;
             comboBox_As2_spac_no_2.SelectedIndex = 0;
-
-            foreach (var item in betony.concreteNames)
+            
+            for (int i = 0; i <= (int)Concrete.classes.C90_105; i++)
             {
-                comboBox_Concrete_1.Items.Add(item);
-                comboBox_Concrete_2.Items.Add(item);
+                string name = new Concrete((Concrete.classes)i).Name;
+                comboBox_Concrete_1.Items.Add(name);
+                comboBox_Concrete_2.Items.Add(name);
             }
             comboBox_Concrete_1.SelectedIndex = 0;
             comboBox_Concrete_2.SelectedIndex = 0;
