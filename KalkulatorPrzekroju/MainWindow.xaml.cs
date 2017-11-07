@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,7 +39,7 @@ namespace KalkulatorPrzekroju
         public MainWindow()
         {
             InitializeComponent();
-
+            //betony.saveToDatFile();
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls(); 
             Concrete bet = new Concrete(Concrete.classes.C12_15);
