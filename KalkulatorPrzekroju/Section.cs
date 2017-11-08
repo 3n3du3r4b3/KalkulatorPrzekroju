@@ -65,22 +65,10 @@ namespace KalkulatorPrzekroju
         /// Rozstaw prętów zbrojenia As2 w mm
         /// </summary>
         public double spacing2 { get; private set; }
-
-        /*
         /// <summary>
-    	/// Współczynnik częściowy betonu
-    	/// </summary>
-        public double gammaC { get; private set; }
-        /// <summary>
-    	/// Współczynnik stosowany w celu uwzględnienia efektów dłutrwałych oraz niekorzystnych wpływów, 
-    	/// wynikających ze sposobu przyłożenia obciążenia (dla BS-EN 0.85, dla PN-EN 1.00)
-    	/// </summary>
-        public double alfaCC { get; private set; }
-        /// <summary>
-    	/// Współczynnik częściowy stali
-    	/// </summary>
-        public double gammaS { get; private set; }
-        */
+        /// Współczynnik pełzania
+        /// </summary>
+        public double fi { get; set; }
 
         /// <summary>
         /// Zwraca aktualny przekrój obrócony o 180 stopni
@@ -115,6 +103,7 @@ namespace KalkulatorPrzekroju
             }
             else
                 a2 = c2 + 0.5 * fi2;
+            fi = 0;
         }
 
         /// <summary>
