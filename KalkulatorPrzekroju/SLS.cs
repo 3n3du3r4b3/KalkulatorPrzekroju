@@ -28,7 +28,7 @@ namespace KalkulatorPrzekroju
             double a2 = section.a2 / dimfactor;
             double As1 = section.As1 / (dimfactor * dimfactor);
             double As2 = section.As2 / (dimfactor * dimfactor);
-            double fi = 0;
+            double fi = section.fi;
             double alfaE = section.currentSteel.Es * (1 + fi) / section.currentConrete.Ecm;
 
             //rezultaty
