@@ -2,7 +2,11 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/KalkulatorPrzekroju/obj/Debug/KalkulatorPrzekroju_MarkupCompile.i.lref
-/KalkulatorPrzekroju/obj/
 
-/.vs/
+/KalkulatorPrzekroju/obj/
+/KalkulatorPrzekroju/obj/Debug/KalkulatorPrzekroju_MarkupCompile.i.lref
+/KalkulatorPrzekroju/obj/Debug/
+
+\.vs/KalkulatorPrzekroju/v15/sqlite3/
+\.vs/
+\.vs/KalkulatorPrzekroju/v14/\.suo
