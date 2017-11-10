@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="MainWindow" Height="560" Width="960" MinWidth="960" MinHeight="540">
+        Title="MainWindow" Height="560" Width="960" MinWidth="960" MinHeight="649">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -99,6 +99,14 @@
 
                                 </Grid>
                             </GroupBox>
+                            <GroupBox x:Name="GroupBox_Creep" Header="Creep" Height="65" Margin="10,410,0,0" VerticalAlignment="Top" Width="310" HorizontalAlignment="Left">
+                                <Grid>
+                                    <Label x:Name="label5_Copy" Content="Creep factor φ(∞, t₀)" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="textBox_creep1" HorizontalAlignment="Left" Height="23" Margin="130,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_1_LostFocus" TabIndex="10" Text="0"/>
+                                    <Button x:Name="button_CalcCreep1" Content="Calculate..." HorizontalAlignment="Left" Margin="210,5,0,0" VerticalAlignment="Top" Width="75" Opacity="1" Height="25"/>
+
+                                </Grid>
+                            </GroupBox>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Section 2" TabIndex="3">
@@ -169,6 +177,15 @@
                                         <Label x:Name="label_stir13" Content="Angle: " HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"/>
                                         <TextBox x:Name="textBox_stir_angle_2" HorizontalAlignment="Left" Height="23" Margin="79,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_2_LostFocus" TabIndex="10" Text="90"/>
                                         <Label x:Name="label_stir14" Content="[ ° ]" HorizontalAlignment="Left" Margin="144,100,0,0" VerticalAlignment="Top"/>
+
+                                    </Grid>
+                                </GroupBox>
+
+                                <GroupBox x:Name="GroupBox_Creep2" Header="Creep" Height="65" Margin="10,410,0,0" VerticalAlignment="Top" Width="310" HorizontalAlignment="Left">
+                                    <Grid>
+                                        <Label x:Name="label6_Copy" Content="Creep factor φ(∞, t₀)" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
+                                        <TextBox x:Name="textBox_creep2" HorizontalAlignment="Left" Height="23" Margin="130,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_1_LostFocus" TabIndex="10" Text="0"/>
+                                        <Button x:Name="button_CalcCreep2" Content="Calculate..." HorizontalAlignment="Left" Margin="210,5,0,0" VerticalAlignment="Top" Width="75" Opacity="1" Height="25"/>
 
                                     </Grid>
                                 </GroupBox>
