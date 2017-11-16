@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OxyPlot;
 using OxyPlot.Series;
+using System.Windows.Media;
 
 namespace KalkulatorPrzekroju
 {
@@ -24,22 +25,32 @@ namespace KalkulatorPrzekroju
         {
             wykres = new PlotModel();
             wykres.LegendPosition = LegendPosition.TopLeft;
+            wykres.Axes.Clear();
+            wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
+            wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
+            wykres.Axes[0].Position = OxyPlot.Axes.AxisPosition.Bottom;
+            wykres.Axes[1].Position = OxyPlot.Axes.AxisPosition.Left;
+            wykres.Axes[0].PositionAtZeroCrossing = true;
+            wykres.Axes[1].PositionAtZeroCrossing = true;
+            wykres.Axes[0].AxislineStyle = LineStyle.Automatic;
+            wykres.Axes[1].AxislineStyle = LineStyle.Automatic;
         }
 
-        public void AddLineSerie(double[][] dataPoints, string name)
+        public void AddLineSerie(double[][] dataPoints, string name,Color color, double size)
         {
             LineSeries punkty = new LineSeries();
             punkty.Title = name;
-
+            
             for (int i = 0; i < dataPoints.Length; i++)
             {
                 punkty.Points.Add(new DataPoint(dataPoints[i][1], dataPoints[i][0]));
             }
-
+            punkty.Color = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
+            punkty.StrokeThickness = size;
             wykres.Series.Add(punkty);
         }
 
-        public void AddPointSerie(double[][] dataPoints, string name)
+        public void AddPointSerie(double[][] dataPoints, string name, Color color, double size)
         {
             ScatterSeries punkty = new ScatterSeries();
             punkty.Title = name;
@@ -48,7 +59,8 @@ namespace KalkulatorPrzekroju
             {
                 punkty.Points.Add(new ScatterPoint(dataPoints[i][1], dataPoints[i][0]));
             }
-
+            punkty.MarkerStroke = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
+            punkty.MarkerSize = size;
             wykres.Series.Add(punkty);
         }
 
@@ -64,17 +76,5 @@ namespace KalkulatorPrzekroju
             }
             wykres.Series.Remove(seriaToDelete);
         }
-
-        public void SetGraph()
-        {
-            //wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
-            //wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
-            wykres.Axes[0].PositionAtZeroCrossing = true;
-            wykres.Axes[1].PositionAtZeroCrossing = true;
-            wykres.Axes[0].AxislineStyle = LineStyle.Solid;
-            wykres.Axes[1].AxislineStyle = LineStyle.Solid;
-            wykres.Axes[0].Layer = OxyPlot.Axes.AxisLayer.AboveSeries;
-            wykres.Axes[1].Layer = OxyPlot.Axes.AxisLayer.AboveSeries;
-            }
     }
 }

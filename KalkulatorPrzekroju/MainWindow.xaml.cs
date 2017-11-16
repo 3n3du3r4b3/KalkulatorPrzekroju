@@ -32,14 +32,15 @@ namespace KalkulatorPrzekroju
         Steel stal = new Steel(Steel.classes.B500B);
         Section section1;
         Section section2;
-
+        MySettings ustawienia;
+        
         string format = "0.##";
 
         public MainWindow()
         {
             InitializeComponent();
             wspolczynniki = new Factors(Factors.Settings.zachowane);
-            SetControlls(); 
+            SetControlls(); /*
             Concrete bet = new Concrete(Concrete.classes.C12_15);
             Steel stl = new Steel(Steel.classes.B500A);
             Section sec = new Section(bet, stl, 1000, 1000, 40, 50, 40, 10, 100.0, 40);
@@ -47,7 +48,8 @@ namespace KalkulatorPrzekroju
             //double mmax = SLS.GetMomentKrytycznyRysa(sec,-853.8253884230121, 0.2, 0.4, 0.8);
             StressState str = SLS.GetStresses(sec, -853.8253884230121, -337.59354350134885);
             double wkm1 = SLS.GetCrackWidth(sec, nmax, nmax, 0.4, 0.8);
-            double wkm2 = SLS.GetCrackWidth(sec, nmax, 921, 0.4, 0.8);
+            double wkm2 = SLS.GetCrackWidth(sec, nmax, 921, 0.4, 0.8);*/
+            ustawienia = new MySettings(Source.zapisane);
         }
 
         private void SetControlls()
@@ -189,7 +191,7 @@ namespace KalkulatorPrzekroju
 
         private void MenuItemSettingsDisplay_Click(object sender, RoutedEventArgs e)
         {
-            Window_DisplaySet displaySettingsWindow = new Window_DisplaySet();
+            Window_DisplaySet displaySettingsWindow = new Window_DisplaySet(ustawienia);
             displaySettingsWindow.Show();
         }
 
@@ -546,33 +548,24 @@ namespace KalkulatorPrzekroju
                      );
                    
             MainPlotView diagram1 = new MainPlotView();
-            diagram1.AddLineSerie(tab1_ULS, "Section 1");
-            diagram1.AddLineSerie(tab2_ULS, "Section 2");
-            MainPlotView diagram2 = new MainPlotView();
-            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - wk = 0.2mm");
-            diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked");
-            MainPlotView diagram3 = new MainPlotView();
-            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress");
-            diagram3.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress");
-            MainPlotView diagramVN = new MainPlotView();
-            diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c");
-            diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s");
-
-            /* MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
-                { Position=OxyPlot.Axes.AxisPosition.None, Minimum = -2000, Maximum = 2000 });
-            MyModel.Axes.Add(new OxyPlot.Axes.LinearAxis
-                { Position = OxyPlot.Axes.AxisPosition.None, Minimum = -1000, Maximum = 8000 });    */
-            /*
-        MyModel.Series.Add(punkty);
-        MyModel.Series.Add(punkty2);
-        punkty.Color = OxyColors.Red;
-        punkty.StrokeThickness = 1;
-        punkty2.MarkerSize = 2; */
+            diagram1.AddLineSerie(tab1_ULS, "Section 1", Colors.Red, 2);
+            diagram1.AddLineSerie(tab2_ULS, "Section 2", Colors.Green, 2);
             PlotView_ULS_MN.Model = diagram1.wykres;
+
+            MainPlotView diagram2 = new MainPlotView();
+            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - wk = 0.2mm", Colors.Brown, 2);
+            diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", Colors.Green, 2);
             PlotView_SLS_Crack.Model = diagram2.wykres;
-            PlotView_ULS_VN.Model = diagramVN.wykres;
+
+            MainPlotView diagram3 = new MainPlotView();
+            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", Colors.Orange, 2);
+            diagram3.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", Colors.Blue, 2);
             PlotView_SLS_Stresess.Model = diagram3.wykres;
-            diagram1.SetGraph();
+
+            MainPlotView diagramVN = new MainPlotView();
+            diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", Colors.Gray, 2);
+            diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", Colors.Red, 2);
+            PlotView_ULS_VN.Model = diagramVN.wykres;
         }
 
         private void button_Creep1_Click(object sender, RoutedEventArgs e)

@@ -68,8 +68,9 @@
     </ApplicationDefinition>
     <Compile Include="CreepCoefficient.cs" />
     <Compile Include="MainPlotView.cs" />
+    <Compile Include="MyColor.cs" />
     <Compile Include="Section.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="MySettings.cs" />
     <Compile Include="SLS.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Steel.cs" />
