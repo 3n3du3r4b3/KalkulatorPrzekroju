@@ -23,18 +23,21 @@ namespace KalkulatorPrzekroju
     /// </summary>
     public partial class Window_DisplaySet : Window
     {
-        public Window_DisplaySet()
+        MySettings mySettings;
+        public Window_DisplaySet(MySettings set)
         {
             InitializeComponent();
+            mySettings = set;
             /*Settings ustawienia = new Settings();
             ustawienia.SaveToFile();
             ustawienia.ReadFromFile();
-            colorPicker_ULS_MN_Line1.SelectedColor = ustawienia.ULSMN_Section1LineColor;*/
+            MyColor c = ustawienia.ULSMN_Section1LineColor;
+            colorPicker_ULS_MN_Line1.SelectedColor = Color.FromArgb(c.A,c.R,c.G,c.B);*/
         }
 
         //  obsługa przycisków
         private void button_Close_Click(object sender, RoutedEventArgs e)
-        {
+        {   
             this.Close();
         }
     }
