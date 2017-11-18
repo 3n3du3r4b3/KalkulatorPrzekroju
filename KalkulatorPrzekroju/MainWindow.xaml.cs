@@ -50,6 +50,8 @@ namespace KalkulatorPrzekroju
             double wkm1 = SLS.GetCrackWidth(sec, nmax, nmax, 0.4, 0.8);
             double wkm2 = SLS.GetCrackWidth(sec, nmax, 921, 0.4, 0.8);*/
             ustawienia = new MySettings(Source.zapisane);
+            //ustawienia = new MySettings(Source.domyslne);
+            //ustawienia.SaveToFile();
         }
 
         private void SetControlls()
@@ -509,7 +511,7 @@ namespace KalkulatorPrzekroju
             double[][] tabSLS_Crack = SLS.GetSLS_Crack_Curve(
                 section1,
                 wspolczynniki.NoOfPoints,
-                0.2,
+                wspolczynniki.Crack_wklim,
                 0.4,
                 wspolczynniki.Crack_k1
                 );
@@ -548,23 +550,23 @@ namespace KalkulatorPrzekroju
                      );
                    
             MainPlotView diagram1 = new MainPlotView();
-            diagram1.AddLineSerie(tab1_ULS, "Section 1", Colors.Red, 2);
-            diagram1.AddLineSerie(tab2_ULS, "Section 2", Colors.Green, 2);
+            diagram1.AddLineSerie(tab1_ULS, "Section 1", ustawienia.ULSMN_Section1LineColor.GetMedia(), ustawienia.ULSMN_Section1LineWeight);
+            diagram1.AddLineSerie(tab2_ULS, "Section 2", ustawienia.ULSMN_Section2LineColor.GetMedia(), ustawienia.ULSMN_Section2LineWeight);
             PlotView_ULS_MN.Model = diagram1.wykres;
 
             MainPlotView diagram2 = new MainPlotView();
-            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - wk = 0.2mm", Colors.Brown, 2);
-            diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", Colors.Green, 2);
+            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - wk = " + wspolczynniki.Crack_wklim +" mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+            diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
             PlotView_SLS_Crack.Model = diagram2.wykres;
 
             MainPlotView diagram3 = new MainPlotView();
-            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", Colors.Orange, 2);
-            diagram3.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", Colors.Blue, 2);
+            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
+            diagram3.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
             PlotView_SLS_Stresess.Model = diagram3.wykres;
 
             MainPlotView diagramVN = new MainPlotView();
-            diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", Colors.Gray, 2);
-            diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", Colors.Red, 2);
+            diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
+            diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
             PlotView_ULS_VN.Model = diagramVN.wykres;
         }
 

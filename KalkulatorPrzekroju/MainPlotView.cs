@@ -61,6 +61,8 @@ namespace KalkulatorPrzekroju
             }
             punkty.MarkerStroke = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
             punkty.MarkerSize = size;
+            punkty.MarkerType = MarkerType.Circle;
+            punkty.MarkerFill = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
             wykres.Series.Add(punkty);
         }
 

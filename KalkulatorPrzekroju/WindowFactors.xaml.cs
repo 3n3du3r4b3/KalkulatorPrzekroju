@@ -51,6 +51,7 @@ namespace KalkulatorPrzekroju
             textBox_crack_k1.Text = factors.Crack_k1.ToString(format);
             textBox_crack_k3.Text = factors.Crack_k3.ToString(format);
             textBox_crack_k4.Text = factors.Crack_k4.ToString(format);
+            textBox_crack_limit.Text = factors.Crack_wklim.ToString(format);
 
             textBox_stress_k1.Text = factors.Stresses_k1.ToString(format);
             textBox_stress_k3.Text = factors.Stresses_k3.ToString(format);
@@ -72,6 +73,7 @@ namespace KalkulatorPrzekroju
             wspolczynniki.Crack_k1 = Double.Parse(textBox_crack_k1.Text);
             wspolczynniki.Crack_k3 = Double.Parse(textBox_crack_k3.Text);
             wspolczynniki.Crack_k4 = Double.Parse(textBox_crack_k4.Text);
+            wspolczynniki.Crack_wklim = Double.Parse(textBox_crack_limit.Text);
             wspolczynniki.GammaC_Accidental = Double.Parse(textBox_gammaC_ACC.Text);
             wspolczynniki.GammaC_PermAndTrans = Double.Parse(textBox_gammaC_PT.Text);
             wspolczynniki.GammaS_Accidental = Double.Parse(textBox_gammaS_ACC.Text);
@@ -184,6 +186,14 @@ namespace KalkulatorPrzekroju
             TextBox tb = textBox_general_NoOfPoints;
             int input;
             Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+        }
+
+        private void textBox_crack_limit_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_crack_limit;
+            double input;
+            Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
         }
         // koniec kontroli wprowadzania danych przez użytkownika

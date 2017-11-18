@@ -1,12 +1,12 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:oxy="http://oxyplot.org/wpf"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="KalkulatorPrzekroju.Window_DisplaySet"
         mc:Ignorable="d"
-        Title="Window_DisplaySet" Height="300" Width="600">
+        Title="Display Settings" Height="300" Width="510" MinWidth="510" MinHeight="300" MaxWidth="510" MaxHeight="300">
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0,40">
             <TabItem Header="ULS M/N">
@@ -15,27 +15,128 @@
                         <Grid Margin="0">
                             <Label x:Name="label" Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                             <Label x:Name="label1" Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
-                            <ComboBox x:Name="comboBox_ULS_MN_LineWeight" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="120"/>
-
                             <xctk:ColorPicker x:Name="colorPicker_ULS_MN_Line1" HorizontalAlignment="Left" Margin="90,40,0,0" VerticalAlignment="Top" Width="120"/>
+                            <Slider x:Name="slider_sec1_ULS_MN" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox2" Header="Section 2" Margin="250,10,0,0" VerticalAlignment="Top" Height="100" HorizontalAlignment="Left" Width="230">
+                        <Grid Margin="0">
+                            <Label x:Name="label2" Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label x:Name="label12" Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_ULS_MN_Line2" Margin="90,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_sec2_ULS_MN" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="groupBox_Copy" Header="Data points" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="70" Width="470">
+                        <Grid Margin="0">
+                            <Label x:Name="label3" Content="Points size:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label x:Name="label4" Content="Points color:" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_ULS_MN_Points" Margin="330,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_points_ULS_MN" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
                         </Grid>
                     </GroupBox>
 
                 </Grid>
             </TabItem>
             <TabItem Header="ULS V/N">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="162*"/>
+                        <ColumnDefinition Width="337*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Header="Section 1 - VRd.c" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="100" Width="230" Grid.ColumnSpan="2">
+                        <Grid Margin="0">
+                            <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_ULS_VN_Line1" HorizontalAlignment="Left" Margin="90,40,0,0" VerticalAlignment="Top" Width="120"/>
+                            <Slider x:Name="slider_line1_ULS_VN" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Section 1 - VRd.s" Margin="88.133,10,0,0" VerticalAlignment="Top" Height="100" HorizontalAlignment="Left" Width="230" Grid.Column="1">
+                        <Grid Margin="0">
+                            <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_ULS_VN_Line2" Margin="90,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_line2_ULS_VN" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Data points" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="70" Width="470" Grid.ColumnSpan="2">
+                        <Grid Margin="0">
+                            <Label Content="Points size:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Points color:" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_ULS_VN_Points" Margin="330,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_points_ULS_VN" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
             </TabItem>
             <TabItem Header="SLS Crack Width">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+
+                    <GroupBox Header="Section 1 - Non-cracked" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="100" Width="230">
+                        <Grid Margin="0">
+                            <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_Crack_NonCracked_Line" HorizontalAlignment="Left" Margin="90,40,0,0" VerticalAlignment="Top" Width="120"/>
+                            <Slider x:Name="slider_SLS_Crack_NonCracked_Line" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Section 1 - Limited crack width" Margin="250,10,0,0" VerticalAlignment="Top" Height="100" HorizontalAlignment="Left" Width="230">
+                        <Grid Margin="0">
+                            <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_Crack_Cracked_Line" Margin="90,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_SLS_Crack_Cracked_Line" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Data points" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="70" Width="470">
+                        <Grid Margin="0">
+                            <Label Content="Points size:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Points color:" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_Crack_Points" Margin="330,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_SLS_Crack_Points" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
             </TabItem>
             <TabItem Header="SLS Stresses">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+
+                    <GroupBox Header="Section 1 - Concrete stress" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="100" Width="230">
+                        <Grid Margin="0">
+                            <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_ConcreteStress_Line" HorizontalAlignment="Left" Margin="90,40,0,0" VerticalAlignment="Top" Width="120"/>
+                            <Slider x:Name="slider_SLS_ConcreteStress_Line" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Section 1 - Steel stress" Margin="250,10,0,0" VerticalAlignment="Top" Height="100" HorizontalAlignment="Left" Width="230">
+                        <Grid Margin="0">
+                            <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_SteelStress_Line" Margin="90,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_SLS_SteelStress_Line" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Data points" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="70" Width="470">
+                        <Grid Margin="0">
+                            <Label Content="Points size:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                            <Label Content="Points color:" HorizontalAlignment="Left" Margin="250,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_Stress_DataPoint" Margin="330,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Slider x:Name="slider_SLS_Stress_DataPoint" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="button_Save" Content="Save" HorizontalAlignment="Right" Margin="10,0,210,11" Width="70" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_Save" Content="Save" HorizontalAlignment="Right" Margin="10,0,210,11" Width="70" Height="20" VerticalAlignment="Bottom" Click="button_Save_Click"/>
         <Button x:Name="button_Close" Content="Close" HorizontalAlignment="Right" Margin="95,0,125,11" Width="70" Height="20" VerticalAlignment="Bottom" Click="button_Close_Click"/>
-        <Button x:Name="button_RestoreDef" Content="Restore Defaults" HorizontalAlignment="Right" Margin="180,0,10,11" Width="100" Height="20" VerticalAlignment="Bottom"/>
+        <Button x:Name="button_RestoreDef" Content="Restore Defaults" HorizontalAlignment="Right" Margin="180,0,10,11" Width="100" Height="20" VerticalAlignment="Bottom" Click="button_RestoreDef_Click"/>
 
     </Grid>
 </Window>

@@ -53,6 +53,8 @@ namespace KalkulatorPrzekroju
 
         public double Crack_k4 { get; set; }
 
+        public double Crack_wklim { get; set; }
+
         public int NoOfPoints { get; set; }
 
         public Factors(Settings settings)
@@ -86,6 +88,7 @@ namespace KalkulatorPrzekroju
                     Crack_k1 = zapisane.Crack_k1;
                     Crack_k3 = zapisane.Crack_k3;
                     Crack_k4 = zapisane.Crack_k4;
+                    Crack_wklim = zapisane.Crack_wklim;
                 }
                 catch (Exception)
                 {
@@ -120,6 +123,7 @@ namespace KalkulatorPrzekroju
             this.Crack_k1 = 0.8;
             this.Crack_k3 = 3.4;
             this.Crack_k4 = 0.425;
+            this.Crack_wklim = 0.3;
         }
     }
 }
