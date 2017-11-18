@@ -512,7 +512,7 @@ namespace KalkulatorPrzekroju
                 section1,
                 wspolczynniki.NoOfPoints,
                 wspolczynniki.Crack_wklim,
-                0.4,
+                wspolczynniki.Crack_kt,
                 wspolczynniki.Crack_k1
                 );
 
@@ -520,7 +520,7 @@ namespace KalkulatorPrzekroju
                 section1,
                 wspolczynniki.NoOfPoints,
                 0,
-                0.4,
+                wspolczynniki.Crack_kt,
                 wspolczynniki.Crack_k1
                 );
 
@@ -540,13 +540,13 @@ namespace KalkulatorPrzekroju
             double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
-                     0.8
+                     wspolczynniki.Stresses_k3
                      );
-            
+
             double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
-                     0.6
+                     wspolczynniki.Stresses_k1
                      );
                    
             MainPlotView diagram1 = new MainPlotView();
@@ -555,8 +555,8 @@ namespace KalkulatorPrzekroju
             PlotView_ULS_MN.Model = diagram1.wykres;
 
             MainPlotView diagram2 = new MainPlotView();
-            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - wk = " + wspolczynniki.Crack_wklim +" mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
             diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
+            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim +" mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
             PlotView_SLS_Crack.Model = diagram2.wykres;
 
             MainPlotView diagram3 = new MainPlotView();

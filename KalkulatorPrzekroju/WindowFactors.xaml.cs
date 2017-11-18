@@ -53,6 +53,11 @@ namespace KalkulatorPrzekroju
             textBox_crack_k4.Text = factors.Crack_k4.ToString(format);
             textBox_crack_limit.Text = factors.Crack_wklim.ToString(format);
 
+            if (factors.Crack_kt == 0.4)
+                radioButton_long.IsChecked = true;
+            else
+                radioButton_short.IsChecked = true;
+
             textBox_stress_k1.Text = factors.Stresses_k1.ToString(format);
             textBox_stress_k3.Text = factors.Stresses_k3.ToString(format);
 
@@ -81,6 +86,11 @@ namespace KalkulatorPrzekroju
             wspolczynniki.NoOfPoints = Int32.Parse(textBox_general_NoOfPoints.Text);
             wspolczynniki.Stresses_k1 = Double.Parse(textBox_stress_k1.Text);
             wspolczynniki.Stresses_k3 = Double.Parse(textBox_stress_k3.Text);
+
+            if ((bool)radioButton_long.IsChecked)
+                wspolczynniki.Crack_kt = 0.4;
+            else
+                wspolczynniki.Crack_kt = 0.6;
 
             wspolczynniki.SaveToFile();
         }
