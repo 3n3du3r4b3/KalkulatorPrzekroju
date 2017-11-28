@@ -192,29 +192,46 @@
                             </Grid>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="ULS Data" TabIndex="4">
+                    <TabItem Header="ULS M-N Data" TabIndex="4">
                         <Grid Background="#FFE5E5E5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="0,0,0,-0.4" Width="444" AlternationCount="2" RowHeight="5">
+                            <DataGrid x:Name="dataGrid_ULS_MN" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10">
                                 <DataGrid.Columns>
-                                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Lp."/>
-                                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
-                                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Bending Moment [kNm]"/>
-                                    <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Shear Force [kN]"/>
+                                    <DataGridTextColumn Binding="{Binding row}" ClipboardContentBinding="{x:Null}" Header="No." IsReadOnly="True" FontWeight="Bold"/>
+                                    <DataGridTextColumn Binding="{Binding X}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
+                                    <DataGridTextColumn Binding="{Binding Y}" ClipboardContentBinding="{x:Null}" Header="Bending Moment [kNm]"/>
                                 </DataGrid.Columns>
                             </DataGrid>
+                            <Button x:Name="button_Import_MN" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_MN_Click"/>
+
                         </Grid>
                     </TabItem>
-                    <TabItem Header="SLS QPR Data" TabIndex="5">
+                    <TabItem Header="ULS V-N Data" TabIndex="5">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dataGrid_ULS_VN" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding row}" ClipboardContentBinding="{x:Null}" Header="No." IsReadOnly="True" FontWeight="Bold"/>
+                                    <DataGridTextColumn Binding="{Binding X}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
+                                    <DataGridTextColumn Binding="{Binding Y}" ClipboardContentBinding="{x:Null}" Header="Shear Force [kN]"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button x:Name="button_Import_VN" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_MN_Click"/>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="SLS QPR Data" TabIndex="6">
                         <Grid Background="#FFE5E5E5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="SLS CHR Data" TabIndex="6">
+                    <TabItem Header="SLS CHR Data" TabIndex="7">
                         <Grid Background="#FFE5E5E5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>

@@ -66,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CasePoint.cs" />
     <Compile Include="CreepCoefficient.cs" />
     <Compile Include="MainPlotView.cs" />
     <Compile Include="MyColor.cs" />

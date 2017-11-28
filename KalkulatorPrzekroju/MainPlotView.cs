@@ -50,14 +50,14 @@ namespace KalkulatorPrzekroju
             wykres.Series.Add(punkty);
         }
 
-        public void AddPointSerie(double[][] dataPoints, string name, Color color, double size)
+        public void AddPointSerie(List<CasePoint> dataPoints, string name, Color color, double size)
         {
             ScatterSeries punkty = new ScatterSeries();
             punkty.Title = name;
 
-            for (int i = 0; i < dataPoints.Length; i++)
+            for (int i = 0; i < dataPoints.Count; i++)
             {
-                punkty.Points.Add(new ScatterPoint(dataPoints[i][1], dataPoints[i][0]));
+                punkty.Points.Add(new ScatterPoint(dataPoints[i].X, dataPoints[i].Y));
             }
             punkty.MarkerStroke = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
             punkty.MarkerSize = size;
@@ -74,9 +74,9 @@ namespace KalkulatorPrzekroju
                 if (seria.Title == name)
                 {
                     seriaToDelete = seria;
+                    wykres.Series.Remove(seriaToDelete);
                 }
             }
-            wykres.Series.Remove(seriaToDelete);
         }
     }
 }

@@ -19,6 +19,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using OxyPlot;
 using OxyPlot.Series;
 using Microsoft.Win32;
+using System.Globalization;
+
 
 namespace KalkulatorPrzekroju
 {
@@ -32,8 +34,28 @@ namespace KalkulatorPrzekroju
         Steel stal = new Steel(Steel.classes.B500B);
         Section section1;
         Section section2;
+        Stirrups stirrups1;
+        Stirrups stirrups2;
         MySettings ustawienia;
-        
+        MainPlotView diagram_ULS_VN;
+        MainPlotView diagram_ULS_MN;
+        MainPlotView diagram_SLS_Crack;
+        MainPlotView diagram_SLS_Stressess;
+
+        double[][] tabSLS_ConcreteStress;
+        double[][] tabSLS_SteelStress;
+        double[][] tabVRd1;
+        double[][] tabVRdc1;
+        double[][] tabSLS_NonCrack;
+        double[][] tabSLS_Crack;
+        double[][] tab2_ULS;
+        double[][] tab1_ULS;
+
+        List<CasePoint> points_MN;
+        List<CasePoint> points_VN;
+        List<CasePoint> points_SLS_QPR;
+        List<CasePoint> points_SLS_CHR;
+
         string format = "0.##";
 
         public MainWindow()
@@ -83,7 +105,7 @@ namespace KalkulatorPrzekroju
             comboBox_As2_spac_no_1.SelectedIndex = 0;
             comboBox_As1_spac_no_2.SelectedIndex = 0;
             comboBox_As2_spac_no_2.SelectedIndex = 0;
-            
+
             for (int i = 0; i <= (int)Concrete.classes.C90_105; i++)
             {
                 string name = new Concrete((Concrete.classes)i).Name;
@@ -183,7 +205,7 @@ namespace KalkulatorPrzekroju
                 label_spac_no_As2_2.Visibility = Visibility.Hidden;
             }
         }
-        
+
         //oprogramowanie menu
         private void MenuItemSettingsFactors_Click(object sender, RoutedEventArgs e)
         {
@@ -215,7 +237,7 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        //kontrola wprowadzania danych przez uzytkownika
+        ///kontrola wprowadzania danych przez uzytkownika
         private void textBox_width_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_width_1;
@@ -410,10 +432,63 @@ namespace KalkulatorPrzekroju
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
         }
+        ///koniec kontrola wprowadzania danych
+
 
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
+            TakeData();
+            CalcCurves();
+
+            Refresh_ULS_MN_Graph();
+            Refresh_ULS_VN_Graph();
+            Refresh_SLS_Crack_Graph();
+            Refresh_SLS_Stresses_Graph();
+        }
+
+        private void button_Creep1_Click(object sender, RoutedEventArgs e)
+        {
+            //double[] crCoeff = { 40, 1, 100, 10000 };
+            double divide = 10;
+            double[] cr = new double[Convert.ToInt32(divide)];
+            double[] day = new double[Convert.ToInt32(divide)];
+            for (double i = 1; i <= divide; i++)
+            {
+                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
+                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
+            }
+            CreepWindow crWindow = new CreepWindow();
+            crWindow.Show(cr, day);
+        }
+
+        private void button_Creep2_Click(object sender, RoutedEventArgs e)
+        {
+            //double[] crCoeff = { 40, 1, 100, 10000 };
+            double divide = 10;
+            double[] cr = new double[Convert.ToInt32(divide)];
+            double[] day = new double[Convert.ToInt32(divide)];
+            for (double i = 1; i <= divide; i++)
+            {
+                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
+                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
+            }
+            CreepWindow crWindow = new CreepWindow();
+            crWindow.Show(cr, day);
+        }
+
+        private void button_Import_MN_Click(object sender, RoutedEventArgs e)
+        {
+            points_MN = ReadFileCSV();
+            dataGrid_ULS_MN.ItemsSource = points_MN;
+            Refresh_ULS_MN_Graph();
+        }
+
+        // KONIEC OPROGRAMOWANIA KONTROLEK
+
+        private void TakeData()
+        {
+
             if (comboBox_As2_spac_no_1.Text == "spacing")
             {
                 section1 = new Section(
@@ -444,8 +519,6 @@ namespace KalkulatorPrzekroju
                    Double.Parse(textBox_cover_As2_1.Text)
                    );
             }
-            else
-                section1 = null;
 
             if (comboBox_As2_spac_no_2.Text == "spacing")
             {
@@ -477,10 +550,8 @@ namespace KalkulatorPrzekroju
                    Double.Parse(textBox_cover_As2_2.Text)
                    );
             }
-            else
-                section1 = null;
 
-            Stirrups stirrups1 = new Stirrups(
+            stirrups1 = new Stirrups(
                 Int32.Parse(textBox_legs_1.Text),
                 Double.Parse(comboBox_diameter_AsStir_1.Text),
                 section1.currentSteel,
@@ -488,27 +559,30 @@ namespace KalkulatorPrzekroju
                 Double.Parse(textBox_stir_angle_1.Text)
                 );
 
-            Stirrups stirrups2 = new Stirrups(
+            stirrups2 = new Stirrups(
                 Int32.Parse(textBox_legs_2.Text),
                 Double.Parse(comboBox_diameter_AsStir_2.Text),
                 section2.currentSteel,
                 Double.Parse(textBox_stir_spacing_2.Text),
                 Double.Parse(textBox_stir_angle_2.Text)
                 );
+        }
 
-            double[][] tab1_ULS = ULS.GetULS_MN_Curve(
+        private void CalcCurves()
+        {
+            tab1_ULS = ULS.GetULS_MN_Curve(
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
-            double[][] tab2_ULS = ULS.GetULS_MN_Curve(
+            tab2_ULS = ULS.GetULS_MN_Curve(
                 section2,
                 (ULS.DesignSituation)comboBox_DesignSituation_2.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
-            double[][] tabSLS_Crack = SLS.GetSLS_Crack_Curve(
+            tabSLS_Crack = SLS.GetSLS_Crack_Curve(
                 section1,
                 wspolczynniki.NoOfPoints,
                 wspolczynniki.Crack_wklim,
@@ -516,7 +590,7 @@ namespace KalkulatorPrzekroju
                 wspolczynniki.Crack_k1
                 );
 
-            double[][] tabSLS_NonCrack = SLS.GetSLS_Crack_Curve(
+            tabSLS_NonCrack = SLS.GetSLS_Crack_Curve(
                 section1,
                 wspolczynniki.NoOfPoints,
                 0,
@@ -524,82 +598,142 @@ namespace KalkulatorPrzekroju
                 wspolczynniki.Crack_k1
                 );
 
-            double[][] tabVRdc1 = ULS.GetULS_VRdcN_Curve(
+            tabVRdc1 = ULS.GetULS_VRdcN_Curve(
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
-            double[][] tabVRd1 = ULS.GetULS_VRdN_Curve(
+            tabVRd1 = ULS.GetULS_VRdN_Curve(
                 section1,
                 (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints,
                 stirrups1
                 );
 
-            double[][] tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
+            tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
                      wspolczynniki.Stresses_k3
                      );
 
-            double[][] tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
+            tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
                      section1,
                      wspolczynniki.NoOfPoints,
                      wspolczynniki.Stresses_k1
                      );
-                   
-            MainPlotView diagram1 = new MainPlotView();
-            diagram1.AddLineSerie(tab1_ULS, "Section 1", ustawienia.ULSMN_Section1LineColor.GetMedia(), ustawienia.ULSMN_Section1LineWeight);
-            diagram1.AddLineSerie(tab2_ULS, "Section 2", ustawienia.ULSMN_Section2LineColor.GetMedia(), ustawienia.ULSMN_Section2LineWeight);
-            PlotView_ULS_MN.Model = diagram1.wykres;
 
-            MainPlotView diagram2 = new MainPlotView();
-            diagram2.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
-            diagram2.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim +" mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
-            PlotView_SLS_Crack.Model = diagram2.wykres;
-
-            MainPlotView diagram3 = new MainPlotView();
-            diagram3.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
-            diagram3.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
-            PlotView_SLS_Stresess.Model = diagram3.wykres;
-
-            MainPlotView diagramVN = new MainPlotView();
-            diagramVN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
-            diagramVN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
-            PlotView_ULS_VN.Model = diagramVN.wykres;
         }
 
-        private void button_Creep1_Click(object sender, RoutedEventArgs e)
+        private void Refresh_ULS_MN_Graph()
         {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
+            PlotView_ULS_MN.Model = null;
+
+            diagram_ULS_MN = new MainPlotView();
+            diagram_ULS_MN.AddLineSerie(tab1_ULS, "Section 1", ustawienia.ULSMN_Section1LineColor.GetMedia(), ustawienia.ULSMN_Section1LineWeight);
+            diagram_ULS_MN.AddLineSerie(tab2_ULS, "Section 2", ustawienia.ULSMN_Section2LineColor.GetMedia(), ustawienia.ULSMN_Section2LineWeight);
+            if (points_MN != null)
             {
-                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)),0);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
+                diagram_ULS_MN.RemoveSerie("ULS Case");
+                diagram_ULS_MN.AddPointSerie(points_MN, "ULS Case", ustawienia.ULSMN_DataPointColor.GetMedia(), ustawienia.ULSMN_DataPointWeight);
             }
-            CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr,day);
+            PlotView_ULS_MN.Model = diagram_ULS_MN.wykres;
         }
 
-        private void button_Creep2_Click(object sender, RoutedEventArgs e)
+        private void Refresh_ULS_VN_Graph()
         {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
+            PlotView_ULS_VN.Model = null;
+
+            diagram_ULS_VN = new MainPlotView();
+            diagram_ULS_VN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
+            diagram_ULS_VN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
+            if (points_VN != null)
             {
-                cr[Convert.ToInt32(i-1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i -1)/ (divide-1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)),0);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
+                diagram_ULS_VN.RemoveSerie("ULS Case");
+                diagram_ULS_VN.AddPointSerie(points_VN, "ULS Case", ustawienia.ULSVN_DataPointColor.GetMedia(), ustawienia.ULSVN_DataPointWeight);
             }
-            CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr,day);
+            PlotView_ULS_VN.Model = diagram_ULS_VN.wykres;
         }
 
-        // KONIEC OPROGRAMOWANIA KONTROLEK
+        private void Refresh_SLS_Crack_Graph()
+        {
+            PlotView_SLS_Crack.Model = null;
+
+            diagram_SLS_Crack = new MainPlotView();
+            diagram_SLS_Crack.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
+            diagram_SLS_Crack.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+            if (points_SLS_QPR != null)
+            {
+                diagram_SLS_Crack.RemoveSerie("SLS QPR Case");
+                diagram_SLS_Crack.AddPointSerie(points_SLS_QPR, "SLS QPR Case", ustawienia.SLS_Crack_DataPointColor.GetMedia(), ustawienia.SLS_Crack_DataPointWeight);
+            }
+            PlotView_SLS_Crack.Model = diagram_SLS_Crack.wykres;
+        }
+
+        private void Refresh_SLS_Stresses_Graph()
+        {
+            PlotView_SLS_Stresess.Model = null;
+
+            diagram_SLS_Stressess = new MainPlotView();
+            diagram_SLS_Stressess.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
+            diagram_SLS_Stressess.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
+            if (points_SLS_CHR != null)
+            {
+                diagram_SLS_Stressess.RemoveSerie("SLS CHR Case");
+                diagram_SLS_Stressess.AddPointSerie(points_SLS_CHR, "SLS CHR Case", ustawienia.SLS_Stress_DataPointColor.GetMedia(), ustawienia.SLS_Stress_DataPointWeight);
+            }
+            PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
+        }
+
+        private List<CasePoint> ReadFileCSV()
+        {
+            List<CasePoint> taLista = new List<CasePoint>();
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Text files (.txt)|*.txt|CSV Files (.csv)|*.csv";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.FileName = "*.csv";
+
+            string path = "";
+
+            if ((bool)openFileDialog1.ShowDialog())
+            {
+                path = openFileDialog1.FileName;
+
+                try
+                {
+                    string separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+                    char columnSeparator;
+
+                    if (String.Equals(separator, "."))
+                    {
+                        columnSeparator = ',';
+                    }
+                    else
+                    {
+                        columnSeparator = ';';
+                    }
+
+                    string line;
+                    int counter = 0;
+                    StreamReader file = new StreamReader(@path);
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        counter++;
+
+                        if (counter != 1)
+                        {
+                            string[] dataLine;
+                            dataLine = line.Split(new char[] { columnSeparator });
+                            taLista.Add(new CasePoint(counter - 1, Double.Parse(dataLine[0]), Double.Parse(dataLine[1])));
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Cannot load file!", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return taLista;
+        }
     }
 }
