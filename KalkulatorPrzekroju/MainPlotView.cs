@@ -69,12 +69,16 @@ namespace KalkulatorPrzekroju
         public void RemoveSerie(string name)
         {
             Series seriaToDelete = null;
-            foreach (Series seria in wykres.Series)
+            if (wykres.Series.Count > 0)
             {
-                if (seria.Title == name)
+                foreach (Series seria in wykres.Series)
                 {
-                    seriaToDelete = seria;
-                    wykres.Series.Remove(seriaToDelete);
+                    if (seria.Title == name)
+                    {
+                        seriaToDelete = seria;
+                        wykres.Series.Remove(seriaToDelete);
+                        return;
+                    }
                 }
             }
         }

@@ -62,15 +62,7 @@ namespace KalkulatorPrzekroju
         {
             InitializeComponent();
             wspolczynniki = new Factors(Factors.Settings.zachowane);
-            SetControlls(); /*
-            Concrete bet = new Concrete(Concrete.classes.C12_15);
-            Steel stl = new Steel(Steel.classes.B500A);
-            Section sec = new Section(bet, stl, 1000, 1000, 40, 50, 40, 10, 100.0, 40);
-            double nmax = SLS.GetSilaOsiowaKrytycznaRysa(sec, 0.2, 0.4, 0.8);
-            //double mmax = SLS.GetMomentKrytycznyRysa(sec,-853.8253884230121, 0.2, 0.4, 0.8);
-            StressState str = SLS.GetStresses(sec, -853.8253884230121, -337.59354350134885);
-            double wkm1 = SLS.GetCrackWidth(sec, nmax, nmax, 0.4, 0.8);
-            double wkm2 = SLS.GetCrackWidth(sec, nmax, 921, 0.4, 0.8);*/
+            SetControlls(); 
             ustawienia = new MySettings(Source.zapisane);
             //ustawienia = new MySettings(Source.domyslne);
             //ustawienia.SaveToFile();
@@ -432,8 +424,27 @@ namespace KalkulatorPrzekroju
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
         }
-        ///koniec kontrola wprowadzania danych
+        
+        private void dataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Refresh_ULS_MN_Graph();
+        }
 
+        private void dataGrid_SLS_CHR_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Refresh_ULS_VN_Graph();
+        }
+
+        private void dataGrid_SLS_QPR_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Refresh_SLS_Crack_Graph();
+        }
+
+        private void dataGrid_ULS_VN_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Refresh_SLS_Stresses_Graph();
+        }
+        ///koniec kontrola wprowadzania danych
 
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
@@ -479,9 +490,90 @@ namespace KalkulatorPrzekroju
 
         private void button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
-            points_MN = ReadFileCSV();
-            dataGrid_ULS_MN.ItemsSource = points_MN;
+            tabControl.SelectedIndex = 0;
+            List<CasePoint> temp_points_MN = ReadFileCSV();
+            if (temp_points_MN.Count > 0)
+            {
+                points_MN = temp_points_MN;
+                dataGrid_ULS_MN.ItemsSource = points_MN;
+            }
             Refresh_ULS_MN_Graph();
+        }
+
+        private void button_Import_VN_Click(object sender, RoutedEventArgs e)
+        {
+            tabControl.SelectedIndex = 1;
+            List<CasePoint> temp_points_VN = ReadFileCSV();
+            if (temp_points_VN.Count > 0)
+            {
+                points_VN = temp_points_VN;
+                dataGrid_ULS_VN.ItemsSource = points_VN;
+            }
+            Refresh_ULS_VN_Graph();
+        }
+
+        private void button_Import_QPR_Click(object sender, RoutedEventArgs e)
+        {
+            tabControl.SelectedIndex = 2;
+            List<CasePoint> temp_points_QPR = ReadFileCSV();
+            if (temp_points_QPR.Count > 0)
+            {
+                points_SLS_QPR = temp_points_QPR;
+                dataGrid_SLS_QPR.ItemsSource = points_SLS_QPR;
+            }
+            Refresh_SLS_Crack_Graph();
+        }
+
+        private void button_Import_CHR_Click(object sender, RoutedEventArgs e)
+        {
+            tabControl.SelectedIndex = 3;
+            List<CasePoint> temp_points_CHR = ReadFileCSV();
+            if (temp_points_CHR.Count > 0)
+            {
+                points_SLS_CHR = temp_points_CHR;
+                dataGrid_SLS_CHR.ItemsSource = points_SLS_CHR;
+            }
+            Refresh_SLS_Stresses_Graph();
+        }
+
+        private void button_Delete_MN_Click(object sender, RoutedEventArgs e)
+        {
+            if (diagram_ULS_MN != null)
+            {
+                PlotView_ULS_MN.Model = null;
+                diagram_ULS_MN.RemoveSerie("ULS Case");
+                PlotView_ULS_MN.Model = diagram_ULS_MN.wykres;
+            }
+        }
+
+        private void button_Delete_VN_Click(object sender, RoutedEventArgs e)
+        {
+            if (diagram_ULS_VN != null)
+            {
+                PlotView_ULS_VN.Model = null;
+                diagram_ULS_VN.RemoveSerie("ULS Case");
+                PlotView_ULS_VN.Model = diagram_ULS_VN.wykres;
+            }
+        }
+
+        private void button_Delete_QPR_Click(object sender, RoutedEventArgs e)
+        {
+            if (diagram_SLS_Crack != null)
+            {
+                PlotView_SLS_Crack.Model = null;
+                diagram_SLS_Crack.RemoveSerie("SLS QPR Case");
+                PlotView_SLS_Crack.Model = diagram_SLS_Crack.wykres;
+            }
+        }
+
+        private void button_Delete_CHR_Click(object sender, RoutedEventArgs e)
+        {
+            if (diagram_SLS_Crack != null)
+            {
+                PlotView_SLS_Stresess.Model = null;
+                diagram_SLS_Stressess.RemoveSerie("SLS CHR Case");
+                PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
+            }
         }
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
@@ -630,8 +722,19 @@ namespace KalkulatorPrzekroju
             PlotView_ULS_MN.Model = null;
 
             diagram_ULS_MN = new MainPlotView();
-            diagram_ULS_MN.AddLineSerie(tab1_ULS, "Section 1", ustawienia.ULSMN_Section1LineColor.GetMedia(), ustawienia.ULSMN_Section1LineWeight);
-            diagram_ULS_MN.AddLineSerie(tab2_ULS, "Section 2", ustawienia.ULSMN_Section2LineColor.GetMedia(), ustawienia.ULSMN_Section2LineWeight);
+
+            if (tab1_ULS != null)
+            {
+                diagram_ULS_MN.RemoveSerie("Section 1");
+                diagram_ULS_MN.AddLineSerie(tab1_ULS, "Section 1", ustawienia.ULSMN_Section1LineColor.GetMedia(), ustawienia.ULSMN_Section1LineWeight);
+            }
+
+            if (tab2_ULS != null)
+            {
+                diagram_ULS_MN.RemoveSerie("Section 2");
+                diagram_ULS_MN.AddLineSerie(tab2_ULS, "Section 2", ustawienia.ULSMN_Section2LineColor.GetMedia(), ustawienia.ULSMN_Section2LineWeight);
+            }
+
             if (points_MN != null)
             {
                 diagram_ULS_MN.RemoveSerie("ULS Case");
@@ -645,8 +748,19 @@ namespace KalkulatorPrzekroju
             PlotView_ULS_VN.Model = null;
 
             diagram_ULS_VN = new MainPlotView();
-            diagram_ULS_VN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
-            diagram_ULS_VN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
+
+            if (tabVRdc1 != null)
+            {
+                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.c");
+                diagram_ULS_VN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
+            }
+
+            if (tabVRd1 != null)
+            {
+                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s");
+                diagram_ULS_VN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
+            }
+
             if (points_VN != null)
             {
                 diagram_ULS_VN.RemoveSerie("ULS Case");
@@ -660,8 +774,19 @@ namespace KalkulatorPrzekroju
             PlotView_SLS_Crack.Model = null;
 
             diagram_SLS_Crack = new MainPlotView();
-            diagram_SLS_Crack.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
-            diagram_SLS_Crack.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+
+            if (tabSLS_NonCrack != null)
+            {
+                diagram_SLS_Crack.RemoveSerie("Section 1 - non-cracked");
+                diagram_SLS_Crack.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
+            }
+
+            if (tabSLS_Crack != null)
+            {
+                diagram_SLS_Crack.RemoveSerie("Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm");
+                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+            }
+
             if (points_SLS_QPR != null)
             {
                 diagram_SLS_Crack.RemoveSerie("SLS QPR Case");
@@ -675,8 +800,18 @@ namespace KalkulatorPrzekroju
             PlotView_SLS_Stresess.Model = null;
 
             diagram_SLS_Stressess = new MainPlotView();
-            diagram_SLS_Stressess.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
-            diagram_SLS_Stressess.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
+
+            if (tabSLS_ConcreteStress != null)
+            {
+                diagram_SLS_Stressess.RemoveSerie("Section 1 - Concrete stress");
+                diagram_SLS_Stressess.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
+            }
+
+            if (tabSLS_SteelStress != null)
+            {
+                diagram_SLS_Stressess.RemoveSerie("Section 1 - Steel stress");
+                diagram_SLS_Stressess.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
+            }
             if (points_SLS_CHR != null)
             {
                 diagram_SLS_Stressess.RemoveSerie("SLS CHR Case");

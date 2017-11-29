@@ -197,7 +197,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <DataGrid x:Name="dataGrid_ULS_MN" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10">
+                            <DataGrid x:Name="dataGrid_ULS_MN" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="True" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10" SelectionChanged="dataGrid_ULS_MN_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding row}" ClipboardContentBinding="{x:Null}" Header="No." IsReadOnly="True" FontWeight="Bold"/>
                                     <DataGridTextColumn Binding="{Binding X}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
@@ -205,6 +205,7 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                             <Button x:Name="button_Import_MN" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_MN_Click"/>
+                            <Button x:Name="button_Delete_MN" Content="Delete all from graph" Margin="0,0,150,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="9" Click="button_Delete_MN_Click"/>
 
                         </Grid>
                     </TabItem>
@@ -213,14 +214,15 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <DataGrid x:Name="dataGrid_ULS_VN" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10">
+                            <DataGrid x:Name="dataGrid_ULS_VN" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="False" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10" SelectionChanged="dataGrid_ULS_VN_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding row}" ClipboardContentBinding="{x:Null}" Header="No." IsReadOnly="True" FontWeight="Bold"/>
                                     <DataGridTextColumn Binding="{Binding X}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
                                     <DataGridTextColumn Binding="{Binding Y}" ClipboardContentBinding="{x:Null}" Header="Shear Force [kN]"/>
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <Button x:Name="button_Import_VN" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_MN_Click"/>
+                            <Button x:Name="button_Import_VN" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_VN_Click" RenderTransformOrigin="0.503,0.5"/>
+                            <Button x:Name="button_Delete_VN" Content="Delete all from graph" Margin="0,0,150,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="9" Click="button_Delete_VN_Click"/>
 
                         </Grid>
                     </TabItem>
@@ -229,6 +231,16 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dataGrid_SLS_QPR" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="True" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10" SelectionChanged="dataGrid_SLS_QPR_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding row}" ClipboardContentBinding="{x:Null}" Header="No." IsReadOnly="True" FontWeight="Bold"/>
+                                    <DataGridTextColumn Binding="{Binding X}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
+                                    <DataGridTextColumn Binding="{Binding Y}" ClipboardContentBinding="{x:Null}" Header="Bending Moment [kNm]"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button x:Name="button_Import_QPR" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_QPR_Click"/>
+                            <Button x:Name="button_Delete_QPR" Content="Delete all from graph" Margin="0,0,150,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="9" Click="button_Delete_QPR_Click"/>
+
                         </Grid>
                     </TabItem>
                     <TabItem Header="SLS CHR Data" TabIndex="7">
@@ -236,6 +248,16 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
+                            <DataGrid x:Name="dataGrid_SLS_CHR" HorizontalAlignment="Left" Margin="0,0,0,50" Width="444" AlternationCount="2" RowHeight="20" AutoGenerateColumns="False" MinColumnWidth="50" CanUserReorderColumns="False" IsSynchronizedWithCurrentItem="True" AllowDrop="True" RowHeaderWidth="37" MinRowHeight="10" SelectionChanged="dataGrid_SLS_CHR_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding row}" ClipboardContentBinding="{x:Null}" Header="No." IsReadOnly="True" FontWeight="Bold"/>
+                                    <DataGridTextColumn Binding="{Binding X}" ClipboardContentBinding="{x:Null}" Header="Axial Force [kN]"/>
+                                    <DataGridTextColumn Binding="{Binding Y}" ClipboardContentBinding="{x:Null}" Header="Bending Moment [kNm]"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button x:Name="button_Import_CHR" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_CHR_Click"/>
+                            <Button x:Name="button_Delete_CHR" Content="Delete all from graph" Margin="0,0,150,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="9" Click="button_Delete_CHR_Click"/>
+
                         </Grid>
                     </TabItem>
                     <TabItem Header="Creep" TabIndex="7">
