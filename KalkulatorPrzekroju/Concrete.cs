@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace KalkulatorPrzekroju
 {
+    [Serializable]
     public class Concrete
     {
         /// <summary>

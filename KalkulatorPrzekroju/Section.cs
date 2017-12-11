@@ -7,6 +7,7 @@ using System.IO;
 
 namespace KalkulatorPrzekroju
 {
+    [Serializable]
     class Section
     {
         /// <summary>

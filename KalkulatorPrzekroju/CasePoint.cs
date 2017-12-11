@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace KalkulatorPrzekroju
 {
+    [Serializable]
     public class CasePoint
     {
         public int row { get; set; }

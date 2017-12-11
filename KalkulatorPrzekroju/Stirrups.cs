@@ -8,6 +8,7 @@ namespace KalkulatorPrzekroju
 {/// <summary>
 /// Klasa reprezentująca strzemiona
 /// </summary>
+    [Serializable]
     class Stirrups
     {
         /// <summary>
