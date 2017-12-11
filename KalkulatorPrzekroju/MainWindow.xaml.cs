@@ -57,10 +57,14 @@ namespace KalkulatorPrzekroju
         List<CasePoint> points_SLS_CHR;
 
         string format = "0.##";
+        string thisFile = "";
+        string defaultTitle = "Concrete Rectangular Section Designer CRSD";
+        string defaultExt = "CRSD files (*.crsd)|*.crdsd|All files (*.*)|*.*";
 
         public MainWindow()
         {
             InitializeComponent();
+            this.Title = defaultTitle;
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls(); 
             ustawienia = new MySettings(Source.zapisane);
@@ -120,6 +124,8 @@ namespace KalkulatorPrzekroju
             comboBox_DesignSituation_2.ItemsSource = comboBox_DesignSituation_1.Items;
             comboBox_DesignSituation_1.SelectedIndex = 1;
             comboBox_DesignSituation_2.SelectedIndex = 1;
+            
+            
         }
         // załadowanie średnic pretow z pliku
         private List<double> LoadBarDiameters()
@@ -160,6 +166,7 @@ namespace KalkulatorPrzekroju
             {
                 label_spac_no_As1_1.Visibility = Visibility.Hidden;
             }
+            comboBox_As2_spac_no_1.SelectedIndex = comboBox_As1_spac_no_1.SelectedIndex;
         }
 
         private void comboBox_As2_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -172,6 +179,7 @@ namespace KalkulatorPrzekroju
             {
                 label_spac_no_As2_1.Visibility = Visibility.Hidden;
             }
+            comboBox_As1_spac_no_1.SelectedIndex = comboBox_As2_spac_no_1.SelectedIndex;
         }
 
         private void comboBox_As1_spac_no_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -184,6 +192,7 @@ namespace KalkulatorPrzekroju
             {
                 label_spac_no_As1_2.Visibility = Visibility.Hidden;
             }
+            comboBox_As2_spac_no_2.SelectedIndex = comboBox_As1_spac_no_2.SelectedIndex;
         }
 
         private void comboBox_As2_spac_no_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -196,6 +205,7 @@ namespace KalkulatorPrzekroju
             {
                 label_spac_no_As2_2.Visibility = Visibility.Hidden;
             }
+            comboBox_As1_spac_no_2.SelectedIndex = comboBox_As2_spac_no_2.SelectedIndex;
         }
 
         //oprogramowanie menu
@@ -218,14 +228,68 @@ namespace KalkulatorPrzekroju
 
         private void menuItem_Save_Click(object sender, RoutedEventArgs e)
         {
+            if (String.Equals(thisFile,""))
+            {
+                menuItem_SaveAs_Click(sender, e);
+            }
+            else
+            {
+                SavedFile instance = new SavedFile();
+                SaveToInstance(instance);
+
+                using (Stream output = File.Create(thisFile))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(output, instance);
+                }
+            }
+            MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+        }
+
+        private void menuItem_SaveAs_Click(object sender, RoutedEventArgs e)
+        {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = defaultExt;
             if (saveFileDialog1.ShowDialog() == true)
             {
+                SavedFile instance = new SavedFile();
+                SaveToInstance(instance);
+
                 using (Stream output = File.Create(saveFileDialog1.FileName))
                 {
-                    //BinaryFormatter formatter = new BinaryFormatter();
-                    //formatter.Serialize(output, this);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(output, instance);
+                    this.Title = defaultTitle + " (" + saveFileDialog1.FileName + ")";
                 }
+            }
+            MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+        }
+
+        private void menuItem_Open_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = defaultExt;
+            if (openFileDialog1.ShowDialog() == true)
+            {
+                SavedFile instance;
+                
+                using (Stream input = File.Open(openFileDialog1.FileName, FileMode.Open))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    instance = (SavedFile)formatter.Deserialize(input);
+                    this.Title += " (" + openFileDialog1.FileName + ")";
+                    thisFile = openFileDialog1.FileName;
+                }
+
+                ReadFromInstance(instance);
+                Refresh_SLS_Crack_Graph();
+                Refresh_SLS_Stresses_Graph();
+                Refresh_ULS_MN_Graph();
+                Refresh_ULS_VN_Graph();
+                dataGrid_ULS_MN.ItemsSource = points_MN;
+                dataGrid_ULS_VN.ItemsSource = points_VN;
+                dataGrid_SLS_CHR.ItemsSource = points_SLS_CHR;
+                dataGrid_SLS_QPR.ItemsSource = points_SLS_QPR;
             }
         }
 
@@ -581,7 +645,7 @@ namespace KalkulatorPrzekroju
         private void TakeData()
         {
 
-            if (comboBox_As2_spac_no_1.Text == "spacing")
+            if (comboBox_As1_spac_no_1.Text == "spacing")
             {
                 section1 = new Section(
                    new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
@@ -596,7 +660,7 @@ namespace KalkulatorPrzekroju
                    Double.Parse(textBox_cover_As2_1.Text)
                    );
             }
-            else if (comboBox_As2_spac_no_1.Text == "no of bars")
+            else if (comboBox_As1_spac_no_1.Text == "no of bars")
             {
                 section1 = new Section(
                    new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
@@ -612,7 +676,7 @@ namespace KalkulatorPrzekroju
                    );
             }
 
-            if (comboBox_As2_spac_no_2.Text == "spacing")
+            if (comboBox_As1_spac_no_2.Text == "spacing")
             {
                 section2 = new Section(
                    new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
@@ -627,7 +691,7 @@ namespace KalkulatorPrzekroju
                    Double.Parse(textBox_cover_As2_2.Text)
                    );
             }
-            else if (comboBox_As2_spac_no_2.Text == "no of bars")
+            else if (comboBox_As1_spac_no_2.Text == "no of bars")
             {
                 section2 = new Section(
                    new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
@@ -869,6 +933,136 @@ namespace KalkulatorPrzekroju
                 }
             }
             return taLista;
+        }
+
+        private void ReadFromInstance(SavedFile instance)
+        {
+            section1 = instance.section1;
+            section2 = instance.section2;
+
+            stirrups1 = instance.stirrups1;
+            stirrups2 = instance.stirrups2;
+
+            textBox_height_1.Text = instance.section1_h;
+            textBox_height_2.Text = instance.section2_h;
+            textBox_width_1.Text = instance.section1_b;
+            textBox_width_2.Text = instance.section2_b;
+            textBox_cover_As1_1.Text = instance.section1_c1;
+            textBox_cover_As2_1.Text = instance.section1_c2;
+            textBox_cover_As1_2.Text = instance.section2_c1;
+            textBox_cover_As2_2.Text = instance.section2_c2;
+
+            comboBox_diameter_As1_1.SelectedIndex = instance.diameter_As1_1;
+            comboBox_diameter_As2_1.SelectedIndex = instance.diameter_As2_1;
+            comboBox_diameter_As1_2.SelectedIndex = instance.diameter_As1_2;
+            comboBox_diameter_As2_2.SelectedIndex = instance.diameter_As2_2;
+            comboBox_As1_spac_no_1.SelectedIndex = instance.section1_As1_noOfBars;
+            comboBox_As2_spac_no_1.SelectedIndex = instance.section1_As2_noOfBars;
+            comboBox_As1_spac_no_2.SelectedIndex = instance.section2_As1_noOfBars;
+            comboBox_As2_spac_no_2.SelectedIndex = instance.section2_As2_noOfBars;
+            textBox_spac_no_As1_1.Text = instance.spac_no_As1_1;
+            textBox_spac_no_As2_1.Text = instance.spac_no_As2_1;
+            textBox_spac_no_As1_2.Text = instance.spac_no_As1_2;
+            textBox_spac_no_As2_2.Text = instance.spac_no_As2_2;
+
+            comboBox_Concrete_1.SelectedIndex = instance.concrete1;
+            comboBox_Concrete_2.SelectedIndex = instance.concrete2;
+            comboBox_Steel_1.SelectedIndex = instance.steel1;
+            comboBox_Steel_2.SelectedIndex = instance.steel2;
+            comboBox_DesignSituation_1.SelectedIndex = instance.section1DS;
+            comboBox_DesignSituation_2.SelectedIndex = instance.section2DS;
+
+            comboBox_diameter_AsStir_1.SelectedIndex = instance.diameter_stir_s1;
+            comboBox_diameter_AsStir_2.SelectedIndex = instance.diameter_stir_s2;
+            textBox_legs_1.Text = instance.legs_stir_s1;
+            textBox_legs_2.Text = instance.legs_stir_s2;
+            textBox_stir_spacing_1.Text = instance.spacing_stir_s1;
+            textBox_stir_spacing_2.Text = instance.spacing_stir_s2;
+            textBox_stir_angle_1.Text = instance.angle_stir_s1;
+            textBox_stir_angle_2.Text = instance.angle_stir_s2;
+
+            tabSLS_ConcreteStress = instance.tabSLS_ConcreteStress;
+            tabSLS_SteelStress = instance.tabSLS_SteelStress;
+            tabVRd1 = instance.tabVRd1;
+            tabVRdc1 = instance.tabVRdc1;
+            tabSLS_NonCrack = instance.tabSLS_NonCrack;
+            tabSLS_Crack = instance.tabSLS_Crack;
+            tab1_ULS = instance.tab1_ULS;
+            tab2_ULS = instance.tab2_ULS;
+
+            points_MN = instance.points_MN;
+            points_VN = instance.points_VN;
+            points_SLS_QPR = instance.points_SLS_QPR;
+            points_SLS_CHR = instance.points_SLS_CHR;
+
+            textBox_creep1.Text = instance.creep1.ToString();
+            textBox_creep2.Text = instance.creep2.ToString();
+        }
+
+        private void SaveToInstance(SavedFile instance)
+        {
+            instance.section1 = section1;
+            instance.section2 = section2;
+
+            instance.stirrups1 = stirrups1;
+            instance.stirrups2 = stirrups2;
+
+            instance.section1_h = textBox_height_1.Text;
+            instance.section2_h = textBox_height_2.Text;
+            instance.section1_b = textBox_width_1.Text;
+            instance.section2_b = textBox_width_1.Text;
+            instance.section1_c1 = textBox_cover_As1_1.Text;
+            instance.section1_c2 = textBox_cover_As2_1.Text;
+            instance.section2_c1 = textBox_cover_As1_2.Text;
+            instance.section2_c2 = textBox_cover_As2_2.Text;
+
+            instance.diameter_As1_1 = comboBox_diameter_As1_1.SelectedIndex;
+            instance.diameter_As2_1 = comboBox_diameter_As2_1.SelectedIndex;
+            instance.diameter_As1_2 = comboBox_diameter_As1_2.SelectedIndex;
+            instance.diameter_As2_2 = comboBox_diameter_As2_2.SelectedIndex;
+            instance.section1_As1_noOfBars = comboBox_As1_spac_no_1.SelectedIndex;
+            instance.section1_As2_noOfBars = comboBox_As2_spac_no_1.SelectedIndex;
+            instance.section2_As1_noOfBars = comboBox_As1_spac_no_2.SelectedIndex;
+            instance.section2_As2_noOfBars = comboBox_As2_spac_no_2.SelectedIndex;
+            instance.spac_no_As1_1 = textBox_spac_no_As1_1.Text;
+            instance.spac_no_As2_1 = textBox_spac_no_As1_2.Text;
+            instance.spac_no_As1_2 = textBox_spac_no_As2_1.Text;
+            instance.spac_no_As2_2 = textBox_spac_no_As2_2.Text;
+
+            instance.concrete1 = comboBox_Concrete_1.SelectedIndex;
+            instance.concrete2 = comboBox_Concrete_2.SelectedIndex;
+
+            instance.steel1 = comboBox_Steel_1.SelectedIndex;
+            instance.steel2 = comboBox_Steel_2.SelectedIndex;
+
+            instance.section1DS = comboBox_DesignSituation_1.SelectedIndex;
+            instance.section2DS = comboBox_DesignSituation_2.SelectedIndex;
+
+            instance.diameter_stir_s1 = comboBox_diameter_AsStir_1.SelectedIndex;
+            instance.diameter_stir_s2 = comboBox_diameter_AsStir_2.SelectedIndex;
+            instance.legs_stir_s1 = textBox_legs_1.Text;
+            instance.legs_stir_s2 = textBox_legs_2.Text;
+            instance.spacing_stir_s1 = textBox_stir_spacing_1.Text;
+            instance.spacing_stir_s2 = textBox_stir_spacing_2.Text;
+            instance.angle_stir_s1 = textBox_stir_angle_1.Text;
+            instance.angle_stir_s2 = textBox_stir_angle_2.Text;
+
+            instance.tabSLS_ConcreteStress = tabSLS_ConcreteStress;
+            instance.tabSLS_SteelStress = tabSLS_SteelStress;
+            instance.tabVRd1 = tabVRd1;
+            instance.tabVRdc1 = tabVRdc1;
+            instance.tabSLS_NonCrack = tabSLS_NonCrack;
+            instance.tabSLS_Crack = tabSLS_Crack;
+            instance.tab1_ULS = tab1_ULS;
+            instance.tab2_ULS = tab2_ULS;
+
+            instance.points_MN = points_MN;
+            instance.points_SLS_CHR = points_SLS_CHR;
+            instance.points_SLS_QPR = points_SLS_QPR;
+            instance.points_VN = points_VN;
+
+            instance.creep1 = textBox_creep1.Text;
+            instance.creep2 = textBox_creep2.Text;
         }
     }
 }

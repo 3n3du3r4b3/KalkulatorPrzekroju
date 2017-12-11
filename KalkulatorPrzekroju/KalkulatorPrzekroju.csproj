@@ -70,6 +70,7 @@
     <Compile Include="CreepCoefficient.cs" />
     <Compile Include="MainPlotView.cs" />
     <Compile Include="MyColor.cs" />
+    <Compile Include="SavedFile.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="MySettings.cs" />
     <Compile Include="SLS.cs" />
