@@ -83,7 +83,7 @@ namespace KalkulatorPrzekroju
             }
             else
             {
-                if (SigmaBetonTop>0)
+                if (SigmaBetonTop > 0)
                 {
                     x = (SigmaBetonTop / (SigmaBetonTop + Math.Abs(SigmaBetonBottom))) * h;
                 }
@@ -221,7 +221,7 @@ namespace KalkulatorPrzekroju
             double c = section.c1;
             double spacing1 = section.spacing1;
             double roPeff, deltaEpsilon, AcEff, hcEff, srMax;
-            double sigmaS = Math.Abs(naprezenia.SteelAs1Stress);
+            double sigmaS = naprezenia.SteelAs1Stress;
             double Es = section.currentSteel.Es;
             double fctEff = section.currentConrete.fctm;
             double h = section.h;                                       //wysokosc w milimetrach!!
@@ -235,6 +235,12 @@ namespace KalkulatorPrzekroju
             {
                 return 0;
             }
+
+            if (sigmaS > 0)
+                return 0;
+            else
+                sigmaS = Math.Abs(sigmaS);
+
             if (As == 0)
             {
                 //return 100;
@@ -492,18 +498,18 @@ namespace KalkulatorPrzekroju
             bool warunek;
 
             if (wk0 > rysaGraniczna)
-                delta = -0.01*Math.Abs(NEd);
+                delta = Math.Min(-0.01 * Math.Abs(NEd), -1);
             else
-                delta = 0.01*Math.Abs(NEd);
+                delta = Math.Max(0.01 * Math.Abs(NEd), 1);
 
             do
             {
                 mom1 += delta;
                 double wkS = GetCrackWidth(section, NEd, mom1, kt, k1);
-                
+
                 if (delta > 0 && wkS <= rysaGraniczna)
                     warunek = true;
-                else if (delta < 0 && wkS >= rysaGraniczna)
+                else if (delta < 0 && wkS > rysaGraniczna)
                     warunek = true;
                 else
                     warunek = false;
@@ -623,7 +629,7 @@ namespace KalkulatorPrzekroju
             double S2 = (As1 * (h - a1) + As2 * a2);
             double xc2 = S2 / A_II; // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
 
-            double Force1 = 0.999 * SilaRysujacaOsiowa(section);
+            double Force1 = 0.999*SilaRysujacaOsiowa(section);
             double Moment1 = Force1 * (h / 2 - xc1);
             //StressState str1 = GetStresses(section, Force1, Moment1);
 
@@ -684,18 +690,21 @@ namespace KalkulatorPrzekroju
                 momP = Math.Max(mom1, mom2);
                 momC = (momP + momL) / 2;
 
-                while (Math.Abs(wkP - wkL) > 0.000001 || wkL == 0 || wkP == 0)
+                if (momL != momP)
                 {
-                    wkP = SLS.GetCrackWidth(section, Force, momC, kt, k1);
-                    wkL = SLS.GetCrackWidth(section.reversedSection, Force, -momC, kt, k1);
+                    while (Math.Abs(wkP - wkL) > 0.000001 || wkL == 0 || wkP == 0)
+                    {
+                        wkP = SLS.GetCrackWidth(section, Force, momC, kt, k1);
+                        wkL = SLS.GetCrackWidth(section.reversedSection, Force, -momC, kt, k1);
 
-                    if (wkP > wkL)
-                        momP = momC;
-                    else
-                        momL = momC;
+                        if (wkP > wkL)
+                            momP = momC;
+                        else
+                            momL = momC;
 
-                    momC = (momP + momL) / 2;
-                    moment = momC;
+                        momC = (momP + momL) / 2;
+                        moment = momC;
+                    }
                 }
 
                 wk = Math.Max(wkP, wkL);
@@ -789,10 +798,11 @@ namespace KalkulatorPrzekroju
                 double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = SLS.GetMomentKrytycznyRysa(section, Ned, rysaGraniczna, kt, k1);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
+                results[i][1] = SLS.GetMomentKrytycznyRysa(section, Ned, rysaGraniczna, kt, k1);
                 results[results.Length - i - 1][1] = -SLS.GetMomentKrytycznyRysa(section.reversedSection, Ned, rysaGraniczna, kt, k1);
+                
                 if (i == 98)
                 {
                     //bool nic = true;
