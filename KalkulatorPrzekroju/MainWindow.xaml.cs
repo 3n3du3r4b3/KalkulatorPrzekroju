@@ -32,15 +32,16 @@ namespace KalkulatorPrzekroju
     {
         Factors wspolczynniki;
         Steel stal = new Steel(Steel.classes.B500B);
-        Section section1;
-        Section section2;
-        Stirrups stirrups1;
-        Stirrups stirrups2;
+        Section section1,tempSection1;
+        Section section2, tempSection2;
+        Stirrups stirrups1, tempStir1;
+        Stirrups stirrups2, tempStir2;
         MySettings ustawienia;
         MainPlotView diagram_ULS_VN;
         MainPlotView diagram_ULS_MN;
         MainPlotView diagram_SLS_Crack;
         MainPlotView diagram_SLS_Stressess;
+        SavedFile thisInstance;
 
         double[][] tabSLS_ConcreteStress;
         double[][] tabSLS_SteelStress;
@@ -66,7 +67,7 @@ namespace KalkulatorPrzekroju
             InitializeComponent();
             this.Title = defaultTitle;
             wspolczynniki = new Factors(Factors.Settings.zachowane);
-            SetControlls(); 
+            SetControlls();
             ustawienia = new MySettings(Source.zapisane);
             //ustawienia = new MySettings(Source.domyslne);
             //ustawienia.SaveToFile();
@@ -124,8 +125,8 @@ namespace KalkulatorPrzekroju
             comboBox_DesignSituation_2.ItemsSource = comboBox_DesignSituation_1.Items;
             comboBox_DesignSituation_1.SelectedIndex = 1;
             comboBox_DesignSituation_2.SelectedIndex = 1;
-            
-            
+
+
         }
         // załadowanie średnic pretow z pliku
         private List<double> LoadBarDiameters()
@@ -228,7 +229,7 @@ namespace KalkulatorPrzekroju
 
         private void menuItem_Save_Click(object sender, RoutedEventArgs e)
         {
-            if (String.Equals(thisFile,""))
+            if (String.Equals(thisFile, ""))
             {
                 menuItem_SaveAs_Click(sender, e);
             }
@@ -242,6 +243,8 @@ namespace KalkulatorPrzekroju
                     BinaryFormatter formatter = new BinaryFormatter();
                     formatter.Serialize(output, instance);
                 }
+                thisInstance = instance;
+                ShowToUpdate();
             }
             MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
@@ -261,6 +264,8 @@ namespace KalkulatorPrzekroju
                     formatter.Serialize(output, instance);
                     this.Title = defaultTitle + " (" + saveFileDialog1.FileName + ")";
                 }
+                thisInstance = instance;
+                ShowToUpdate();
             }
             MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
@@ -272,7 +277,7 @@ namespace KalkulatorPrzekroju
             if (openFileDialog1.ShowDialog() == true)
             {
                 SavedFile instance;
-                
+
                 using (Stream input = File.Open(openFileDialog1.FileName, FileMode.Open))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
@@ -290,6 +295,8 @@ namespace KalkulatorPrzekroju
                 dataGrid_ULS_VN.ItemsSource = points_VN;
                 dataGrid_SLS_CHR.ItemsSource = points_SLS_CHR;
                 dataGrid_SLS_QPR.ItemsSource = points_SLS_QPR;
+
+                thisInstance = instance;
             }
         }
 
@@ -300,6 +307,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_height_1_LostFocus(object sender, RoutedEventArgs e)
@@ -308,6 +316,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_cover_As1_1_LostFocus(object sender, RoutedEventArgs e)
@@ -316,6 +325,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_cover_As2_1_LostFocus(object sender, RoutedEventArgs e)
@@ -324,6 +334,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_spac_no_As1_1_LostFocus(object sender, RoutedEventArgs e)
@@ -342,6 +353,7 @@ namespace KalkulatorPrzekroju
                 tb.Text = input.ToString(format);
             }
 
+            ShowToUpdate();
         }
 
         private void textBox_spac_no_As2_1_LostFocus(object sender, RoutedEventArgs e)
@@ -359,6 +371,8 @@ namespace KalkulatorPrzekroju
                 Int32.TryParse(tb.Text, out input);
                 tb.Text = input.ToString(format);
             }
+
+            ShowToUpdate();
         }
 
         private void textBox_width_2_LostFocus(object sender, RoutedEventArgs e)
@@ -367,6 +381,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_height_2_LostFocus(object sender, RoutedEventArgs e)
@@ -375,6 +390,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_cover_As1_2_LostFocus(object sender, RoutedEventArgs e)
@@ -383,6 +399,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_cover_As2_2_LostFocus(object sender, RoutedEventArgs e)
@@ -391,6 +408,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_spac_no_As1_2_LostFocus(object sender, RoutedEventArgs e)
@@ -399,6 +417,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_spac_no_As2_2_LostFocus(object sender, RoutedEventArgs e)
@@ -407,6 +426,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_legs_2_LostFocus(object sender, RoutedEventArgs e)
@@ -415,6 +435,7 @@ namespace KalkulatorPrzekroju
             int input;
             Int32.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_stir_spacing_2_LostFocus(object sender, RoutedEventArgs e)
@@ -423,6 +444,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_stir_angle_2_LostFocus(object sender, RoutedEventArgs e)
@@ -431,6 +453,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_legs_1_LostFocus(object sender, RoutedEventArgs e)
@@ -439,6 +462,7 @@ namespace KalkulatorPrzekroju
             int input;
             Int32.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_stir_spacing_1_LostFocus(object sender, RoutedEventArgs e)
@@ -447,6 +471,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_stir_angle_1_LostFocus(object sender, RoutedEventArgs e)
@@ -455,6 +480,7 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            ShowToUpdate();
         }
 
         private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
@@ -488,7 +514,7 @@ namespace KalkulatorPrzekroju
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
         }
-        
+
         private void dataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Refresh_ULS_MN_Graph();
@@ -513,13 +539,19 @@ namespace KalkulatorPrzekroju
         //PRZYCISKI
         private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
-            TakeData();
+            section1 = CreateSection(1);
+            section2 = CreateSection(2);
+            stirrups1 = CreateStirrups(1);
+            stirrups2 = CreateStirrups(2);
+
             CalcCurves();
 
             Refresh_ULS_MN_Graph();
             Refresh_ULS_VN_Graph();
             Refresh_SLS_Crack_Graph();
             Refresh_SLS_Stresses_Graph();
+
+            ShowToUpdate();
         }
 
         private void button_Creep1_Click(object sender, RoutedEventArgs e)
@@ -641,89 +673,112 @@ namespace KalkulatorPrzekroju
         }
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
-
-        private void TakeData()
+        private Section CreateSection(int i)
         {
-
-            if (comboBox_As1_spac_no_1.Text == "spacing")
+            Section section;
+            if (i == 1)
             {
-                section1 = new Section(
-                   new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
-                   new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
-                   Double.Parse(textBox_width_1.Text),
-                   Double.Parse(textBox_height_1.Text),
-                   Double.Parse(comboBox_diameter_As1_1.Text),
-                   Double.Parse(textBox_spac_no_As1_1.Text),
-                   Double.Parse(textBox_cover_As1_1.Text),
-                   Double.Parse(comboBox_diameter_As2_1.Text),
-                   Double.Parse(textBox_spac_no_As2_1.Text),
-                   Double.Parse(textBox_cover_As2_1.Text)
-                   );
+                if (comboBox_As1_spac_no_1.Text == "spacing")
+                {
+                    section = new Section(
+                       new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+                       new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+                       Double.Parse(textBox_width_1.Text),
+                       Double.Parse(textBox_height_1.Text),
+                       Double.Parse(comboBox_diameter_As1_1.Text),
+                       Double.Parse(textBox_spac_no_As1_1.Text),
+                       Double.Parse(textBox_cover_As1_1.Text),
+                       Double.Parse(comboBox_diameter_As2_1.Text),
+                       Double.Parse(textBox_spac_no_As2_1.Text),
+                       Double.Parse(textBox_cover_As2_1.Text)
+                       );
+                }
+                else if (comboBox_As1_spac_no_1.Text == "no of bars")
+                {
+                    section = new Section(
+                       new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+                       new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+                       Double.Parse(textBox_width_1.Text),
+                       Double.Parse(textBox_height_1.Text),
+                       Double.Parse(comboBox_diameter_As1_1.Text),
+                       Int32.Parse(textBox_spac_no_As1_1.Text),
+                       Double.Parse(textBox_cover_As1_1.Text),
+                       Double.Parse(comboBox_diameter_As2_1.Text),
+                       Int32.Parse(textBox_spac_no_As2_1.Text),
+                       Double.Parse(textBox_cover_As2_1.Text)
+                       );
+                }
+                else
+                    section = null;
             }
-            else if (comboBox_As1_spac_no_1.Text == "no of bars")
+            else if (i == 2)
             {
-                section1 = new Section(
-                   new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
-                   new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
-                   Double.Parse(textBox_width_1.Text),
-                   Double.Parse(textBox_height_1.Text),
-                   Double.Parse(comboBox_diameter_As1_1.Text),
-                   Int32.Parse(textBox_spac_no_As1_1.Text),
-                   Double.Parse(textBox_cover_As1_1.Text),
-                   Double.Parse(comboBox_diameter_As2_1.Text),
-                   Int32.Parse(textBox_spac_no_As2_1.Text),
-                   Double.Parse(textBox_cover_As2_1.Text)
-                   );
+                if (comboBox_As1_spac_no_2.Text == "spacing")
+                {
+                    section = new Section(
+                       new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+                       new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+                       Double.Parse(textBox_width_2.Text),
+                       Double.Parse(textBox_height_2.Text),
+                       Double.Parse(comboBox_diameter_As1_2.Text),
+                       Double.Parse(textBox_spac_no_As1_2.Text),
+                       Double.Parse(textBox_cover_As1_2.Text),
+                       Double.Parse(comboBox_diameter_As2_2.Text),
+                       Double.Parse(textBox_spac_no_As2_2.Text),
+                       Double.Parse(textBox_cover_As2_2.Text)
+                       );
+                }
+                else if (comboBox_As1_spac_no_2.Text == "no of bars")
+                {
+                    section = new Section(
+                       new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+                       new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+                       Double.Parse(textBox_width_2.Text),
+                       Double.Parse(textBox_height_2.Text),
+                       Double.Parse(comboBox_diameter_As1_2.Text),
+                       Int32.Parse(textBox_spac_no_As1_2.Text),
+                       Double.Parse(textBox_cover_As1_2.Text),
+                       Double.Parse(comboBox_diameter_As2_2.Text),
+                       Int32.Parse(textBox_spac_no_As2_2.Text),
+                       Double.Parse(textBox_cover_As2_2.Text)
+                       );
+                }
+                else
+                    section = null;
             }
-
-            if (comboBox_As1_spac_no_2.Text == "spacing")
-            {
-                section2 = new Section(
-                   new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
-                   new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
-                   Double.Parse(textBox_width_2.Text),
-                   Double.Parse(textBox_height_2.Text),
-                   Double.Parse(comboBox_diameter_As1_2.Text),
-                   Double.Parse(textBox_spac_no_As1_2.Text),
-                   Double.Parse(textBox_cover_As1_2.Text),
-                   Double.Parse(comboBox_diameter_As2_2.Text),
-                   Double.Parse(textBox_spac_no_As2_2.Text),
-                   Double.Parse(textBox_cover_As2_2.Text)
-                   );
-            }
-            else if (comboBox_As1_spac_no_2.Text == "no of bars")
-            {
-                section2 = new Section(
-                   new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
-                   new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
-                   Double.Parse(textBox_width_2.Text),
-                   Double.Parse(textBox_height_2.Text),
-                   Double.Parse(comboBox_diameter_As1_2.Text),
-                   Int32.Parse(textBox_spac_no_As1_2.Text),
-                   Double.Parse(textBox_cover_As1_2.Text),
-                   Double.Parse(comboBox_diameter_As2_2.Text),
-                   Int32.Parse(textBox_spac_no_As2_2.Text),
-                   Double.Parse(textBox_cover_As2_2.Text)
-                   );
-            }
-
-            stirrups1 = new Stirrups(
-                Int32.Parse(textBox_legs_1.Text),
-                Double.Parse(comboBox_diameter_AsStir_1.Text),
-                section1.currentSteel,
-                Double.Parse(textBox_stir_spacing_1.Text),
-                Double.Parse(textBox_stir_angle_1.Text)
-                );
-
-            stirrups2 = new Stirrups(
-                Int32.Parse(textBox_legs_2.Text),
-                Double.Parse(comboBox_diameter_AsStir_2.Text),
-                section2.currentSteel,
-                Double.Parse(textBox_stir_spacing_2.Text),
-                Double.Parse(textBox_stir_angle_2.Text)
-                );
+            else
+                section = null;
+            return section;
         }
 
+        private Stirrups CreateStirrups(int i)
+        {
+            Stirrups stirrups;
+            if (i == 1)
+            {
+                stirrups = new Stirrups(
+                    int.Parse(textBox_legs_1.Text),
+                    double.Parse(comboBox_diameter_AsStir_1.Text),
+                    new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+                    double.Parse(textBox_stir_spacing_1.Text),
+                    double.Parse(textBox_stir_angle_1.Text)
+                    );
+            }
+            else if (i == 2)
+            {
+                stirrups = new Stirrups(
+                    int.Parse(textBox_legs_2.Text),
+                    double.Parse(comboBox_diameter_AsStir_2.Text),
+                    new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+                    double.Parse(textBox_stir_spacing_2.Text),
+                    double.Parse(textBox_stir_angle_2.Text)
+                    );
+            }
+            else
+                stirrups = null;
+            return stirrups;
+        }
+        
         private void CalcCurves()
         {
             tab1_ULS = ULS.GetULS_MN_Curve(
@@ -1063,6 +1118,60 @@ namespace KalkulatorPrzekroju
 
             instance.creep1 = textBox_creep1.Text;
             instance.creep2 = textBox_creep2.Text;
+        }
+
+        private bool GraphIsUpToDate()
+        {
+            tempSection1 = CreateSection(1);
+            tempSection2 = CreateSection(2);
+            tempStir1 = CreateStirrups(1);
+            tempStir2 = CreateStirrups(2);
+            
+            if (Equals(tempSection1, section1) &&
+                Equals(tempSection2, section2) &&
+                Equals(tempStir1, stirrups1) &&
+                Equals(tempStir2, stirrups2))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void ShowToUpdate()
+        {
+            if (GraphIsUpToDate())
+                button_UpdateGraph.IsEnabled = false;
+            else
+                button_UpdateGraph.IsEnabled = true;
+
+            if (thisInstance != null)
+            {
+                if (Equals(thisInstance.section1, tempSection1) &&
+                    Equals(thisInstance.section2, tempSection2) &&
+                    Equals(thisInstance.stirrups1, tempStir1) &&
+                    Equals(thisInstance.stirrups2, tempStir2)/* &&
+                    Equals(thisInstance.points_MN, points_MN) &&
+                    Equals(thisInstance.points_SLS_CHR, points_SLS_CHR) &&
+                    Equals(thisInstance.points_SLS_QPR, points_SLS_QPR) &&
+                    Equals(thisInstance.points_VN, points_VN) &&
+                    Equals(thisInstance.tab1_ULS, tab1_ULS) &&
+                    Equals(thisInstance.tab2_ULS, tab2_ULS) &&
+                    Equals(thisInstance.tabSLS_ConcreteStress, tabSLS_ConcreteStress) &&
+                    Equals(thisInstance.tabSLS_Crack, tabSLS_Crack) &&
+                    Equals(thisInstance.tabSLS_NonCrack, tabSLS_NonCrack) &&
+                    Equals(thisInstance.tabSLS_SteelStress, tabSLS_SteelStress) &&
+                    Equals(thisInstance.tabVRd1, tabVRd1) &&
+                    Equals(thisInstance.tabVRdc1, tabVRdc1)*/
+                    )
+                {
+                    Title = defaultTitle + " (" + thisFile + ")";
+                }
+                else
+                    Title = defaultTitle + " (" + thisFile + ")" + " *";
+            }
         }
     }
 }

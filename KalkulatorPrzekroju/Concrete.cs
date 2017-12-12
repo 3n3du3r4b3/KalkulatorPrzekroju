@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace KalkulatorPrzekroju
 {
     [Serializable]
-    public class Concrete
+    public class Concrete: IComparable<Concrete>
     {
         /// <summary>
         /// Nazwa klasy betonu
@@ -178,6 +178,35 @@ namespace KalkulatorPrzekroju
             fctk095 = 1.3 * fctm;
             Ecm = 22 * Math.Pow(0.1 * fcm, 0.3) * 1000;
             epsilon_c1 = Math.Min(0.7 * Math.Pow(fcm, 0.31), 2.8);
+        }
+
+        public int CompareTo(Concrete other)
+        {
+            if (this.fck == other.fck)
+            {
+                return 0;
+            }
+            else if (this.fck < other.fck)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            Concrete other = obj as Concrete;
+            if (this.fck == other.fck)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

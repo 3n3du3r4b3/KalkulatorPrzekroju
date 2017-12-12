@@ -8,7 +8,7 @@ using System.IO;
 namespace KalkulatorPrzekroju
 {
     [Serializable]
-    class Section
+    class Section : IComparable<Section>
     {
         /// <summary>
         /// Szerokość przekroju w mm
@@ -179,6 +179,64 @@ namespace KalkulatorPrzekroju
             As2 = (fi2/2)*(fi2/2)*Math.PI*noOfBars2;
             a1 = c1+0.5*fi1;
             a2 = c2+0.5*fi2;
+        }
+
+        public int CompareTo(Section s2)
+        {
+            if (this.h == s2.h &&
+                this.b == s2.b &&
+                this.a1 == s2.a1 &&
+                this.a2 == s2.a2 &&
+                this.As1 == s2.As1 &&
+                this.As2 == s2.As2 &&
+                this.c1 == s2.c1 &&
+                this.c2 == s2.c2 &&
+                this.currentConrete == s2.currentConrete &&
+                this.currentSteel == s2.currentSteel &&
+                this.fi == s2.fi &&
+                this.fi1 == s2.fi1 &&
+                this.fi2 == s2.fi2 &&
+                this.spacing1 == s2.spacing1 &&
+                this.spacing2 == s2.spacing2)
+            {
+                return 0;
+            }
+            else if (this.h < s2.h)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            Section s2 = obj as Section;
+
+            if (this.h == s2.h &&
+                this.b == s2.b &&
+                this.a1 == s2.a1 &&
+                this.a2 == s2.a2 &&
+                this.As1 == s2.As1 &&
+                this.As2 == s2.As2 &&
+                this.c1 == s2.c1 &&
+                this.c2 == s2.c2 &&
+                Equals(this.currentConrete, s2.currentConrete) &&
+                Equals(this.currentSteel, s2.currentSteel) &&
+                this.fi == s2.fi &&
+                this.fi1 == s2.fi1 &&
+                this.fi2 == s2.fi2 &&
+                this.spacing1 == s2.spacing1 &&
+                this.spacing2 == s2.spacing2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

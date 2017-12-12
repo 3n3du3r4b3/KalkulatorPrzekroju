@@ -53,5 +53,20 @@ namespace KalkulatorPrzekroju
             Swd = s;
             Alfa = alfa;
         }
+
+        public override bool Equals(Object obj)
+        {
+            Stirrups other = obj as Stirrups;
+            if (this.Legs == other.Legs &&
+                this.Fi == other.Fi &&
+                Equals(this.currentSteel, other.currentSteel) &&
+                this.Swd == other.Swd &&
+                this.Alfa == other.Alfa)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }

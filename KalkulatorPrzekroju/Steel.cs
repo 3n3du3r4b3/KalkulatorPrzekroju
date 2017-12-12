@@ -10,7 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace KalkulatorPrzekroju
 {
     [Serializable]
-    class Steel
+    class Steel:IComparable<Steel>
     {
         public string Name { get; private set; }
         public double fyk { get; private set; }
@@ -90,6 +90,35 @@ namespace KalkulatorPrzekroju
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(output, this);
+            }
+        }
+
+        public int CompareTo(Steel other)
+        {
+            if (this.fyk == other.fyk)
+            {
+                return 0;
+            }
+            else if (this.fyk < other.fyk)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            Steel other = obj as Steel;
+            if (this.fyk == other.fyk)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
