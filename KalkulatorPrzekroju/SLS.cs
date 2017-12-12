@@ -667,14 +667,14 @@ namespace KalkulatorPrzekroju
 
                 if (wkP > wkL)
                 {
-                    while (wkP > wkL)
+                    while (wkP >= wkL)
                     {
                         mom1 -= 0.01 * Math.Abs(Force);
                         wkP = SLS.GetCrackWidth(section, Force, mom1, kt, k1);
                         wkL = SLS.GetCrackWidth(section.reversedSection, Force, -mom1, kt, k1);
                     }
                 }
-                else if (wkP < wkL)
+                else if (wkP <= wkL)
                 {
                     while (wkP < wkL)
                     {
@@ -692,7 +692,7 @@ namespace KalkulatorPrzekroju
 
                 if (momL != momP)
                 {
-                    while (Math.Abs(wkP - wkL) > 0.000001 || wkL == 0 || wkP == 0)
+                    while (Math.Abs(wkP - wkL) > 0.000001 && Math.Abs(momL-momP) > 0.000001) // || wkL == 0 || wkP == 0)
                     {
                         wkP = SLS.GetCrackWidth(section, Force, momC, kt, k1);
                         wkL = SLS.GetCrackWidth(section.reversedSection, Force, -momC, kt, k1);
@@ -721,7 +721,7 @@ namespace KalkulatorPrzekroju
             }
             wkP = GetCrackWidth(section, Force, moment, kt, k1);
             wkL = GetCrackWidth(section.reversedSection, Force, -moment, kt, k1);
-            return Force;
+            return maxForce;
         }
 
         /// <summary>
