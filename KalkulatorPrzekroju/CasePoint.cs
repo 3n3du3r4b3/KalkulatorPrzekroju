@@ -19,5 +19,18 @@ namespace KalkulatorPrzekroju
             this.X = X;
             this.Y = Y;
         }
+
+        public override bool Equals(object obj)
+        {
+            CasePoint CS = obj as CasePoint;
+            if (CS.row == this.row &&
+                CS.X == this.X &&
+                CS.Y == this.Y)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }

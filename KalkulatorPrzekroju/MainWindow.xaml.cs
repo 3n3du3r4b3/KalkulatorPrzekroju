@@ -1152,19 +1152,11 @@ namespace KalkulatorPrzekroju
                 if (Equals(thisInstance.section1, tempSection1) &&
                     Equals(thisInstance.section2, tempSection2) &&
                     Equals(thisInstance.stirrups1, tempStir1) &&
-                    Equals(thisInstance.stirrups2, tempStir2)/* &&
+                    Equals(thisInstance.stirrups2, tempStir2) &&
                     Equals(thisInstance.points_MN, points_MN) &&
                     Equals(thisInstance.points_SLS_CHR, points_SLS_CHR) &&
                     Equals(thisInstance.points_SLS_QPR, points_SLS_QPR) &&
-                    Equals(thisInstance.points_VN, points_VN) &&
-                    Equals(thisInstance.tab1_ULS, tab1_ULS) &&
-                    Equals(thisInstance.tab2_ULS, tab2_ULS) &&
-                    Equals(thisInstance.tabSLS_ConcreteStress, tabSLS_ConcreteStress) &&
-                    Equals(thisInstance.tabSLS_Crack, tabSLS_Crack) &&
-                    Equals(thisInstance.tabSLS_NonCrack, tabSLS_NonCrack) &&
-                    Equals(thisInstance.tabSLS_SteelStress, tabSLS_SteelStress) &&
-                    Equals(thisInstance.tabVRd1, tabVRd1) &&
-                    Equals(thisInstance.tabVRdc1, tabVRdc1)*/
+                    Equals(thisInstance.points_VN, points_VN)
                     )
                 {
                     Title = defaultTitle + " (" + thisFile + ")";
