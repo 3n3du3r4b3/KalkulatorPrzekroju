@@ -50,6 +50,13 @@ namespace KalkulatorPrzekroju
             return epsilonCU2 * (r + x - d) / x;
         }
 
+        private static double circleWidthAtR(CircleSection section, double r)
+        {
+            double R = section.D / 2 / 1000;    //promień przekroju w m
+            double alfa = 2 * Math.Acos((R - r) / (R));
+            return 2 * R * Math.Sin(alfa / 2);
+        }
+
         /// <summary>Funkcja zwraca wartość pozytywnego lub negatywnego momentu krytycznego dla siły NEd</summary>
         /// <param name="section"> obiekt typu section reprezentujący przekrój</param>
         /// <param name="NEd"> siła podłużna w kN </param>
@@ -142,6 +149,159 @@ namespace KalkulatorPrzekroju
             double MRd = Ms1 - NEd * (d - 0.5 * h);
 
             return MRd*1000;
+        }
+
+        /// <summary>Funkcja zwraca wartość pozytywnego lub negatywnego momentu krytycznego dla siły NEd</summary>
+        /// <param name="section"> obiekt typu CircleSection reprezentujący przekrój okrągły</param>
+        /// <param name="NEd"> siła podłużna w kN </param>
+        /// <param name="situation">określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param> 
+        /// <returns>Zwraca moment krytyczny w kNm</returns>
+        public static double MomentKrytyczny(CircleSection section, double NEd, DesignSituation situation)
+        {
+            double gammaC, gammaS;
+            if (situation == DesignSituation.Accidental)
+            {
+                gammaC = 1.2;
+                gammaS = 1.0;
+            }
+            else
+            {
+                gammaC = 1.5;
+                gammaS = 1.15;
+            }
+            double alfaCC = 0.85;
+
+            Steel currentSteel = section.currentSteel;
+            Concrete currentConcrete = section.currentConrete;
+            double D = section.D / 1000;        // w metrach
+            double a = section.a / 1000;      // w metrach
+            double Ab = section.Ab / 1000000;     // w metrach kwadratowych
+            double fiB = section.fiB / 1000;
+            int noB = section.noB;
+
+            double fyk = currentSteel.fyk;          // w MPa
+            double Es = currentSteel.Es;            // w MPa
+            //double Ecm = currentConcrete.Ecm;       // w MPa
+            double fck = currentConcrete.fck;       // w MPa
+            double fcd = fck / gammaC * alfaCC;     // w MPa
+            double fyd = fyk / gammaS;
+            double n = currentConcrete.n;
+
+            double eps = 0.00001;
+            double epsilonC2 = currentConcrete.epsilon_c2;
+            double epsilonCU2 = currentConcrete.epsilon_cu2;
+            double x1 = 0;
+            double x2 = 100000 * D;
+
+            double d; //wysokość użyteczna, zależna od wysokości strefy ściskanej x
+            double As; //pole zbrojenia rozciąganego, zależne od wysokości strefy ściskanej x
+
+            //obliczenia parametrów geometryczny dla przekroju okragłego
+            double R = D / 2;     //promień przekroju
+            double rAs = R - a;   //promień okręgu po którym rozmieszczone są pręty
+            double[] beta = new double[noB]; //tablica z kątami w rad rozmieszczenia prętów w przekróju, założenie, że pierwszy pręt jest na kącie 0 jeśli nieparzysta ilość, lub są rozmieszczone symetrycznie
+            double[] di = new double[noB]; //tablica z odległościami prętów od górnej krawędzi przekroju (ściskanej)
+            bool[] ki = new bool[noB]; //tablica okreslajaca czy dany pret jest rozciagany (true), ściskany(false)
+            for (int i = 0; i < noB; i++)
+            {
+                beta[i] = 2 * Math.PI / noB * ((double)(noB % 2 + 1) / 2 + i);
+                di[i] = a + (1 - Math.Cos(beta[i])) * rAs;
+            }
+
+            double Pc = 0;
+            double PAs1 = 0;
+            double PAs2 = 0;
+            double x, range;
+            int k = 1000;
+            double NRd = 0;
+
+            NEd = NEd / 1000;
+
+            do
+            {
+                x = (x1 + x2) / 2;
+                Pc = 0;
+
+                //określenie wysokości użytecznej d która jest zależna od x
+                As = 0; // sumaryczne pole powierzchni zbrojenia rozciaganego
+                double Asd = 0;   //moment statyczny zbrojenia rozciaganego wzgledem gornej krawedzi przekroju
+
+                for (int i = 0; i < noB; i++)
+                {
+                    if (di[i] < x)
+                    {
+                        ki[i] = false;
+                    }
+                    else
+                        ki[i] = true;
+                    Asd += Ab * Convert.ToUInt32(ki[i]) * di[i];
+                    As += Ab * Convert.ToUInt32(ki[i]);
+                }
+
+                if (As == 0)
+                {
+                    d = D;
+                }
+                else
+                    d = Asd / As; //wysokość uzyteczna znana
+
+                range = Math.Min(x, D);
+                for (int i = 0; i < k; i++)
+                {
+                    double ri = d - range / k * (i + 0.5);
+                    Pc += sigmaC(fcd, epsilonR(epsilonCU2, ri, x, d), epsilonC2, epsilonCU2, n) * circleWidthAtR(section, d - ri) * range / k;
+                }
+
+                double[] PAsi = new double[noB];
+                PAs1 = 0;
+                PAs2 = 0;
+                for (int i = 0; i < noB; i++)
+                {
+                    PAsi[i] = Ab * sigmaS(epsilonR(epsilonCU2, d - di[i], x, d), Es, fyd);
+                    if (!ki[i])
+                    {
+                        PAs2 += PAsi[i];
+                    }
+                    else
+                    {
+                        PAs1 += Ab * sigmaS(epsilonR(epsilonCU2, 0, x, d), Es, fyd);
+                    }
+                }
+
+                NRd = Pc + PAs1 + PAs2;
+
+                if (NRd >= NEd)
+                {
+                    x2 = x;
+                }
+                else
+                {
+                    x1 = x;
+                }
+
+            } while (Math.Abs(NEd - NRd) > eps);
+
+            double Pcz = 0;
+            for (int i = 0; i < k; i++)
+            {
+                double ri = d - range / k * (i + 0.5);
+                double sC = sigmaC(fcd, epsilonR(epsilonCU2, ri, x, d), epsilonC2, epsilonCU2, n);
+                Pcz += sC * circleWidthAtR(section, d - ri) * (range / k) * ri;
+            }
+
+            double[] MAs2i = new double[noB];
+            double MAs2 = 0;
+            for (int i = 0; i < noB; i++)
+            {
+                MAs2i[i] = Convert.ToUInt32(!ki[i]) * Ab * sigmaS(epsilonR(epsilonCU2, d - di[i], x, d), Es, fyd) * (d - di[i]);
+                MAs2 += MAs2i[i];
+            }
+
+            double Ms1 = Pcz + MAs2;
+
+            double MRd = Ms1 - NEd * (d - 0.5 * D);
+
+            return MRd * 1000;
         }
 
         public static double SilaKrytycznaSciskajaca(Section section, DesignSituation situation)
