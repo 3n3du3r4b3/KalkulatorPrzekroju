@@ -208,5 +208,30 @@ namespace KalkulatorPrzekroju
                 return false;
             }
         }
+
+        /// <summary>
+        /// Zwraca wartość naprężenia w betonie w zależności od zadaneg odkształcenia
+        /// </summary>
+        /// <param name="fcd">WYtrzymałość obliczeniowa betonu w MPa</param>
+        /// <param name="epsilon">Zadane odkształcenie betonu w promilach</param>
+        /// <returns>Wartość naprężenia w betonie w zależności od zadaneg odkształcenia w MPa</returns>
+        public double SigmaC(double fcd, double epsilon)
+        {
+            double sigma;
+
+            if (epsilon >= 0 && epsilon < epsilon_c2)
+            {
+                sigma = fcd * (1 - Math.Pow(1 - epsilon / epsilon_c2, n));
+            }
+            else if (epsilon_c2 <= epsilon && epsilon <= epsilon_cu2)
+            {
+                sigma = fcd;
+            }
+            else
+            {
+                sigma = 0;
+            }
+            return sigma;
+        }
     }
 }

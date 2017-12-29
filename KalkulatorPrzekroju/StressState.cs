@@ -20,13 +20,9 @@ namespace KalkulatorPrzekroju
     	/// </summary>
         public double ConcreteBottomStress { private set; get; }
         /// <summary>
-    	/// Naprężenia w zbrojeniu dolnym w MPa
+    	/// Naprężenia w zbrojeniu w MPa
     	/// </summary>
-        public double SteelAs1Stress { private set; get; }
-        /// <summary>
-    	/// Naprężenia w zbrojeniu górnym w MPa
-    	/// </summary>
-        public double SteelAs2Stress { private set; get; }
+        public double[] SteelStress { private set; get; }
         /// <summary>
     	/// Wysokość strefy ściskanej przekroju w metrach
     	/// </summary>
@@ -48,15 +44,43 @@ namespace KalkulatorPrzekroju
         /// <param name="sigmaConcreteBottom">naprężenia na dolnej krawędzi betonu ściskanego lub dolnej krawędzi strefy ściskanej</param>
         /// <param name="sigmaSteelAs1">naprężenia w zbrojeniu As1</param>
         /// <param name="sigmaSteelAs2">naprężenia w zbrojeniu As2</param>
-        public StressState(double sigmaConcreteTop, double sigmaConcreteBottom, double sigmaSteelAs1, double sigmaSteelAs2, double wysStrefySciskanej, double mimosrod, int faza)
+        public StressState(double sigmaConcreteTop, double sigmaConcreteBottom, double[] sigmaSteel, double wysStrefySciskanej, double mimosrod, int faza)
         {
             ConcreteTopStress = sigmaConcreteTop;
             ConcreteBottomStress = sigmaConcreteBottom;
-            SteelAs1Stress = sigmaSteelAs1;
-            SteelAs2Stress = sigmaSteelAs2;
+            SteelStress = sigmaSteel;
             WysokośćStrefySciskanej = wysStrefySciskanej;
             Mimosrod = mimosrod;
             Faza = faza;
         }
+        
+        public double TopSteelStress(Section sec)
+        {
+            if (sec is RectangleSection)
+            {
+                return SteelStress[0];
+            }
+            else if (sec is CircleSection)
+            {
+                return SteelStress[0];
+            }
+            else
+                return 0;
+        }
+        
+        public double BottomSteelStress(Section sec)
+        {
+            if (sec is RectangleSection)
+            {
+                return SteelStress[1];
+            }
+            else if (sec is CircleSection)
+            {
+                return SteelStress[sec.NoB/2];
+            }
+            else
+                return 0;
+        }
+
     }
 }

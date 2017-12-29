@@ -121,5 +121,19 @@ namespace KalkulatorPrzekroju
                 return false;
             }
         }
+        
+        public double SigmaS(double epsilon, double fyd)
+        {
+            if (Math.Abs(epsilon) / 1000 < fyd / Es)
+            {
+                return epsilon * Es / 1000;
+            }
+            else
+            {
+                return Math.Abs(epsilon) / epsilon * fyd;
+            }
+
+        }
+
     }
 }

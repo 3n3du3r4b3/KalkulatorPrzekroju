@@ -69,6 +69,7 @@ namespace KalkulatorPrzekroju
             wspolczynniki = new Factors(Factors.Settings.zachowane);
             SetControlls();
             ustawienia = new MySettings(Source.zapisane);
+            
             //ustawienia = new MySettings(Source.domyslne);
             //ustawienia.SaveToFile();
         }
@@ -139,8 +140,7 @@ namespace KalkulatorPrzekroju
                     string line;
                     while ((line = input.ReadLine()) != null)
                     {
-                        double diameter;
-                        Double.TryParse(line, out diameter);
+                        Double.TryParse(line, out double diameter);
                         lista.Add(diameter);
                     }
                 }
@@ -157,7 +157,7 @@ namespace KalkulatorPrzekroju
 
 
         /// OPROGRAMOWANIE KONTROLEK
-        private void comboBox_As1_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_As1_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBox_As1_spac_no_1.SelectedIndex == 0)
             {
@@ -170,7 +170,7 @@ namespace KalkulatorPrzekroju
             comboBox_As2_spac_no_1.SelectedIndex = comboBox_As1_spac_no_1.SelectedIndex;
         }
 
-        private void comboBox_As2_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_As2_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBox_As2_spac_no_1.SelectedIndex == 0)
             {
@@ -183,7 +183,7 @@ namespace KalkulatorPrzekroju
             comboBox_As1_spac_no_1.SelectedIndex = comboBox_As2_spac_no_1.SelectedIndex;
         }
 
-        private void comboBox_As1_spac_no_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_As1_spac_no_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBox_As1_spac_no_2.SelectedIndex == 0)
             {
@@ -196,7 +196,7 @@ namespace KalkulatorPrzekroju
             comboBox_As2_spac_no_2.SelectedIndex = comboBox_As1_spac_no_2.SelectedIndex;
         }
 
-        private void comboBox_As2_spac_no_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_As2_spac_no_2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBox_As2_spac_no_2.SelectedIndex == 0)
             {
@@ -222,16 +222,16 @@ namespace KalkulatorPrzekroju
             displaySettingsWindow.Show();
         }
 
-        private void menuItem_Close_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void menuItem_Save_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Save_Click(object sender, RoutedEventArgs e)
         {
             if (String.Equals(thisFile, ""))
             {
-                menuItem_SaveAs_Click(sender, e);
+                MenuItem_SaveAs_Click(sender, e);
             }
             else
             {
@@ -249,10 +249,12 @@ namespace KalkulatorPrzekroju
             MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
-        private void menuItem_SaveAs_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = defaultExt;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = defaultExt
+            };
             if (saveFileDialog1.ShowDialog() == true)
             {
                 SavedFile instance = new SavedFile();
@@ -270,10 +272,12 @@ namespace KalkulatorPrzekroju
             MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
-        private void menuItem_Open_Click(object sender, RoutedEventArgs e)
+        private void MenuItem_Open_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = defaultExt;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                Filter = defaultExt
+            };
             if (openFileDialog1.ShowDialog() == true)
             {
                 SavedFile instance;
@@ -301,243 +305,225 @@ namespace KalkulatorPrzekroju
         }
 
         ///kontrola wprowadzania danych przez uzytkownika
-        private void textBox_width_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_width_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_width_1;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_height_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_height_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_height_1;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_cover_As1_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_cover_As1_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_cover_As1_1;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_cover_As2_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_cover_As2_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_cover_As2_1;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_spac_no_As1_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_spac_no_As1_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_spac_no_As1_1;
             if (comboBox_As1_spac_no_1.SelectedIndex == 0)
             {
-                double input;
-                Double.TryParse(tb.Text, out input);
+                Double.TryParse(tb.Text, out double input);
                 tb.Text = input.ToString(format);
             }
             else if (comboBox_As1_spac_no_1.SelectedIndex == 1)
             {
-                int input;
-                Int32.TryParse(tb.Text, out input);
+                Int32.TryParse(tb.Text, out int input);
                 tb.Text = input.ToString(format);
             }
 
             ShowToUpdate();
         }
 
-        private void textBox_spac_no_As2_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_spac_no_As2_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_spac_no_As2_1;
             if (comboBox_As2_spac_no_1.SelectedIndex == 0)
             {
-                double input;
-                Double.TryParse(tb.Text, out input);
+                Double.TryParse(tb.Text, out double input);
                 tb.Text = input.ToString(format);
             }
             else if (comboBox_As2_spac_no_1.SelectedIndex == 1)
             {
-                int input;
-                Int32.TryParse(tb.Text, out input);
+                Int32.TryParse(tb.Text, out int input);
                 tb.Text = input.ToString(format);
             }
 
             ShowToUpdate();
         }
 
-        private void textBox_width_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_width_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_width_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_height_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_height_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_height_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_cover_As1_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_cover_As1_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_cover_As1_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_cover_As2_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_cover_As2_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_cover_As2_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_spac_no_As1_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_spac_no_As1_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_spac_no_As1_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_spac_no_As2_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_spac_no_As2_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_spac_no_As2_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_legs_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_legs_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_legs_2;
-            int input;
-            Int32.TryParse(tb.Text, out input);
+            Int32.TryParse(tb.Text, out int input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_stir_spacing_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_stir_spacing_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_stir_spacing_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_stir_angle_2_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_stir_angle_2_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_stir_angle_2;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_legs_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_legs_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_legs_1;
-            int input;
-            Int32.TryParse(tb.Text, out input);
+            Int32.TryParse(tb.Text, out int input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_stir_spacing_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_stir_spacing_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_stir_spacing_1;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_stir_angle_1_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_stir_angle_1_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_stir_angle_1;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
 
-        private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_RH_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_RH;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
         }
 
-        private void textBox_u_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_u_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_u;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
         }
 
-        private void textBox_Cst_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_Cst_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_Cst;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
         }
 
-        private void textBox_Cse_LostFocus(object sender, RoutedEventArgs e)
+        private void TextBox_Cse_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox tb = textBox_Cse;
-            double input;
-            Double.TryParse(tb.Text, out input);
+            Double.TryParse(tb.Text, out double input);
             tb.Text = input.ToString(format);
         }
 
-        private void dataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ShowToUpdate();
+        }
+
+
+        private void DataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Refresh_ULS_MN_Graph();
         }
 
-        private void dataGrid_SLS_CHR_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DataGrid_SLS_CHR_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Refresh_ULS_VN_Graph();
         }
 
-        private void dataGrid_SLS_QPR_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DataGrid_SLS_QPR_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Refresh_SLS_Crack_Graph();
         }
 
-        private void dataGrid_ULS_VN_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DataGrid_ULS_VN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Refresh_SLS_Stresses_Graph();
         }
         ///koniec kontrola wprowadzania danych
 
         //PRZYCISKI
-        private void button_UpdateGraph_Click(object sender, RoutedEventArgs e)
+        private void Button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
             section1 = CreateSection(1);
             section2 = CreateSection(2);
@@ -554,7 +540,7 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
-        private void button_Creep1_Click(object sender, RoutedEventArgs e)
+        private void Button_Creep1_Click(object sender, RoutedEventArgs e)
         {
             //double[] crCoeff = { 40, 1, 100, 10000 };
             double divide = 10;
@@ -562,14 +548,14 @@ namespace KalkulatorPrzekroju
             double[] day = new double[Convert.ToInt32(divide)];
             for (double i = 1; i <= divide; i++)
             {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
+                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section1 as RectangleSection, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
                 day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
             }
             CreepWindow crWindow = new CreepWindow();
             crWindow.Show(cr, day);
         }
 
-        private void button_Creep2_Click(object sender, RoutedEventArgs e)
+        private void Button_Creep2_Click(object sender, RoutedEventArgs e)
         {
             //double[] crCoeff = { 40, 1, 100, 10000 };
             double divide = 10;
@@ -577,14 +563,14 @@ namespace KalkulatorPrzekroju
             double[] day = new double[Convert.ToInt32(divide)];
             for (double i = 1; i <= divide; i++)
             {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
+                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section2 as RectangleSection, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
                 day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
             }
             CreepWindow crWindow = new CreepWindow();
             crWindow.Show(cr, day);
         }
 
-        private void button_Import_MN_Click(object sender, RoutedEventArgs e)
+        private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
             List<CasePoint> temp_points_MN = ReadFileCSV();
@@ -596,7 +582,7 @@ namespace KalkulatorPrzekroju
             Refresh_ULS_MN_Graph();
         }
 
-        private void button_Import_VN_Click(object sender, RoutedEventArgs e)
+        private void Button_Import_VN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 1;
             List<CasePoint> temp_points_VN = ReadFileCSV();
@@ -608,7 +594,7 @@ namespace KalkulatorPrzekroju
             Refresh_ULS_VN_Graph();
         }
 
-        private void button_Import_QPR_Click(object sender, RoutedEventArgs e)
+        private void Button_Import_QPR_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 2;
             List<CasePoint> temp_points_QPR = ReadFileCSV();
@@ -620,7 +606,7 @@ namespace KalkulatorPrzekroju
             Refresh_SLS_Crack_Graph();
         }
 
-        private void button_Import_CHR_Click(object sender, RoutedEventArgs e)
+        private void Button_Import_CHR_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 3;
             List<CasePoint> temp_points_CHR = ReadFileCSV();
@@ -632,7 +618,7 @@ namespace KalkulatorPrzekroju
             Refresh_SLS_Stresses_Graph();
         }
 
-        private void button_Delete_MN_Click(object sender, RoutedEventArgs e)
+        private void Button_Delete_MN_Click(object sender, RoutedEventArgs e)
         {
             if (diagram_ULS_MN != null)
             {
@@ -642,7 +628,7 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        private void button_Delete_VN_Click(object sender, RoutedEventArgs e)
+        private void Button_Delete_VN_Click(object sender, RoutedEventArgs e)
         {
             if (diagram_ULS_VN != null)
             {
@@ -652,7 +638,7 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        private void button_Delete_QPR_Click(object sender, RoutedEventArgs e)
+        private void Button_Delete_QPR_Click(object sender, RoutedEventArgs e)
         {
             if (diagram_SLS_Crack != null)
             {
@@ -662,7 +648,7 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        private void button_Delete_CHR_Click(object sender, RoutedEventArgs e)
+        private void Button_Delete_CHR_Click(object sender, RoutedEventArgs e)
         {
             if (diagram_SLS_Crack != null)
             {
@@ -680,7 +666,7 @@ namespace KalkulatorPrzekroju
             {
                 if (comboBox_As1_spac_no_1.Text == "spacing")
                 {
-                    section = new Section(
+                    section = new RectangleSection(
                        new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
                        new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
                        Double.Parse(textBox_width_1.Text),
@@ -690,12 +676,13 @@ namespace KalkulatorPrzekroju
                        Double.Parse(textBox_cover_As1_1.Text),
                        Double.Parse(comboBox_diameter_As2_1.Text),
                        Double.Parse(textBox_spac_no_As2_1.Text),
-                       Double.Parse(textBox_cover_As2_1.Text)
+                       Double.Parse(textBox_cover_As2_1.Text),
+                       CreateStirrups(1)
                        );
                 }
                 else if (comboBox_As1_spac_no_1.Text == "no of bars")
                 {
-                    section = new Section(
+                    section = new RectangleSection(
                        new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
                        new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
                        Double.Parse(textBox_width_1.Text),
@@ -705,7 +692,8 @@ namespace KalkulatorPrzekroju
                        Double.Parse(textBox_cover_As1_1.Text),
                        Double.Parse(comboBox_diameter_As2_1.Text),
                        Int32.Parse(textBox_spac_no_As2_1.Text),
-                       Double.Parse(textBox_cover_As2_1.Text)
+                       Double.Parse(textBox_cover_As2_1.Text),
+                       CreateStirrups(1)
                        );
                 }
                 else
@@ -715,7 +703,7 @@ namespace KalkulatorPrzekroju
             {
                 if (comboBox_As1_spac_no_2.Text == "spacing")
                 {
-                    section = new Section(
+                    section = new RectangleSection(
                        new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
                        new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
                        Double.Parse(textBox_width_2.Text),
@@ -725,12 +713,13 @@ namespace KalkulatorPrzekroju
                        Double.Parse(textBox_cover_As1_2.Text),
                        Double.Parse(comboBox_diameter_As2_2.Text),
                        Double.Parse(textBox_spac_no_As2_2.Text),
-                       Double.Parse(textBox_cover_As2_2.Text)
+                       Double.Parse(textBox_cover_As2_2.Text),
+                       CreateStirrups(2)
                        );
                 }
                 else if (comboBox_As1_spac_no_2.Text == "no of bars")
                 {
-                    section = new Section(
+                    section = new RectangleSection(
                        new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
                        new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
                        Double.Parse(textBox_width_2.Text),
@@ -740,7 +729,8 @@ namespace KalkulatorPrzekroju
                        Double.Parse(textBox_cover_As1_2.Text),
                        Double.Parse(comboBox_diameter_As2_2.Text),
                        Int32.Parse(textBox_spac_no_As2_2.Text),
-                       Double.Parse(textBox_cover_As2_2.Text)
+                       Double.Parse(textBox_cover_As2_2.Text),
+                       CreateStirrups(2)
                        );
                 }
                 else
@@ -781,55 +771,46 @@ namespace KalkulatorPrzekroju
         
         private void CalcCurves()
         {
-            tab1_ULS = ULS.GetULS_MN_Curve(
-                section1,
-                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
+            tab1_ULS = section1.ULS_MN_Curve(
+                (Section.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
-            tab2_ULS = ULS.GetULS_MN_Curve(
-                section2,
-                (ULS.DesignSituation)comboBox_DesignSituation_2.SelectedIndex,
+            tab2_ULS = section2.ULS_MN_Curve(
+                (Section.DesignSituation)comboBox_DesignSituation_2.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
-            tabSLS_Crack = SLS.GetSLS_Crack_Curve(
-                section1,
+            tabSLS_Crack = section1.SLS_Crack_Curve(
                 wspolczynniki.NoOfPoints,
                 wspolczynniki.Crack_wklim,
                 wspolczynniki.Crack_kt,
                 wspolczynniki.Crack_k1
                 );
 
-            tabSLS_NonCrack = SLS.GetSLS_Crack_Curve(
-                section1,
+            tabSLS_NonCrack = section1.SLS_Crack_Curve(
                 wspolczynniki.NoOfPoints,
                 0,
                 wspolczynniki.Crack_kt,
                 wspolczynniki.Crack_k1
                 );
-
-            tabVRdc1 = ULS.GetULS_VRdcN_Curve(
-                section1,
-                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
+            
+            tabVRdc1 = section1.ULS_VRdcN_Curve(
+                (Section.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
                 wspolczynniki.NoOfPoints
                 );
 
-            tabVRd1 = ULS.GetULS_VRdN_Curve(
-                section1,
-                (ULS.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
-                wspolczynniki.NoOfPoints,
-                stirrups1
+            tabVRd1 = section1.ULS_VRdN_Curve(
+                (Section.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
+                wspolczynniki.NoOfPoints
                 );
 
-            tabSLS_SteelStress = SLS.GetSLS_StressSteel_Curve(
-                     section1,
+            tabSLS_SteelStress = section1.SLS_StressSteel_Curve(
                      wspolczynniki.NoOfPoints,
                      wspolczynniki.Stresses_k3
                      );
 
-            tabSLS_ConcreteStress = SLS.GetSLS_StressConcrete_Curve(
-                     section1,
+            tabSLS_ConcreteStress = section1.SLS_StressConcrete_Curve(
                      wspolczynniki.NoOfPoints,
                      wspolczynniki.Stresses_k1
                      );
@@ -942,10 +923,12 @@ namespace KalkulatorPrzekroju
         private List<CasePoint> ReadFileCSV()
         {
             List<CasePoint> taLista = new List<CasePoint>();
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "Text files (.txt)|*.txt|CSV Files (.csv)|*.csv";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.FileName = "*.csv";
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                Filter = "Text files (.txt)|*.txt|CSV Files (.csv)|*.csv",
+                FilterIndex = 2,
+                FileName = "*.csv"
+            };
 
             string path = "";
 
@@ -989,7 +972,7 @@ namespace KalkulatorPrzekroju
             }
             return taLista;
         }
-
+        
         private void ReadFromInstance(SavedFile instance)
         {
             section1 = instance.section1;
