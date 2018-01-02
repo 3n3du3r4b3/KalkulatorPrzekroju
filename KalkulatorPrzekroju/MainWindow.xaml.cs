@@ -483,37 +483,7 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
-        private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_RH;
-            double input;
-            Double.TryParse(tb.Text, out input);
-            tb.Text = input.ToString(format);
-        }
-
-        private void textBox_u_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_u;
-            double input;
-            Double.TryParse(tb.Text, out input);
-            tb.Text = input.ToString(format);
-        }
-
-        private void textBox_Cst_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_Cst;
-            double input;
-            Double.TryParse(tb.Text, out input);
-            tb.Text = input.ToString(format);
-        }
-
-        private void textBox_Cse_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_Cse;
-            double input;
-            Double.TryParse(tb.Text, out input);
-            tb.Text = input.ToString(format);
-        }
+        
 
         private void dataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -552,36 +522,6 @@ namespace KalkulatorPrzekroju
             Refresh_SLS_Stresses_Graph();
 
             ShowToUpdate();
-        }
-
-        private void button_Creep1_Click(object sender, RoutedEventArgs e)
-        {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
-            {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section1, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
-            }
-            CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr, day);
-        }
-
-        private void button_Creep2_Click(object sender, RoutedEventArgs e)
-        {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
-            {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section2, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
-            }
-            CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr, day);
         }
 
         private void button_Import_MN_Click(object sender, RoutedEventArgs e)
@@ -671,6 +611,33 @@ namespace KalkulatorPrzekroju
                 PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
             }
         }
+
+        private void button_CalcCreep1_Click(object sender, RoutedEventArgs e)
+        {
+            section1 = CreateSection(1);
+            section2 = CreateSection(2);
+            stirrups1 = CreateStirrups(1);
+            stirrups2 = CreateStirrups(2);
+
+            CalcCurves();
+
+            CreepWindow creepwin1 = new CreepWindow();
+            creepwin1.Show(section1.b*section1.h,section1.currentConrete.fcm);
+        }
+
+        private void button_CalcCreep2_Click(object sender, RoutedEventArgs e)
+        {
+            section1 = CreateSection(1);
+            section2 = CreateSection(2);
+            stirrups1 = CreateStirrups(1);
+            stirrups2 = CreateStirrups(2);
+
+            CalcCurves();
+
+            CreepWindow creepwin2 = new CreepWindow();
+            creepwin2.Show(section2.b * section2.h, section2.currentConrete.fcm);
+        }
+    
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
         private Section CreateSection(int i)

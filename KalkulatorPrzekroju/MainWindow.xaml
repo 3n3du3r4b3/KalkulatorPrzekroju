@@ -103,7 +103,7 @@
                                 <Grid>
                                     <Label x:Name="label5_Copy" Content="Creep factor φ(∞, t₀)" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                                     <TextBox x:Name="textBox_creep1" HorizontalAlignment="Left" Height="23" Margin="130,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_1_LostFocus" TabIndex="10" Text="0"/>
-                                    <Button x:Name="button_CalcCreep1" Content="Calculate..." HorizontalAlignment="Left" Margin="210,5,0,0" VerticalAlignment="Top" Width="75" Opacity="1" Height="25"/>
+                                    <Button x:Name="button_CalcCreep1" Content="Calculate..." HorizontalAlignment="Left" Margin="210,5,0,0" VerticalAlignment="Top" Width="75" Opacity="1" Height="25" Click="button_CalcCreep1_Click"/>
 
                                 </Grid>
                             </GroupBox>
@@ -185,7 +185,7 @@
                                     <Grid>
                                         <Label x:Name="label6_Copy" Content="Creep factor φ(∞, t₀)" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"/>
                                         <TextBox x:Name="textBox_creep2" HorizontalAlignment="Left" Height="23" Margin="130,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="60" TextAlignment="Center" LostFocus="textBox_stir_angle_1_LostFocus" TabIndex="10" Text="0"/>
-                                        <Button x:Name="button_CalcCreep2" Content="Calculate..." HorizontalAlignment="Left" Margin="210,5,0,0" VerticalAlignment="Top" Width="75" Opacity="1" Height="25"/>
+                                        <Button x:Name="button_CalcCreep2" Content="Calculate..." HorizontalAlignment="Left" Margin="210,5,0,0" VerticalAlignment="Top" Width="75" Opacity="1" Height="25" Click="button_CalcCreep2_Click"/>
 
                                     </Grid>
                                 </GroupBox>
@@ -259,38 +259,6 @@
                             <Button x:Name="button_Import_CHR" Content="Import from CSV File" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="8" Click="button_Import_CHR_Click"/>
                             <Button x:Name="button_Delete_CHR" Content="Delete all from graph" Margin="0,0,150,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="130" TabIndex="9" Click="button_Delete_CHR_Click"/>
 
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Creep" TabIndex="7">
-                        <Grid x:Name="grid_Creep" Background="#FFE5E5E5">
-                            <GroupBox x:Name="groupBox_Creep" Header="Creep Parameters" Margin="10,5,10,0" Height="100" VerticalAlignment="Top">
-                                <Grid>
-                                    <Label x:Name="labelRH" Content="RH: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_RH" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_RH_LostFocus" TabIndex="1" Text="40"/>
-                                    <Label x:Name="labelRH1" Content="%" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top"/>
-                                    <Label x:Name="labelu" Content="u: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_u" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_u_LostFocus" TabIndex="2" Text="1000"/>
-                                    <Label x:Name="labelu1" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
-                                    <Label x:Name="labelCst" Content="Creep Start: " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_Cst" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cst_LostFocus" TabIndex="3" Text="3"/>
-                                    <Label x:Name="label1_Copy34" Content="days" HorizontalAlignment="Left" Margin="179,41,0,0" VerticalAlignment="Top"/>
-                                    <Label x:Name="label2_Copy3" Content="Creep end: " HorizontalAlignment="Left" Margin="214,41,0,0" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="textBox_Cse" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cse_LostFocus" TabIndex="4" Text="10000"/>
-                                    <Label x:Name="label1_Copy23" Content="days" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox x:Name="groupBox_CResults" Header="Results" Margin="10,91,10,0" Height="82" VerticalAlignment="Top">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="247*"/>
-                                        <ColumnDefinition Width="58*"/>
-                                        <ColumnDefinition Width="107*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button x:Name="button_Creep1" Content="Creep Section 1" HorizontalAlignment="Left" Margin="44,0,0,10" VerticalAlignment="Bottom" Width="100" Height="30" TabIndex="9" Click="button_Creep1_Click"/>
-                                    <Button x:Name="button_Creep2" Content="Creep Section 2" HorizontalAlignment="Left" Margin="22,0,0,10" VerticalAlignment="Bottom" Width="100" Height="30" TabIndex="9" Click="button_Creep2_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
-                                </Grid>
-                            </GroupBox>
                         </Grid>
                     </TabItem>
                 </TabControl>
