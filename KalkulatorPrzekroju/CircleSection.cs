@@ -7,95 +7,196 @@ using System.IO;
 
 namespace KalkulatorPrzekroju
 {
-    [Serializable]
-    class CircleSection:Section
+    internal class CircleSection
     {
+        public double D;
+        public double a;
+        public double Ab;
+        public double fiB;
+        public int noB;
         /// <summary>
-        /// Średnica przekroju w mm
+        /// Szerokość przekroju w mm
         /// </summary>
-        public double D { get; private set; }
+        public double b { get; private set; }
         /// <summary>
-    	/// Pole powierzchni przekroju pojedynczego pręta Ab w mm2
+    	/// Wysokość przekroju w mm
     	/// </summary>
-        public double Ab { get; private set; }
+        public double h { get; private set; }
         /// <summary>
         /// Średnica prętów zbrojeniowych w mm
         /// </summary>
-        public double FiB { get; private set; }
+        public double fiB { get; private set; }
         /// <summary>
-        /// Otulina zbrojenia w mm
+    	/// Odległość środka ciężkości zbrojenia As2 od najbliższej krawędzi betonu w mm
+    	/// </summary>
+        public double a2 { get; private set; }
+        /// <summary>
+    	/// Pole powierzchni zbrojenia As1 w mm2
+    	/// </summary>
+        public double As1 { get; private set; }
+        /// <summary>
+    	/// Pole powierzchni zbrojenia As2 w mm2
+    	/// </summary>
+        public double As2 { get; private set; }
+        /// <summary>
+    	/// Obiekt typu Concrete reprezentujący klasę betonu w przekroju
+    	/// </summary>
+        public Concrete currentConrete { get; private set; }
+        /// <summary>
+    	/// Obiekt typu Steel reprezentujący klasę stali w przekroju
+    	/// </summary>
+        public Steel currentSteel { get; private set; }
+        /// <summary>
+        /// Średnica zbrojenia As1 w mm
         /// </summary>
-        public double C { get; private set; }
+        public double c { get; private set; }
         /// <summary>
-        /// Odległość środka ciężkości zbrojenia od krawędzi w mm
+        /// Średnica zbrojenia As2 w mm
         /// </summary>
-        public double A { get; private set; }
+        public double a { get; private set; }
         /// <summary>
-        /// Odległość pomiędzy prętami zbrojenia w linii prostej w mm
+        /// Ilość prętów zbrojenia w przekroju
         /// </summary>
-        public double Spacing { get { return D * Math.Sin(2 * Math.PI / NoB); } }
-
-        public override double HTotal { get {return D;}}
-
-        public override int NoB { get; protected set; }
-
-        public override double[] Asi
-        {
-            get
-            {
-                double[] Asi = new double[NoB];
-                for (int i = 0; i < NoB; i++)
-                {
-                    Asi[i] = Ab / Dimfactor / Dimfactor;
-                }
-                return Asi;
-            }
-        }
-
-        public override double AcTotal { get { return Math.PI * Math.Pow(D / 2, 2); } }
-
-        public override double AsTotal { get { return NoB * Ab; } }
-
-        public override Section ReversedSection { get { return new CircleSection(CurrentConcrete, CurrentSteel, D, FiB, C, NoB); } }
+        public int noB { get; private set; }
+        /// <summary>
+    	/// Całkowite pole powierzchni przekroju betonowego w mm2
+    	/// </summary>
+        public new double AcTotal { get; private set; }
 
         /// <summary>
-        /// Konstruktor przekroju
+        /// Całkowite pole powierzchni zbrojenia w mm2
+        /// </summary>
+        public new double AsTotal { get; private set; }
+
+        /// <summary>
+        /// Obiekt typu Concrete reprezentujący klasę betonu w przekroju
+        /// </summary>
+        public new Concrete currentConrete { get; private set; }
+
+        /// <summary>
+        /// Obiekt typu Steel reprezentujący klasę stali w przekroju
+        /// </summary>
+        public new Steel currentSteel { get; private set; }
+
+        /// <summary>
+        /// Współczynnik pełzania
+        /// </summary>
+        public new double fi { get; set; }
+
+        /// <summary>
+        /// Zwraca aktualny przekrój obrócony o 180 stopni
+        /// </summary>
+        public new CircleSection reversedSection { get { return new CircleSection(currentConrete, currentSteel, D, fiB, c, noB); } }
+
+
+        /// <summary>
+        /// Konstruktor przekroju na podstawie rozstawu zbrojenia
         /// </summary>
         /// <param name="concrete">Obiekt reprezentujący klasę betonu dla przekroju</param>
         /// <param name="steel">Obiekt reprezentujący klasę stali zbrojeniowej w przekroju</param>
-        /// <param name="d">Średnica przekroju w milimetrach</param>
-        /// <param name="fiB">Średnica prętów zbrojenia w mm</param>
-        /// <param name="c">Otulina zbrojenia w mm</param>
-        /// <param name="noB">Ilość prętów zbrojenia w przekroju - MINIMUM 4 sztuki!</param>
-        public CircleSection(Concrete concrete, Steel steel, double d, double fiB, double c, int noB)
+        /// <param name="b">Szerokość przekroju w milimetrach</param>
+        /// <param name="h">Wysokość przekroju w milimetrach</param>
+        /// <param name="fi1">Średnica zbrojenia As1 w mm</param>
+        /// <param name="spacing1">Rozstaw prętów zbrojenia As1 w mm</param>
+        /// <param name="c1">Otulina zbrojenia As1 w mm</param>
+        /// <param name="fi2">Średnica zbrojenia As2 w mm</param>
+        /// <param name="spacing2">Rozstaw prętów zbrojenia As2 w mm</param>
+        /// <param name="c2">Otulina zbrojenia As2 w mm</param>
+        public CircleSection(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double fi2, double spacing2, double c2)
         {
             this.D = d;
-            this.FiB = fiB;
-            this.C = c;
+            this.fiB = fiB;
+            this.c = c;
             
-            this.NoB = noB;
+            if (noB < 4)
+            	this.noB = 4;
+            else
+            	this.noB = noB;
             
-            CurrentConcrete = concrete;
-            CurrentSteel = steel;
+            this.currentConrete = concrete;
+            this.currentSteel = steel;
             this.Ab = (fiB/2)*(fiB/2)*Math.PI;
-            this.A = c+fiB/2;
-            SetCreepFactor(0);
+            this.a = c+fiB/2;
+            fi = 0;
+            this.AcTotal = (D/2)*(D/2)*Math.PI;
+            this.AsTotal = Ab * noB;
+        }
+
+        /// <summary>
+        /// Konstruktor przekroju na podstawie ilości prętów zbrojenia w przekroju
+        /// </summary>
+        /// <param name="concrete">Obiekt reprezentujący klasę betonu dla przekroju</param>
+        /// <param name="steel">Obiekt reprezentujący klasę stali zbrojeniowej w przekroju</param>
+        /// <param name="b">Szerokość przekroju w milimetrach</param>
+        /// <param name="h">Wysokość przekroju w milimetrach</param>
+        /// <param name="fi1">Średnica zbrojenia As1 w mm</param>
+        /// <param name="noOfBars1">Ilość prętów zbrojenia As1 w sztukach (liczba całkowita)</param>
+        /// <param name="c1">Otulina zbrojenia As1 w mm</param>
+        /// <param name="fi2">Średnica zbrojenia As2 w mm</param>
+        /// <param name="noOfBars2">Ilość prętów zbrojenia As2 w sztukach (liczba całkowita)</param>
+        /// <param name="c2">Otulina zbrojenia As2 w mm</param>
+        public CircleSection(Concrete concrete, Steel steel, double b, double h, double fi1, int noOfBars1, double c1, double fi2, int noOfBars2, double c2)
+        {
+            this.b = b;
+            this.h = h;
+            this.fi1 = fi1;
+            this.c1 = c1;
+            this.fi2 = fi2;
+            this.c2 = c2;
+            this.spacing1 = (b - 2 * c1 - fi1) / (noOfBars1 - 1);
+            this.spacing2 = (b - 2 * c2 - fi2) / (noOfBars2 - 1);
+            currentConrete = concrete;
+            currentSteel = steel;
+            As1 = (fi1 / 2) * (fi1 / 2) * Math.PI * noOfBars1;
+            As2 = (fi2 / 2) * (fi2 / 2) * Math.PI * noOfBars2;
+            a1 = c1 + 0.5 * fi1;
+            a2 = c2 + 0.5 * fi2;
+        }
+
+        public int CompareTo(Section s2)
+        {
+            if (this.h == s2.h &&
+                this.b == s2.b &&
+                this.a1 == s2.a1 &&
+                this.a2 == s2.a2 &&
+                this.As1 == s2.As1 &&
+                this.As2 == s2.As2 &&
+                this.c1 == s2.c1 &&
+                this.c2 == s2.c2 &&
+                this.currentConrete == s2.currentConrete &&
+                this.currentSteel == s2.currentSteel &&
+                this.fi == s2.fi &&
+                this.fi1 == s2.fi1 &&
+                this.fi2 == s2.fi2 &&
+                this.spacing1 == s2.spacing1 &&
+                this.spacing2 == s2.spacing2)
+            {
+                return 0;
+            }
+            else if (this.h < s2.h)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
         }
 
         public override bool Equals(object obj)
         {
-            CircleSection s2 = obj as CircleSection;
+            Section s2 = obj as Section;
 
             if (this.D == s2.D &&
-                this.FiB == s2.FiB &&
-                this.C == s2.C &&
-                this.NoB == s2.NoB &&
-                Equals(this.CurrentConcrete, s2.CurrentConcrete) &&
-                Equals(this.CurrentSteel, s2.CurrentSteel) &&
-                this.Fi == s2.Fi &&
+                this.fiB == s2.fiB &&
+                this.c == s2.c &&
+                this.noB == s2.noB &&
+                Equals(this.currentConrete, s2.currentConrete) &&
+                Equals(this.currentSteel, s2.currentSteel) &&
+                this.fi == s2.fi &&
                 this.Ab == s2.Ab &&
-                this.A == s2.A &&
-                this.Fi == s2.Fi)
+                this.a == s2.a &&
+                this.fi == s2.fi)
             {
                 return true;
             }
@@ -423,3 +524,52 @@ namespace KalkulatorPrzekroju
         
     }
 }
+        /// Średnica prętów zbrojeniowych w mm
+        /// </summary>
+        public double FiB { get; private set; }
+        public double C { get; private set; }
+        public double A { get; private set; }
+        /// Odległość pomiędzy prętami zbrojenia w linii prostej w mm
+        public double Spacing { get { return D * Math.Sin(2 * Math.PI / NoB); } }
+
+        public override double HTotal { get {return D;}}
+
+        public override int NoB { get; protected set; }
+
+        public override double[] Asi
+        {
+            get
+            {
+                double[] Asi = new double[NoB];
+                for (int i = 0; i < NoB; i++)
+                {
+                    Asi[i] = Ab / Dimfactor / Dimfactor;
+                }
+                return Asi;
+            }
+        }
+
+        public override double AcTotal { get { return Math.PI * Math.Pow(D / 2, 2); } }
+        public override double AsTotal { get { return NoB * Ab; } }
+        public override Section ReversedSection { get { return new CircleSection(CurrentConcrete, CurrentSteel, D, FiB, C, NoB); } }
+            this.D = d;
+            this.FiB = fiB;
+            this.C = c;
+            
+            this.NoB = noB;
+            
+            CurrentConcrete = concrete;
+            CurrentSteel = steel;
+            this.Ab = (fiB/2)*(fiB/2)*Math.PI;
+            this.A = c+fiB/2;
+            SetCreepFactor(0);
+            if (this.D == s2.D &&
+                this.FiB == s2.FiB &&
+                this.C == s2.C &&
+                this.NoB == s2.NoB &&
+                Equals(this.CurrentConcrete, s2.CurrentConcrete) &&
+                Equals(this.CurrentSteel, s2.CurrentSteel) &&
+                this.Fi == s2.Fi &&
+                this.Ab == s2.Ab &&
+                this.A == s2.A &&
+                this.Fi == s2.Fi)

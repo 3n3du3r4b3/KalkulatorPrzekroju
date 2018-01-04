@@ -21,11 +21,11 @@ namespace KalkulatorPrzekroju
         public double fi_end { get; private set; }
         public double tend { get; private set; }*/
 
-        public static double CreepCoefficientCalc(RectangleSection section, double RH, double u, double t00, double tend, double cem)
+        public static double CreepCoefficientCalc(double Acd, double fcmd, double RH, double u, double t00, double tend, double cem)
         {
             double t0 = cemt(t00,cem);
-            double Ac = section.B * section.H;
-            double fcm = section.CurrentConcrete.fcm;
+            double Ac = Acd;
+            double fcm = fcmd;
             double h0 = 2 * Ac / (u); //B.6
             double fi0 = fiRH(RH, h0, alpha1(fcm), alpha2(fcm), fcm) * betafcm(fcm) * betat0(t0); //B.2
             double beta_H = betaH(RH, fcm, h0, alpha3(fcm));

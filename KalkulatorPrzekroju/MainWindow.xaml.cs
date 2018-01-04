@@ -405,17 +405,7 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
-        private void Button_Creep1_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Creep2_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
+        private void button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
             List<CasePoint> temp_points_MN = ReadFileCSV();
@@ -502,6 +492,34 @@ namespace KalkulatorPrzekroju
                 PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
             }
         }
+
+        private void button_CalcCreep1_Click(object sender, RoutedEventArgs e)
+        {
+            section1 = CreateSection(1);
+            section2 = CreateSection(2);
+            stirrups1 = CreateStirrups(1);
+            stirrups2 = CreateStirrups(2);
+
+            CalcCurves();
+
+            CreepWindow creepwin1 = new CreepWindow();
+            creepwin1.Show(section1.b*section1.h,section1.currentConrete.fcm);
+        }
+
+        private void button_CalcCreep2_Click(object sender, RoutedEventArgs e)
+        {
+            section1 = CreateSection(1);
+            section2 = CreateSection(2);
+            stirrups1 = CreateStirrups(1);
+            stirrups2 = CreateStirrups(2);
+
+            CalcCurves();
+
+            CreepWindow creepwin2 = new CreepWindow();
+            creepwin2.Show(section2.b * section2.h, section2.currentConrete.fcm);
+        }
+    
+
         // KONIEC OPROGRAMOWANIA KONTROLEK
         
         private Section CreateSection(int i)
