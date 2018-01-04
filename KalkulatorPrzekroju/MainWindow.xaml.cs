@@ -405,7 +405,7 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
-        private void button_Import_MN_Click(object sender, RoutedEventArgs e)
+        private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
             List<CasePoint> temp_points_MN = ReadFileCSV();
@@ -503,7 +503,7 @@ namespace KalkulatorPrzekroju
             CalcCurves();
 
             CreepWindow creepwin1 = new CreepWindow();
-            creepwin1.Show(section1.b*section1.h,section1.currentConrete.fcm);
+            creepwin1.Show(section1.AcTotal,section1.CurrentConcrete.fcm);
         }
 
         private void button_CalcCreep2_Click(object sender, RoutedEventArgs e)
@@ -516,7 +516,7 @@ namespace KalkulatorPrzekroju
             CalcCurves();
 
             CreepWindow creepwin2 = new CreepWindow();
-            creepwin2.Show(section2.b * section2.h, section2.currentConrete.fcm);
+            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm);
         }
     
 

@@ -8,84 +8,84 @@
 	MinHeight="710"
 	Height="710"
 	RenderTransformOrigin="0.5,0.5">
-	<Grid>
-		<DockPanel
+    <Grid>
+        <DockPanel
 			HorizontalAlignment="Left"
 			LastChildFill="False"
 			Margin="0,35,0,0"
 			Width="250" />
-		<Menu
+        <Menu
 			x:Name="menu"
 			Height="30"
 			Margin="0,0,-0.4,0"
 			VerticalAlignment="Top">
-			<MenuItem
+            <MenuItem
 				x:Name="MenuItem_File"
 				Header="File"
 				Height="30">
-				<MenuItem
+                <MenuItem
 					x:Name="MenuItem_FileNew"
 					Header="New..." />
-				<MenuItem
+                <MenuItem
 					x:Name="menuItem_Open"
 					Header="Open..."
 					Click="MenuItem_Open_Click" />
-				<MenuItem
+                <MenuItem
 					x:Name="menuItem_Save"
 					Header="Save"
 					Click="MenuItem_Save_Click" />
-				<MenuItem
+                <MenuItem
 					x:Name="menuItem_SaveAs"
 					Header="Save As..."
 					Click="MenuItem_SaveAs_Click" />
-				<MenuItem
+                <MenuItem
 					x:Name="menuItem_Close"
 					Header="Close"
 					Click="MenuItem_Close_Click" />
-			</MenuItem>
-			<MenuItem
+            </MenuItem>
+            <MenuItem
 				x:Name="MenuItem_Settings"
 				Header="Settings">
-				<MenuItem
+                <MenuItem
 					x:Name="MenuItemSettingsFactors"
 					Header="Factors"
 					Click="MenuItemSettingsFactors_Click" />
-				<MenuItem
+                <MenuItem
 					x:Name="MenuItemSettingsDisplay"
 					Header="Display Settings"
 					Click="MenuItemSettingsDisplay_Click" />
-			</MenuItem>
-			<MenuItem
+            </MenuItem>
+            <MenuItem
 				x:Name="MenuItem_Info"
 				Header="Info"
 				Height="30">
-				<MenuItem
+                <MenuItem
 					x:Name="MenuItemFileNew1"
 					Header="Methodology" />
-				<MenuItem
+                <MenuItem
 					Header="Help" />
-				<MenuItem
+                <MenuItem
 					Header="About..." />
-			</MenuItem>
-		</Menu>
-		<DockPanel
+            </MenuItem>
+        </Menu>
+        <DockPanel
 			HorizontalAlignment="Left"
 			LastChildFill="False"
 			Margin="0,35,0,0.4"
 			Width="450">
-			<Grid>
-				<TabControl
+            <Grid>
+                <TabControl
 					x:Name="tabControl1"
 					Width="450"
 					Margin="0,0,0,50"
 					TabIndex="1">
-					<TabItem
+                    <TabItem
 						Header="Section 1"
 						TabIndex="2">
-						<Grid
+                        <Grid
 							x:Name="grid_Section_1"
 							Background="#FFE5E5E5">
-							<GroupBox
+                            <GroupBox
 								HorizontalAlignment="Stretch"
 								VerticalAlignment="Top"
 								Margin="10,5,10,0"
@@ -94,8 +94,8 @@
 								Grid.Row="0"
 								x:Name="groupBox_General1"
 								Height="60">
-								<Grid>
-									<RadioButton
+                                <Grid>
+                                    <RadioButton
 										Grid.Column="0"
 										Grid.Row="0"
 										HorizontalAlignment="Left"
@@ -105,7 +105,7 @@
 										IsChecked="True"
 										Margin="10,10,0,0"
 										Click="radioBut_RectCirc_Checked" />
-									<RadioButton
+                                    <RadioButton
 										x:Name="radioBut_Circular_sec1"
 										Grid.Column="0"
 										Grid.Row="0"
@@ -116,7 +116,7 @@
 										Margin="115,10,0,0"
 										HorizontalAlignment="Left"
 										Click="radioBut_RectCirc_Checked" />
-									<RadioButton
+                                    <RadioButton
 										x:Name="radioBut_TShape_sec1"
 										IsChecked="False"
 										Grid.Column="0"
@@ -126,25 +126,25 @@
 										Margin="200,10,0,0"
 										IsEnabled="False"
 										Content="T-Shape" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Geometry1"
 								Header="Geometry"
 								Height="100"
 								VerticalAlignment="Top"
 								Margin="10,65,10,0">
-								<Grid>
-									<Grid
+                                <Grid>
+                                    <Grid
 										x:Name="grid_Geom_Rect1"
 										Visibility="Visible">
-										<Label
+                                        <Label
 											x:Name="label"
 											Content="Width: "
 											HorizontalAlignment="Left"
 											Margin="10,10,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_width_1"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -156,19 +156,19 @@
 											TabIndex="1"
 											Text="1000"
 											LostFocus="TextBox_ToDouble_LostFocus" />
-										<Label
+                                        <Label
 											x:Name="label1"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,10,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label2"
 											Content="Height: "
 											HorizontalAlignment="Left"
 											Margin="235,10,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_height_1"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -180,19 +180,19 @@
 											TabIndex="2"
 											Text="1000"
 											LostFocus="TextBox_ToDouble_LostFocus" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="366,10,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label_Copy"
 											Content="Cover bottom: "
 											HorizontalAlignment="Left"
 											Margin="10,41,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_cover_As1_1"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -204,19 +204,19 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="3"
 											Text="40" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy1"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,41,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label2_Copy"
 											Content="Cover top: "
 											HorizontalAlignment="Left"
 											Margin="214,41,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_cover_As2_1"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -228,23 +228,23 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="4"
 											Text="40" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy2"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="366,41,0,0"
 											VerticalAlignment="Top" />
-									</Grid>
-									<Grid
+                                    </Grid>
+                                    <Grid
 										x:Name="grid_Geom_Circ1"
 										Visibility="Hidden">
-										<Label
+                                        <Label
 											x:Name="labelc"
 											Content="Diameter: "
 											HorizontalAlignment="Left"
 											Margin="10,10,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_diameter_1"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -256,19 +256,19 @@
 											TabIndex="1"
 											Text="1000"
 											LostFocus="TextBox_ToDouble_LostFocus" />
-										<Label
+                                        <Label
 											x:Name="label1c"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,10,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label_Copyc"
 											Content="Cover: "
 											HorizontalAlignment="Left"
 											Margin="10,41,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_cover_Circ_1"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -280,35 +280,35 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="3"
 											Text="40" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy1c"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,41,0,0"
 											VerticalAlignment="Top" />
-									</Grid>
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Reo_All1"
 								Header="Reinforcement"
 								Margin="10,165,10,0"
 								Height="150"
 								VerticalAlignment="Top">
-								<Grid>
-									<Grid
+                                <Grid>
+                                    <Grid
 										x:Name="grid_Reo_Rect1"
 										IsEnabled="True"
 										Visibility="Visible">
-										<GroupBox
+                                        <GroupBox
 											x:Name="groupBox_Reo_Bottom1"
 											Header="Bottom bars"
 											Height="65"
 											Margin="0,0,0,0"
 											VerticalAlignment="Top"
 											BorderThickness="0,1,0,0">
-											<Grid>
-												<ComboBox
+                                            <Grid>
+                                                <ComboBox
 													x:Name="comboBox_diameter_As1_1"
 													HorizontalAlignment="Left"
 													Margin="79,10,0,0"
@@ -317,19 +317,19 @@
 													TabIndex="5"
 													SelectedIndex="6"
 													LostFocus="ListBox_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label4"
 													Content="Diameter: "
 													HorizontalAlignment="Left"
 													Margin="10,10,0,0"
 													VerticalAlignment="Top" />
-												<Label
+                                                <Label
 													x:Name="label6"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="144,10,0,0"
 													VerticalAlignment="Top" />
-												<TextBox
+                                                <TextBox
 													x:Name="textBox_spac_no_As1_1"
 													HorizontalAlignment="Left"
 													Height="23"
@@ -341,13 +341,13 @@
 													TabIndex="7"
 													Text="200"
 													LostFocus="TextBox_ToInt_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label_spac_no_As1_1"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="366,10,0,0"
 													VerticalAlignment="Top" />
-												<ComboBox
+                                                <ComboBox
 													x:Name="comboBox_As1_spac_no_1"
 													HorizontalAlignment="Left"
 													Margin="179,10,0,0"
@@ -356,17 +356,17 @@
 													SelectionChanged="ComboBox_As1_spac_no_1_SelectionChanged"
 													TabIndex="6"
 													LostFocus="ListBox_LostFocus" />
-											</Grid>
-										</GroupBox>
-										<GroupBox
+                                            </Grid>
+                                        </GroupBox>
+                                        <GroupBox
 											x:Name="groupBox_Reo_Top1"
 											Height="65"
 											VerticalAlignment="Top"
 											Margin="0,62,0,0"
 											Header="Top bars"
 											BorderThickness="0,1,0,0">
-											<Grid>
-												<ComboBox
+                                            <Grid>
+                                                <ComboBox
 													x:Name="comboBox_diameter_As2_1"
 													HorizontalAlignment="Left"
 													Margin="79,10,0,0"
@@ -375,19 +375,19 @@
 													TabIndex="8"
 													SelectedIndex="3"
 													LostFocus="ListBox_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label7"
 													Content="Diameter: "
 													HorizontalAlignment="Left"
 													Margin="10,10,0,0"
 													VerticalAlignment="Top" />
-												<Label
+                                                <Label
 													x:Name="label8"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="144,10,0,0"
 													VerticalAlignment="Top" />
-												<TextBox
+                                                <TextBox
 													x:Name="textBox_spac_no_As2_1"
 													HorizontalAlignment="Left"
 													Height="23"
@@ -399,13 +399,13 @@
 													TabIndex="10"
 													Text="100"
 													LostFocus="TextBox_ToInt_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label_spac_no_As2_1"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="366,10,0,0"
 													VerticalAlignment="Top" />
-												<ComboBox
+                                                <ComboBox
 													x:Name="comboBox_As2_spac_no_1"
 													HorizontalAlignment="Left"
 													Margin="179,10,0,0"
@@ -414,22 +414,22 @@
 													SelectionChanged="ComboBox_As2_spac_no_1_SelectionChanged"
 													TabIndex="9"
 													LostFocus="ListBox_LostFocus" />
-											</Grid>
-										</GroupBox>
-									</Grid>
-									<Grid
+                                            </Grid>
+                                        </GroupBox>
+                                    </Grid>
+                                    <Grid
 										x:Name="grid_Reo_Circ1"
 										IsEnabled="True"
 										Visibility="Hidden">
-										<GroupBox
+                                        <GroupBox
 											x:Name="groupBox_Reo_Circ1"
 											Header="Bars"
 											Height="65"
 											Margin="0,0,0,0"
 											VerticalAlignment="Top"
 											BorderThickness="0,1,0,0">
-											<Grid>
-												<ComboBox
+                                            <Grid>
+                                                <ComboBox
 													x:Name="comboBox_diameter_Circ_1"
 													HorizontalAlignment="Left"
 													Margin="79,10,0,0"
@@ -438,19 +438,19 @@
 													TabIndex="5"
 													SelectedIndex="6"
 													LostFocus="ListBox_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label4c"
 													Content="Diameter: "
 													HorizontalAlignment="Left"
 													Margin="10,10,0,0"
 													VerticalAlignment="Top" />
-												<Label
+                                                <Label
 													x:Name="label8c"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="144,10,0,0"
 													VerticalAlignment="Top" />
-												<TextBox
+                                                <TextBox
 													x:Name="textBox_no_Circ_1"
 													HorizontalAlignment="Left"
 													Height="23"
@@ -462,38 +462,38 @@
 													LostFocus="TextBox_ToInt_LostFocus"
 													TabIndex="7"
 													Text="6" />
-												<Label
+                                                <Label
 													x:Name="label_no_Circ_1"
 													HorizontalAlignment="Left"
 													Margin="179,10,0,0"
 													VerticalAlignment="Top"
 													Width="100"
 													Content="no of bars" />
-											</Grid>
-										</GroupBox>
-									</Grid>
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                            </Grid>
+                                        </GroupBox>
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Materials"
 								Header="Materials"
 								Height="82"
 								VerticalAlignment="Top"
 								Margin="10,315,204,0">
-								<Grid>
-									<Label
+                                <Grid>
+                                    <Label
 										x:Name="label3"
 										Content="Concrete: "
 										HorizontalAlignment="Left"
 										Margin="10,5,0,0"
 										VerticalAlignment="Top" />
-									<Label
+                                    <Label
 										x:Name="label5"
 										Content="Steel: "
 										HorizontalAlignment="Left"
 										Margin="32,30,0,-3.8"
 										VerticalAlignment="Top" />
-									<ComboBox
+                                    <ComboBox
 										x:Name="comboBox_Concrete_1"
 										HorizontalAlignment="Left"
 										Margin="79,5,0,0"
@@ -502,7 +502,7 @@
 										TabIndex="11"
 										SelectedIndex="5"
 										LostFocus="ListBox_LostFocus" />
-									<ComboBox
+                                    <ComboBox
 										x:Name="comboBox_Steel_1"
 										HorizontalAlignment="Left"
 										Margin="79,30,0,-0.8"
@@ -510,9 +510,9 @@
 										Width="120"
 										TabIndex="12"
 										LostFocus="ListBox_LostFocus" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_DesignSit"
 								Header="Design Situation"
 								Height="65"
@@ -521,8 +521,8 @@
 								HorizontalAlignment="Stretch"
 								VerticalAlignment="Top"
 								Margin="10,405,204,0">
-								<Grid>
-									<ComboBox
+                                <Grid>
+                                    <ComboBox
 										x:Name="comboBox_DesignSituation_1"
 										HorizontalAlignment="Left"
 										Margin="10,10,0,0"
@@ -530,16 +530,16 @@
 										Width="200"
 										TabIndex="11"
 										LostFocus="ListBox_LostFocus" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Stirrups"
 								Header="Stirrups"
 								Height="155"
 								VerticalAlignment="Top"
 								Margin="245,315,10,0">
-								<Grid>
-									<ComboBox
+                                <Grid>
+                                    <ComboBox
 										x:Name="comboBox_diameter_AsStir_1"
 										Width="60"
 										TabIndex="8"
@@ -550,7 +550,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="75,10,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir1"
 										Content="Diameter: "
 										Grid.Column="0"
@@ -558,7 +558,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,10,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir2"
 										Content="mm"
 										Grid.Column="0"
@@ -566,7 +566,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="140,10,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir3"
 										Content="No. of legs: "
 										Grid.Column="0"
@@ -574,7 +574,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,40,0,0" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_legs_1"
 										Height="23"
 										TextWrapping="Wrap"
@@ -588,7 +588,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="86,40,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir4"
 										Content="Spacing: "
 										Grid.Column="0"
@@ -596,7 +596,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,70,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir5"
 										Content="mm"
 										Grid.Column="0"
@@ -604,7 +604,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="140,70,0,0" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_stir_spacing_1"
 										Height="23"
 										TextWrapping="Wrap"
@@ -618,7 +618,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="75,70,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir6"
 										Content="Angle: "
 										Grid.Column="0"
@@ -626,7 +626,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,100,0,0" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_stir_angle_1"
 										Height="23"
 										TextWrapping="Wrap"
@@ -640,7 +640,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="75,100,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir7"
 										Content="[ ° ]"
 										Grid.Column="0"
@@ -648,9 +648,9 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="140,100,0,0" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="GroupBox_Creep"
 								Header="Creep"
 								Width="310"
@@ -660,14 +660,14 @@
 								HorizontalAlignment="Left"
 								VerticalAlignment="Top"
 								Margin="10,470,0,0">
-								<Grid>
-									<Label
+                                <Grid>
+                                    <Label
 										x:Name="label5_Copy"
 										Content="Creep factor φ(∞, t₀)"
 										HorizontalAlignment="Left"
 										Margin="10,5,0,0"
 										VerticalAlignment="Top" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_creep1"
 										HorizontalAlignment="Left"
 										Height="23"
@@ -679,26 +679,25 @@
 										LostFocus="TextBox_ToDouble_LostFocus"
 										TabIndex="10"
 										Text="0" />
-									<Button
+                                    <Button
 										x:Name="button_CalcCreep1"
 										Content="Calculate..."
 										HorizontalAlignment="Left"
-										Margin="210,5,0,0"
-										VerticalAlignment="Top"
+										Margin="210,5,0,12"
 										Width="75"
 										Opacity="1"
-										Height="25" />
-								</Grid>
-							</GroupBox>
-						</Grid>
-					</TabItem>
-					<TabItem
+                                        Click="button_CalcCreep1_Click"/>
+                                </Grid>
+                            </GroupBox>
+                        </Grid>
+                    </TabItem>
+                    <TabItem
 						Header="Section 2"
 						TabIndex="3">
-						<Grid
+                        <Grid
 							x:Name="grid_Section_2"
 							Background="#FFE5E5E5">
-							<GroupBox
+                            <GroupBox
 								HorizontalAlignment="Stretch"
 								VerticalAlignment="Top"
 								Margin="10,5,10,0"
@@ -707,8 +706,8 @@
 								Grid.Row="0"
 								x:Name="groupBox_General2"
 								Height="60">
-								<Grid>
-									<RadioButton
+                                <Grid>
+                                    <RadioButton
 										Grid.Column="0"
 										Grid.Row="0"
 										HorizontalAlignment="Left"
@@ -718,7 +717,7 @@
 										IsChecked="True"
 										Margin="10,10,0,0"
 										Click="radioBut_RectCirc_Checked" />
-									<RadioButton
+                                    <RadioButton
 										x:Name="radioBut_Circular_sec2"
 										Grid.Column="0"
 										Grid.Row="0"
@@ -728,7 +727,7 @@
 										IsChecked="False"
 										Content="Circular"
 										Click="radioBut_RectCirc_Checked" Width="70" />
-									<RadioButton
+                                    <RadioButton
 										x:Name="radioBut_TShape_sec2"
 										IsChecked="False"
 										Grid.Column="0"
@@ -738,25 +737,25 @@
 										Margin="200,10,0,0"
 										IsEnabled="False"
 										Content="T-Shape" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Geometry2"
 								Header="Geometry"
 								Height="100"
 								VerticalAlignment="Top"
 								Margin="10,65,10,0">
-								<Grid>
-									<Grid
+                                <Grid>
+                                    <Grid
 										x:Name="grid_Geom_Rect2"
 										Visibility="Visible">
-										<Label
+                                        <Label
 											x:Name="label9"
 											Content="Width: "
 											HorizontalAlignment="Left"
 											Margin="10,10,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_width_2"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -768,19 +767,19 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="1"
 											Text="1000" />
-										<Label
+                                        <Label
 											x:Name="label10"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,10,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label11"
 											Content="Height: "
 											HorizontalAlignment="Left"
 											Margin="235,10,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_height_2"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -792,19 +791,19 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="2"
 											Text="500" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy3"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="366,10,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label_Copy1"
 											Content="Cover bottom: "
 											HorizontalAlignment="Left"
 											Margin="10,41,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_cover_As1_2"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -816,19 +815,19 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="3"
 											Text="50" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy4"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,41,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label2_Copy1"
 											Content="Cover top: "
 											HorizontalAlignment="Left"
 											Margin="214,41,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_cover_As2_2"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -840,23 +839,23 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="4"
 											Text="50" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy5"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="366,41,0,0"
 											VerticalAlignment="Top" />
-									</Grid>
-									<Grid
+                                    </Grid>
+                                    <Grid
 										x:Name="grid_Geom_Circ2"
 										Visibility="Hidden">
-										<Label
+                                        <Label
 											x:Name="labelc2"
 											Content="Diameter: "
 											HorizontalAlignment="Left"
 											Margin="10,10,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_diameter_2"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -868,19 +867,19 @@
 											TabIndex="1"
 											Text="1000"
 											LostFocus="TextBox_ToDouble_LostFocus" />
-										<Label
+                                        <Label
 											x:Name="label2c"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,10,0,0"
 											VerticalAlignment="Top" />
-										<Label
+                                        <Label
 											x:Name="label_Copyc2"
 											Content="Cover: "
 											HorizontalAlignment="Left"
 											Margin="10,41,0,0"
 											VerticalAlignment="Top" />
-										<TextBox
+                                        <TextBox
 											x:Name="textBox_cover_Circ_2"
 											HorizontalAlignment="Left"
 											Height="23"
@@ -892,35 +891,35 @@
 											LostFocus="TextBox_ToDouble_LostFocus"
 											TabIndex="3"
 											Text="40" />
-										<Label
+                                        <Label
 											x:Name="label1_Copy2c"
 											Content="mm"
 											HorizontalAlignment="Left"
 											Margin="179,41,0,0"
 											VerticalAlignment="Top" />
-									</Grid>
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Reo_All2"
 								Header="Reinforcement"
 								Margin="10,165,10,0"
 								Height="150"
 								VerticalAlignment="Top">
-								<Grid>
-									<Grid
+                                <Grid>
+                                    <Grid
 										x:Name="grid_Reo_Rect2"
 										IsEnabled="True"
 										Visibility="Visible">
-										<GroupBox
+                                        <GroupBox
 											x:Name="groupBox_Reo_Bottom2"
 											Height="65"
 											VerticalAlignment="Top"
 											Margin="0,0,0,0"
 											Header="Bottom bars"
 											BorderThickness="0,1,0,0">
-											<Grid>
-												<ComboBox
+                                            <Grid>
+                                                <ComboBox
 													x:Name="comboBox_diameter_As1_2"
 													HorizontalAlignment="Left"
 													Margin="79,10,0,0"
@@ -928,19 +927,19 @@
 													Width="60"
 													TabIndex="5"
 													LostFocus="ListBox_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label14"
 													Content="Diameter: "
 													HorizontalAlignment="Left"
 													Margin="10,10,0,0"
 													VerticalAlignment="Top" />
-												<Label
+                                                <Label
 													x:Name="label15"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="144,10,0,0"
 													VerticalAlignment="Top" />
-												<TextBox
+                                                <TextBox
 													x:Name="textBox_spac_no_As1_2"
 													HorizontalAlignment="Left"
 													Height="23"
@@ -952,13 +951,13 @@
 													TabIndex="7"
 													Text="200"
 													LostFocus="TextBox_ToInt_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label_spac_no_As1_2"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="366,10,0,0"
 													VerticalAlignment="Top" />
-												<ComboBox
+                                                <ComboBox
 													x:Name="comboBox_As1_spac_no_2"
 													HorizontalAlignment="Left"
 													Margin="179,10,0,0"
@@ -967,17 +966,17 @@
 													SelectionChanged="ComboBox_As1_spac_no_2_SelectionChanged"
 													TabIndex="6"
 													LostFocus="ListBox_LostFocus" />
-											</Grid>
-										</GroupBox>
-										<GroupBox
+                                            </Grid>
+                                        </GroupBox>
+                                        <GroupBox
 											x:Name="groupBox_Reo_Top2"
 											Height="65"
 											VerticalAlignment="Top"
 											Margin="0,62,0,0"
 											Header="Top bars"
 											BorderThickness="0,1,0,0">
-											<Grid>
-												<ComboBox
+                                            <Grid>
+                                                <ComboBox
 													x:Name="comboBox_diameter_As2_2"
 													HorizontalAlignment="Left"
 													Margin="79,10,0,0"
@@ -985,19 +984,19 @@
 													Width="60"
 													TabIndex="8"
 													LostFocus="ListBox_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label16"
 													Content="Diameter: "
 													HorizontalAlignment="Left"
 													Margin="10,10,0,0"
 													VerticalAlignment="Top" />
-												<Label
+                                                <Label
 													x:Name="label17"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="144,10,0,0"
 													VerticalAlignment="Top" />
-												<TextBox
+                                                <TextBox
 													x:Name="textBox_spac_no_As2_2"
 													HorizontalAlignment="Left"
 													Height="23"
@@ -1009,13 +1008,13 @@
 													TabIndex="10"
 													Text="200"
 													LostFocus="TextBox_ToInt_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label_spac_no_As2_2"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="366,10,0,0"
 													VerticalAlignment="Top" />
-												<ComboBox
+                                                <ComboBox
 													x:Name="comboBox_As2_spac_no_2"
 													HorizontalAlignment="Left"
 													Margin="179,10,0,0"
@@ -1024,22 +1023,22 @@
 													SelectionChanged="ComboBox_As2_spac_no_2_SelectionChanged"
 													TabIndex="9"
 													LostFocus="ListBox_LostFocus" />
-											</Grid>
-										</GroupBox>
-									</Grid>
-									<Grid
+                                            </Grid>
+                                        </GroupBox>
+                                    </Grid>
+                                    <Grid
 										x:Name="grid_Reo_Circ2"
 										IsEnabled="True"
 										Visibility="Hidden">
-										<GroupBox
+                                        <GroupBox
 											x:Name="groupBox_Reo_Circ2"
 											Header="Bars"
 											Height="65"
 											Margin="0,0,0,0"
 											VerticalAlignment="Top"
 											BorderThickness="0,1,0,0">
-											<Grid>
-												<ComboBox
+                                            <Grid>
+                                                <ComboBox
 													x:Name="comboBox_diameter_Circ_2"
 													HorizontalAlignment="Left"
 													Margin="79,10,0,0"
@@ -1048,19 +1047,19 @@
 													TabIndex="5"
 													SelectedIndex="6"
 													LostFocus="ListBox_LostFocus" />
-												<Label
+                                                <Label
 													x:Name="label4c2"
 													Content="Diameter: "
 													HorizontalAlignment="Left"
 													Margin="10,10,0,0"
 													VerticalAlignment="Top" />
-												<Label
+                                                <Label
 													x:Name="label8c2"
 													Content="mm"
 													HorizontalAlignment="Left"
 													Margin="144,10,0,0"
 													VerticalAlignment="Top" />
-												<TextBox
+                                                <TextBox
 													x:Name="textBox_no_Circ_2"
 													HorizontalAlignment="Left"
 													Height="23"
@@ -1072,38 +1071,38 @@
 													LostFocus="TextBox_ToInt_LostFocus"
 													TabIndex="7"
 													Text="6" />
-												<Label
+                                                <Label
 													x:Name="label_no_Circ_2"
 													HorizontalAlignment="Left"
 													Margin="179,10,0,0"
 													VerticalAlignment="Top"
 													Width="100"
 													Content="no of bars" />
-											</Grid>
-										</GroupBox>
-									</Grid>
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                            </Grid>
+                                        </GroupBox>
+                                    </Grid>
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Materials1"
 								Header="Materials"
 								Height="82"
 								VerticalAlignment="Top"
 								Margin="10,315,204,0">
-								<Grid>
-									<Label
+                                <Grid>
+                                    <Label
 										x:Name="label12"
 										Content="Concrete: "
 										HorizontalAlignment="Left"
 										Margin="10,5,0,0"
 										VerticalAlignment="Top" />
-									<Label
+                                    <Label
 										x:Name="label13"
 										Content="Steel: "
 										HorizontalAlignment="Left"
 										Margin="32,30,0,-3.8"
 										VerticalAlignment="Top" />
-									<ComboBox
+                                    <ComboBox
 										x:Name="comboBox_Concrete_2"
 										HorizontalAlignment="Left"
 										Margin="79,5,0,0"
@@ -1111,7 +1110,7 @@
 										Width="120"
 										TabIndex="11"
 										LostFocus="ListBox_LostFocus" />
-									<ComboBox
+                                    <ComboBox
 										x:Name="comboBox_Steel_2"
 										HorizontalAlignment="Left"
 										Margin="79,30,0,-0.8"
@@ -1119,16 +1118,16 @@
 										Width="120"
 										TabIndex="12"
 										LostFocus="ListBox_LostFocus" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_DesignSit2"
 								Header="Design Situation"
 								Height="65"
 								VerticalAlignment="Top"
 								Margin="10,405,204,0">
-								<Grid>
-									<ComboBox
+                                <Grid>
+                                    <ComboBox
 										x:Name="comboBox_DesignSituation_2"
 										HorizontalAlignment="Left"
 										Margin="10,10,0,0"
@@ -1136,16 +1135,16 @@
 										Width="200"
 										TabIndex="11"
 										LostFocus="ListBox_LostFocus" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="groupBox_Stirrups_s2"
 								Header="Stirrups"
 								Height="155"
 								VerticalAlignment="Top"
 								Margin="245,315,10,0">
-								<Grid>
-									<ComboBox
+                                <Grid>
+                                    <ComboBox
 										x:Name="comboBox_diameter_AsStir_2"
 										Width="60"
 										TabIndex="8"
@@ -1156,7 +1155,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="75,10,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir8"
 										Content="Diameter: "
 										Grid.Column="0"
@@ -1164,7 +1163,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,10,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir9"
 										Content="mm"
 										Grid.Column="0"
@@ -1172,7 +1171,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="140,10,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir10"
 										Content="No. of legs: "
 										Grid.Column="0"
@@ -1180,7 +1179,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,40,0,0" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_legs_2"
 										Height="23"
 										TextWrapping="Wrap"
@@ -1194,7 +1193,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="86,40,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir11"
 										Content="Spacing: "
 										Grid.Column="0"
@@ -1202,7 +1201,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,70,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir12"
 										Content="mm"
 										Grid.Column="0"
@@ -1210,7 +1209,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="140,70,0,0" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_stir_spacing_2"
 										Height="23"
 										TextWrapping="Wrap"
@@ -1224,7 +1223,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="75,70,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir13"
 										Content="Angle: "
 										Grid.Column="0"
@@ -1232,7 +1231,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="6,100,0,0" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_stir_angle_2"
 										Height="23"
 										TextWrapping="Wrap"
@@ -1246,7 +1245,7 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="75,100,0,0" />
-									<Label
+                                    <Label
 										x:Name="label_stir14"
 										Content="[ ° ]"
 										Grid.Column="0"
@@ -1254,9 +1253,9 @@
 										HorizontalAlignment="Left"
 										VerticalAlignment="Top"
 										Margin="140,100,0,0" />
-								</Grid>
-							</GroupBox>
-							<GroupBox
+                                </Grid>
+                            </GroupBox>
+                            <GroupBox
 								x:Name="GroupBox_Creep2"
 								Header="Creep"
 								Height="65"
@@ -1264,14 +1263,14 @@
 								Width="310"
 								HorizontalAlignment="Left"
 								Margin="10,470,0,0">
-								<Grid>
-									<Label
+                                <Grid>
+                                    <Label
 										x:Name="label6_Copy"
 										Content="Creep factor φ(∞, t₀)"
 										HorizontalAlignment="Left"
 										Margin="10,5,0,0"
 										VerticalAlignment="Top" />
-									<TextBox
+                                    <TextBox
 										x:Name="textBox_creep2"
 										HorizontalAlignment="Left"
 										Height="23"
@@ -1283,7 +1282,7 @@
 										LostFocus="TextBox_ToDouble_LostFocus"
 										TabIndex="10"
 										Text="0" />
-									<Button
+                                    <Button
 										x:Name="button_CalcCreep2"
 										Content="Calculate..."
 										HorizontalAlignment="Left"
@@ -1291,20 +1290,21 @@
 										VerticalAlignment="Top"
 										Width="75"
 										Opacity="1"
-										Height="25" />
-								</Grid>
-							</GroupBox>
-						</Grid>
-					</TabItem>
-					<TabItem
+										Height="25"
+                                        Click="button_CalcCreep2_Click"/>
+                                </Grid>
+                            </GroupBox>
+                        </Grid>
+                    </TabItem>
+                    <TabItem
 						Header="ULS M-N Data"
 						TabIndex="4">
-						<Grid
+                        <Grid
 							Background="#FFE5E5E5">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition />
-							</Grid.ColumnDefinitions>
-							<DataGrid
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid
 								x:Name="dataGrid_ULS_MN"
 								HorizontalAlignment="Left"
 								Margin="0,0,0,50"
@@ -1319,24 +1319,24 @@
 								RowHeaderWidth="37"
 								MinRowHeight="10"
 								SelectionChanged="DataGrid_ULS_MN_SelectionChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
 										Binding="{Binding row}"
 										ClipboardContentBinding="{x:Null}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding X}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding Y}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Bending Moment [kNm]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_MN"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
@@ -1346,7 +1346,7 @@
 								Width="130"
 								TabIndex="8"
 								Click="Button_Import_MN_Click" />
-							<Button
+                            <Button
 								x:Name="button_Delete_MN"
 								Content="Delete all from graph"
 								Margin="0,0,150,10"
@@ -1356,17 +1356,17 @@
 								Width="130"
 								TabIndex="9"
 								Click="Button_Delete_MN_Click" />
-						</Grid>
-					</TabItem>
-					<TabItem
+                        </Grid>
+                    </TabItem>
+                    <TabItem
 						Header="ULS V-N Data"
 						TabIndex="5">
-						<Grid
+                        <Grid
 							Background="#FFE5E5E5">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition />
-							</Grid.ColumnDefinitions>
-							<DataGrid
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid
 								x:Name="dataGrid_ULS_VN"
 								HorizontalAlignment="Left"
 								Margin="0,0,0,50"
@@ -1381,24 +1381,24 @@
 								RowHeaderWidth="37"
 								MinRowHeight="10"
 								SelectionChanged="DataGrid_ULS_VN_SelectionChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
 										Binding="{Binding row}"
 										ClipboardContentBinding="{x:Null}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding X}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding Y}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Shear Force [kN]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_VN"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
@@ -1409,7 +1409,7 @@
 								TabIndex="8"
 								Click="Button_Import_VN_Click"
 								RenderTransformOrigin="0.503,0.5" />
-							<Button
+                            <Button
 								x:Name="button_Delete_VN"
 								Content="Delete all from graph"
 								Margin="0,0,150,10"
@@ -1419,17 +1419,17 @@
 								Width="130"
 								TabIndex="9"
 								Click="Button_Delete_VN_Click" />
-						</Grid>
-					</TabItem>
-					<TabItem
+                        </Grid>
+                    </TabItem>
+                    <TabItem
 						Header="SLS QPR Data"
 						TabIndex="6">
-						<Grid
+                        <Grid
 							Background="#FFE5E5E5">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition />
-							</Grid.ColumnDefinitions>
-							<DataGrid
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid
 								x:Name="dataGrid_SLS_QPR"
 								HorizontalAlignment="Left"
 								Margin="0,0,0,50"
@@ -1444,24 +1444,24 @@
 								RowHeaderWidth="37"
 								MinRowHeight="10"
 								SelectionChanged="DataGrid_SLS_QPR_SelectionChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
 										Binding="{Binding row}"
 										ClipboardContentBinding="{x:Null}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding X}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding Y}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Bending Moment [kNm]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_QPR"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
@@ -1471,7 +1471,7 @@
 								Width="130"
 								TabIndex="8"
 								Click="Button_Import_QPR_Click" />
-							<Button
+                            <Button
 								x:Name="button_Delete_QPR"
 								Content="Delete all from graph"
 								Margin="0,0,150,10"
@@ -1481,17 +1481,17 @@
 								Width="130"
 								TabIndex="9"
 								Click="Button_Delete_QPR_Click" />
-						</Grid>
-					</TabItem>
-					<TabItem
+                        </Grid>
+                    </TabItem>
+                    <TabItem
 						Header="SLS CHR Data"
 						TabIndex="7">
-						<Grid
+                        <Grid
 							Background="#FFE5E5E5">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition />
-							</Grid.ColumnDefinitions>
-							<DataGrid
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid
 								x:Name="dataGrid_SLS_CHR"
 								HorizontalAlignment="Left"
 								Margin="0,0,0,50"
@@ -1506,24 +1506,24 @@
 								RowHeaderWidth="37"
 								MinRowHeight="10"
 								SelectionChanged="DataGrid_SLS_CHR_SelectionChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
 										Binding="{Binding row}"
 										ClipboardContentBinding="{x:Null}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding X}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding Y}"
 										ClipboardContentBinding="{x:Null}"
 										Header="Bending Moment [kNm]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_CHR"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
@@ -1533,7 +1533,7 @@
 								Width="130"
 								TabIndex="8"
 								Click="Button_Import_CHR_Click" />
-							<Button
+                            <Button
 								x:Name="button_Delete_CHR"
 								Content="Delete all from graph"
 								Margin="0,0,150,10"
@@ -1543,10 +1543,10 @@
 								Width="130"
 								TabIndex="9"
 								Click="Button_Delete_CHR_Click" />
-						</Grid>
-					</TabItem>
-				</TabControl>
-				<Button
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                <Button
 					x:Name="button_UpdateGraph"
 					Content="Update Graph"
 					Margin="0,0,10,10"
@@ -1556,7 +1556,7 @@
 					Width="100"
 					TabIndex="8"
 					Click="Button_UpdateGraph_Click" />
-				<Button
+                <Button
 					x:Name="button_ClearGraph"
 					Content="Clear Graph"
 					HorizontalAlignment="Right"
@@ -1565,20 +1565,20 @@
 					Width="100"
 					Height="30"
 					TabIndex="7" />
-			</Grid>
-		</DockPanel>
-		<TabControl
+            </Grid>
+        </DockPanel>
+        <TabControl
 			x:Name="tabControl"
 			TabIndex="9"
 			Margin="455,35,0,0">
-			<TabItem
+            <TabItem
 				Header="ULS M/N"
 				TabIndex="10">
-				<Grid
+                <Grid
 					Background="#FFE5E5E5">
-					<oxy:PlotView
+                    <oxy:PlotView
 						x:Name="PlotView_ULS_MN" />
-					<Button
+                    <Button
 						x:Name="button_SaveToPDF_ULS_MN"
 						Content="Save To PDF"
 						HorizontalAlignment="Left"
@@ -1586,15 +1586,15 @@
 						VerticalAlignment="Bottom"
 						Width="75"
 						Opacity="0.5" />
-				</Grid>
-			</TabItem>
-			<TabItem
+                </Grid>
+            </TabItem>
+            <TabItem
 				Header="ULS V/N">
-				<Grid
+                <Grid
 					Background="#FFE5E5E5">
-					<oxy:PlotView
+                    <oxy:PlotView
 						x:Name="PlotView_ULS_VN" />
-					<Button
+                    <Button
 						x:Name="button_SaveToPDF_ULS_VN"
 						Content="Save To PDF"
 						HorizontalAlignment="Left"
@@ -1602,15 +1602,15 @@
 						VerticalAlignment="Bottom"
 						Width="75"
 						Opacity="0.5" />
-				</Grid>
-			</TabItem>
-			<TabItem
+                </Grid>
+            </TabItem>
+            <TabItem
 				Header="SLS Crack Width">
-				<Grid
+                <Grid
 					Background="#FFE5E5E5">
-					<oxy:PlotView
+                    <oxy:PlotView
 						x:Name="PlotView_SLS_Crack" />
-					<Button
+                    <Button
 						x:Name="button_SaveToPDF_SLS_Crack"
 						Content="Save To PDF"
 						HorizontalAlignment="Left"
@@ -1618,15 +1618,15 @@
 						VerticalAlignment="Bottom"
 						Width="75"
 						Opacity="0.5" />
-				</Grid>
-			</TabItem>
-			<TabItem
+                </Grid>
+            </TabItem>
+            <TabItem
 				Header="SLS Stresses">
-				<Grid
+                <Grid
 					Background="#FFE5E5E5">
-					<oxy:PlotView
+                    <oxy:PlotView
 						x:Name="PlotView_SLS_Stresess" />
-					<Button
+                    <Button
 						x:Name="button_SaveToPDF_SLS_Stresses"
 						Content="Save To PDF"
 						HorizontalAlignment="Left"
@@ -1634,8 +1634,8 @@
 						VerticalAlignment="Bottom"
 						Width="75"
 						Opacity="0.5" />
-				</Grid>
-			</TabItem>
-		</TabControl>
-	</Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>
