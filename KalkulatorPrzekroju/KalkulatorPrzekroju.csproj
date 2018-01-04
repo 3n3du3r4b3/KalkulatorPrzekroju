@@ -67,18 +67,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CasePoint.cs" />
+    <Compile Include="CircleSection.cs" />
     <Compile Include="CreepCoefficient.cs" />
     <Compile Include="MainPlotView.cs" />
     <Compile Include="MyColor.cs" />
+    <Compile Include="RectangleSection.cs" />
     <Compile Include="SavedFile.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="MySettings.cs" />
-    <Compile Include="SLS.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Steel.cs" />
     <Compile Include="Stirrups.cs" />
     <Compile Include="StressState.cs" />
-    <Compile Include="ULS.cs" />
     <Compile Include="CreepWindow.xaml.cs">
       <DependentUpon>CreepWindow.xaml</DependentUpon>
     </Compile>
@@ -116,7 +116,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model_ULS_MN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

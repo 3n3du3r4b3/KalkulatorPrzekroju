@@ -26,7 +26,7 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Stal zbrojeniowa strzemion
         /// </summary>
-        public Steel currentSteel { private set; get; }
+        public Steel CurrentSteel { private set; get; }
         /// <summary>
         /// Rozstaw podłużny strzemion w mm
         /// </summary>
@@ -49,7 +49,7 @@ namespace KalkulatorPrzekroju
             Legs = legs;
             Fi = fi;
             Asw = Math.PI * (Fi / 2) * (Fi / 2) * Legs;
-            currentSteel = steel;
+            CurrentSteel = steel;
             Swd = s;
             Alfa = alfa;
         }
@@ -59,7 +59,7 @@ namespace KalkulatorPrzekroju
             Stirrups other = obj as Stirrups;
             if (this.Legs == other.Legs &&
                 this.Fi == other.Fi &&
-                Equals(this.currentSteel, other.currentSteel) &&
+                Equals(this.CurrentSteel, other.CurrentSteel) &&
                 this.Swd == other.Swd &&
                 this.Alfa == other.Alfa)
             {
