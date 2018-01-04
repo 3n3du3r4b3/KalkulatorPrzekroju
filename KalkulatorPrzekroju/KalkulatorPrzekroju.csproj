@@ -116,7 +116,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model_ULS_MN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

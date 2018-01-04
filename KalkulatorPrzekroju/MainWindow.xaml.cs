@@ -59,7 +59,7 @@ namespace KalkulatorPrzekroju
 
         string format = "0.##";
         string thisFile = "";
-        string defaultTitle = "Concrete Rectangular Section Designer CRSD";
+        string defaultTitle = "Concrete Regular Section Designer CRSD";
         string defaultExt = "CRSD files (*.crsd)|*.crdsd|All files (*.*)|*.*";
 
         public MainWindow()
@@ -85,6 +85,8 @@ namespace KalkulatorPrzekroju
                 comboBox_diameter_As2_2.Items.Add(item);
                 comboBox_diameter_AsStir_1.Items.Add(item);
                 comboBox_diameter_AsStir_2.Items.Add(item);
+                comboBox_diameter_Circ_1.Items.Add(item);
+                comboBox_diameter_Circ_2.Items.Add(item);
             }
             comboBox_diameter_As1_1.SelectedIndex = 4;
             comboBox_diameter_As2_1.SelectedIndex = 4;
@@ -92,6 +94,8 @@ namespace KalkulatorPrzekroju
             comboBox_diameter_As2_2.SelectedIndex = 4;
             comboBox_diameter_AsStir_1.SelectedIndex = 4;
             comboBox_diameter_AsStir_2.SelectedIndex = 4;
+            comboBox_diameter_Circ_1.SelectedIndex = 4;
+            comboBox_diameter_Circ_2.SelectedIndex = 4;
 
             comboBox_As1_spac_no_1.Items.Add("spacing");
             comboBox_As1_spac_no_1.Items.Add("no of bars");
@@ -140,7 +144,8 @@ namespace KalkulatorPrzekroju
                     string line;
                     while ((line = input.ReadLine()) != null)
                     {
-                        Double.TryParse(line, out double diameter);
+                    	double diameter;
+                        Double.TryParse(line, out diameter);
                         lista.Add(diameter);
                     }
                 }
@@ -156,7 +161,7 @@ namespace KalkulatorPrzekroju
         }
 
 
-        /// OPROGRAMOWANIE KONTROLEK
+        // OPROGRAMOWANIE KONTROLEK
         private void ComboBox_As1_spac_no_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBox_As1_spac_no_1.SelectedIndex == 0)
@@ -208,18 +213,48 @@ namespace KalkulatorPrzekroju
             }
             comboBox_As1_spac_no_2.SelectedIndex = comboBox_As2_spac_no_2.SelectedIndex;
         }
-
+		        
+		private void radioBut_RectCirc_Checked(object sender, RoutedEventArgs e)
+		{
+			if (radioBut_Circular_sec1.IsChecked == true) {
+				grid_Geom_Circ1.Visibility = Visibility.Visible;
+				grid_Geom_Rect1.Visibility = Visibility.Hidden;
+				grid_Reo_Circ1.Visibility = Visibility.Visible;
+				grid_Reo_Rect1.Visibility = Visibility.Hidden;
+			} else if (radioBut_Rectangle_sec1.IsChecked == true) {
+				grid_Geom_Circ1.Visibility = Visibility.Hidden;
+				grid_Geom_Rect1.Visibility = Visibility.Visible;
+				grid_Reo_Circ1.Visibility = Visibility.Hidden;
+				grid_Reo_Rect1.Visibility = Visibility.Visible;
+			} 
+			
+			if (radioBut_Circular_sec2.IsChecked == true) {
+				grid_Geom_Circ2.Visibility = Visibility.Visible;
+				grid_Geom_Rect2.Visibility = Visibility.Hidden;
+				grid_Reo_Circ2.Visibility = Visibility.Visible;
+				grid_Reo_Rect2.Visibility = Visibility.Hidden;
+			} else if (radioBut_Rectangle_sec2.IsChecked == true) {
+				grid_Geom_Circ2.Visibility = Visibility.Hidden;
+				grid_Geom_Rect2.Visibility = Visibility.Visible;
+				grid_Reo_Circ2.Visibility = Visibility.Hidden;
+				grid_Reo_Rect2.Visibility = Visibility.Visible;
+			}
+			ShowToUpdate();
+		}
+		
         //oprogramowanie menu
         private void MenuItemSettingsFactors_Click(object sender, RoutedEventArgs e)
         {
             WindowFactors settingsWindow = new WindowFactors();
             settingsWindow.Show(wspolczynniki);
+            button_UpdateGraph.IsEnabled = true;
         }
 
         private void MenuItemSettingsDisplay_Click(object sender, RoutedEventArgs e)
         {
             Window_DisplaySet displaySettingsWindow = new Window_DisplaySet(ustawienia);
             displaySettingsWindow.Show();
+            button_UpdateGraph.IsEnabled = true;
         }
 
         private void MenuItem_Close_Click(object sender, RoutedEventArgs e)
@@ -255,6 +290,7 @@ namespace KalkulatorPrzekroju
             {
                 Filter = defaultExt
             };
+            string newFile="";
             if (saveFileDialog1.ShowDialog() == true)
             {
                 SavedFile instance = new SavedFile();
@@ -264,11 +300,12 @@ namespace KalkulatorPrzekroju
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     formatter.Serialize(output, instance);
-                    this.Title = defaultTitle + " (" + saveFileDialog1.FileName + ")";
                 }
                 thisInstance = instance;
+                newFile = saveFileDialog1.FileName;
                 ShowToUpdate();
             }
+            this.Title = defaultTitle + " (" + newFile + ")";
             MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
@@ -303,203 +340,31 @@ namespace KalkulatorPrzekroju
                 thisInstance = instance;
             }
         }
-
-        ///kontrola wprowadzania danych przez uzytkownika
-        private void TextBox_width_1_LostFocus(object sender, RoutedEventArgs e)
+		//koniec oprogramowanie menu
+		
+        //kontrola wprowadzania danych przez uzytkownika
+        private void TextBox_ToDouble_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tb = textBox_width_1;
-            Double.TryParse(tb.Text, out double input);
+        	TextBox tb = sender as TextBox;
+        	double input;
+            Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
         }
-
-        private void TextBox_height_1_LostFocus(object sender, RoutedEventArgs e)
+        
+        private void TextBox_ToInt_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tb = textBox_height_1;
-            Double.TryParse(tb.Text, out double input);
+        	TextBox tb = sender as TextBox;
+        	int input;
+            Int32.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
-        }
-
-        private void TextBox_cover_As1_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_cover_As1_1;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_cover_As2_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_cover_As2_1;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_spac_no_As1_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_spac_no_As1_1;
-            if (comboBox_As1_spac_no_1.SelectedIndex == 0)
-            {
-                Double.TryParse(tb.Text, out double input);
-                tb.Text = input.ToString(format);
-            }
-            else if (comboBox_As1_spac_no_1.SelectedIndex == 1)
-            {
-                Int32.TryParse(tb.Text, out int input);
-                tb.Text = input.ToString(format);
-            }
-
-            ShowToUpdate();
-        }
-
-        private void TextBox_spac_no_As2_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_spac_no_As2_1;
-            if (comboBox_As2_spac_no_1.SelectedIndex == 0)
-            {
-                Double.TryParse(tb.Text, out double input);
-                tb.Text = input.ToString(format);
-            }
-            else if (comboBox_As2_spac_no_1.SelectedIndex == 1)
-            {
-                Int32.TryParse(tb.Text, out int input);
-                tb.Text = input.ToString(format);
-            }
-
-            ShowToUpdate();
-        }
-
-        private void TextBox_width_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_width_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_height_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_height_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_cover_As1_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_cover_As1_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_cover_As2_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_cover_As2_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_spac_no_As1_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_spac_no_As1_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_spac_no_As2_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_spac_no_As2_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_legs_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_legs_2;
-            Int32.TryParse(tb.Text, out int input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_stir_spacing_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_stir_spacing_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_stir_angle_2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_stir_angle_2;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_legs_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_legs_1;
-            Int32.TryParse(tb.Text, out int input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_stir_spacing_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_stir_spacing_1;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_stir_angle_1_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_stir_angle_1;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-            ShowToUpdate();
-        }
-
-        private void TextBox_RH_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_RH;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-        }
-
-        private void TextBox_u_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_u;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-        }
-
-        private void TextBox_Cst_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_Cst;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
-        }
-
-        private void TextBox_Cse_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_Cse;
-            Double.TryParse(tb.Text, out double input);
-            tb.Text = input.ToString(format);
         }
 
         private void ListBox_LostFocus(object sender, RoutedEventArgs e)
         {
             ShowToUpdate();
         }
-
 
         private void DataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -542,32 +407,12 @@ namespace KalkulatorPrzekroju
 
         private void Button_Creep1_Click(object sender, RoutedEventArgs e)
         {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
-            {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section1 as RectangleSection, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
-            }
-            CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr, day);
+
         }
 
         private void Button_Creep2_Click(object sender, RoutedEventArgs e)
         {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
-            {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(section2 as RectangleSection, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), 0);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
-            }
-            CreepWindow crWindow = new CreepWindow();
-            crWindow.Show(cr, day);
+
         }
 
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
@@ -657,89 +502,99 @@ namespace KalkulatorPrzekroju
                 PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
             }
         }
-
         // KONIEC OPROGRAMOWANIA KONTROLEK
+        
         private Section CreateSection(int i)
         {
-            Section section;
-            if (i == 1)
-            {
-                if (comboBox_As1_spac_no_1.Text == "spacing")
-                {
-                    section = new RectangleSection(
-                       new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
-                       new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
-                       Double.Parse(textBox_width_1.Text),
-                       Double.Parse(textBox_height_1.Text),
-                       Double.Parse(comboBox_diameter_As1_1.Text),
-                       Double.Parse(textBox_spac_no_As1_1.Text),
-                       Double.Parse(textBox_cover_As1_1.Text),
-                       Double.Parse(comboBox_diameter_As2_1.Text),
-                       Double.Parse(textBox_spac_no_As2_1.Text),
-                       Double.Parse(textBox_cover_As2_1.Text),
-                       CreateStirrups(1)
-                       );
-                }
-                else if (comboBox_As1_spac_no_1.Text == "no of bars")
-                {
-                    section = new RectangleSection(
-                       new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
-                       new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
-                       Double.Parse(textBox_width_1.Text),
-                       Double.Parse(textBox_height_1.Text),
-                       Double.Parse(comboBox_diameter_As1_1.Text),
-                       Int32.Parse(textBox_spac_no_As1_1.Text),
-                       Double.Parse(textBox_cover_As1_1.Text),
-                       Double.Parse(comboBox_diameter_As2_1.Text),
-                       Int32.Parse(textBox_spac_no_As2_1.Text),
-                       Double.Parse(textBox_cover_As2_1.Text),
-                       CreateStirrups(1)
-                       );
-                }
-                else
-                    section = null;
-            }
-            else if (i == 2)
-            {
-                if (comboBox_As1_spac_no_2.Text == "spacing")
-                {
-                    section = new RectangleSection(
-                       new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
-                       new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
-                       Double.Parse(textBox_width_2.Text),
-                       Double.Parse(textBox_height_2.Text),
-                       Double.Parse(comboBox_diameter_As1_2.Text),
-                       Double.Parse(textBox_spac_no_As1_2.Text),
-                       Double.Parse(textBox_cover_As1_2.Text),
-                       Double.Parse(comboBox_diameter_As2_2.Text),
-                       Double.Parse(textBox_spac_no_As2_2.Text),
-                       Double.Parse(textBox_cover_As2_2.Text),
-                       CreateStirrups(2)
-                       );
-                }
-                else if (comboBox_As1_spac_no_2.Text == "no of bars")
-                {
-                    section = new RectangleSection(
-                       new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
-                       new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
-                       Double.Parse(textBox_width_2.Text),
-                       Double.Parse(textBox_height_2.Text),
-                       Double.Parse(comboBox_diameter_As1_2.Text),
-                       Int32.Parse(textBox_spac_no_As1_2.Text),
-                       Double.Parse(textBox_cover_As1_2.Text),
-                       Double.Parse(comboBox_diameter_As2_2.Text),
-                       Int32.Parse(textBox_spac_no_As2_2.Text),
-                       Double.Parse(textBox_cover_As2_2.Text),
-                       CreateStirrups(2)
-                       );
-                }
-                else
-                    section = null;
-            }
-            else
-                section = null;
-            return section;
-        }
+			Section section;
+			if (i == 1) {
+				if (radioBut_Rectangle_sec1.IsChecked == true) {
+					if (comboBox_As1_spac_no_1.Text == "spacing") {
+						section = new RectangleSection(
+							new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+							new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+							Double.Parse(textBox_width_1.Text),
+							Double.Parse(textBox_height_1.Text),
+							Double.Parse(comboBox_diameter_As1_1.Text),
+							Double.Parse(textBox_spac_no_As1_1.Text),
+							Double.Parse(textBox_cover_As1_1.Text),
+							Double.Parse(comboBox_diameter_As2_1.Text),
+							Double.Parse(textBox_spac_no_As2_1.Text),
+							Double.Parse(textBox_cover_As2_1.Text),
+							CreateStirrups(1)
+						);
+					} else if (comboBox_As1_spac_no_1.Text == "no of bars") {
+						section = new RectangleSection(
+							new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+							new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+							Double.Parse(textBox_width_1.Text),
+							Double.Parse(textBox_height_1.Text),
+							Double.Parse(comboBox_diameter_As1_1.Text),
+							Int32.Parse(textBox_spac_no_As1_1.Text),
+							Double.Parse(textBox_cover_As1_1.Text),
+							Double.Parse(comboBox_diameter_As2_1.Text),
+							Int32.Parse(textBox_spac_no_As2_1.Text),
+							Double.Parse(textBox_cover_As2_1.Text),
+							CreateStirrups(1)
+						);
+					} else
+						section = null;
+				} else if (radioBut_Circular_sec1.IsChecked == true) {
+					section = new CircleSection(
+						new Concrete((Concrete.classes)comboBox_Concrete_1.SelectedIndex),
+						new Steel((Steel.classes)comboBox_Steel_1.SelectedIndex),
+						Double.Parse(textBox_diameter_1.Text),
+						Double.Parse(comboBox_diameter_Circ_1.Text),
+						Double.Parse(textBox_cover_Circ_1.Text),
+						Int32.Parse(textBox_no_Circ_1.Text));
+				} else
+						section = null;
+			} else if (i == 2) {
+				if (radioBut_Rectangle_sec2.IsChecked == true) {
+					if (comboBox_As1_spac_no_2.Text == "spacing") {
+						section = new RectangleSection(
+							new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+							new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+							Double.Parse(textBox_width_2.Text),
+							Double.Parse(textBox_height_2.Text),
+							Double.Parse(comboBox_diameter_As1_2.Text),
+							Double.Parse(textBox_spac_no_As1_2.Text),
+							Double.Parse(textBox_cover_As1_2.Text),
+							Double.Parse(comboBox_diameter_As2_2.Text),
+							Double.Parse(textBox_spac_no_As2_2.Text),
+							Double.Parse(textBox_cover_As2_2.Text),
+							CreateStirrups(2)
+						);
+					} else if (comboBox_As1_spac_no_2.Text == "no of bars") {
+						section = new RectangleSection(
+							new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+							new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+							Double.Parse(textBox_width_2.Text),
+							Double.Parse(textBox_height_2.Text),
+							Double.Parse(comboBox_diameter_As1_2.Text),
+							Int32.Parse(textBox_spac_no_As1_2.Text),
+							Double.Parse(textBox_cover_As1_2.Text),
+							Double.Parse(comboBox_diameter_As2_2.Text),
+							Int32.Parse(textBox_spac_no_As2_2.Text),
+							Double.Parse(textBox_cover_As2_2.Text),
+							CreateStirrups(2)
+						);
+					} else
+						section = null;
+				} else if (radioBut_Circular_sec2.IsChecked == true) {
+					section = new CircleSection(
+						new Concrete((Concrete.classes)comboBox_Concrete_2.SelectedIndex),
+						new Steel((Steel.classes)comboBox_Steel_2.SelectedIndex),
+						Double.Parse(textBox_diameter_2.Text),
+						Double.Parse(comboBox_diameter_Circ_2.Text),
+						Double.Parse(textBox_cover_Circ_2.Text),
+						Int32.Parse(textBox_no_Circ_2.Text));
+				} else
+						section = null;
+			} else
+				section = null;
+			return section;
+		}
 
         private Stirrups CreateStirrups(int i)
         {
@@ -1105,23 +960,24 @@ namespace KalkulatorPrzekroju
 
         private bool GraphIsUpToDate()
         {
-            tempSection1 = CreateSection(1);
-            tempSection2 = CreateSection(2);
-            tempStir1 = CreateStirrups(1);
-            tempStir2 = CreateStirrups(2);
-            
-            if (Equals(tempSection1, section1) &&
-                Equals(tempSection2, section2) &&
-                Equals(tempStir1, stirrups1) &&
-                Equals(tempStir2, stirrups2))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+			tempSection1 = CreateSection(1);
+			tempSection2 = CreateSection(2);
+			tempStir1 = CreateStirrups(1);
+			tempStir2 = CreateStirrups(2);
+			try {
+				if (Equals(tempSection1, section1) &&
+				    Equals(tempSection2, section2) &&
+				    Equals(tempStir1, stirrups1) &&
+				    Equals(tempStir2, stirrups2)) {
+					return true;
+				}
+				return false;
+				
+			} catch (Exception) {
+            	
+				return false;
+			}
+		}
 
         private void ShowToUpdate()
         {
@@ -1132,6 +988,7 @@ namespace KalkulatorPrzekroju
 
             if (thisInstance != null)
             {
+            	try {
                 if (Equals(thisInstance.section1, tempSection1) &&
                     Equals(thisInstance.section2, tempSection2) &&
                     Equals(thisInstance.stirrups1, tempStir1) &&
@@ -1146,7 +1003,12 @@ namespace KalkulatorPrzekroju
                 }
                 else
                     Title = defaultTitle + " (" + thisFile + ")" + " *";
+            		
+            	} catch (Exception) {
+            		Title = defaultTitle + " (" + thisFile + ")" + " *";
+            	}
             }
         }
+
     }
 }

@@ -52,7 +52,7 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        public override double AcTotal { get { return 2 * Math.PI * Math.Pow(D / 2, 2); } }
+        public override double AcTotal { get { return Math.PI * Math.Pow(D / 2, 2); } }
 
         public override double AsTotal { get { return NoB * Ab; } }
 
@@ -311,8 +311,8 @@ namespace KalkulatorPrzekroju
             //obliczenia parametrów geometryczny dla przekroju okragłego
             double R = D / 2;		//promień przekroju
             double rAs = R - a;	//promień okręgu po którym rozmieszczone są pręty
-            double[] di = new double[noB]; //tablica z odległościami prętów od górnej krawędzi przekroju (ściskanej)
-            bool[] ki = new bool[noB]; //tablica okreslajaca czy dany pret jest rozciagany (true), ściskany(false)
+            double[] di; //tablica z odległościami prętów od górnej krawędzi przekroju (ściskanej)
+            bool[] ki; //tablica okreslajaca czy dany pret jest rozciagany (true), ściskany(false)
 
             di = RzednePretowUpEdge();
 
@@ -320,8 +320,9 @@ namespace KalkulatorPrzekroju
             double PAs1 = 0;
             double PAs2 = 0;
             double x, range;
-            int k = 1000;
+            int k = 100;
             double NRd = 0;
+            //d = di.Max();
 
             NEd = NEd / 1000;
 
@@ -335,25 +336,27 @@ namespace KalkulatorPrzekroju
                 double Asd = 0; //moment statyczny zbrojenia rozciaganego wzgledem gornej krawedzi przekroju
 
                 ki = CzyPretRozciagany(x);
-
+                
                 for (int i = 0; i < noB; i++)
                 {
                     Asd += Ab * Convert.ToUInt32(ki[i]) * di[i];
                     As += Ab * Convert.ToUInt32(ki[i]);
                 }
-
+                
                 if (As == 0)
                 {
                     d = D;
                 }
                 else
-                    d = Asd / As; //wysokość uzyteczna znana
-
+                    d = Asd / As; //wysokość uzyteczna znana 
+                
                 range = Math.Min(x, D);
                 for (int i = 0; i < k; i++)
                 {
                     double ri = d - range / k * (i + 0.5);
-                    Pc += CurrentConcrete.SigmaC(fcd, EpsilonR(ri, x, d)) * DlugoscOK(d - ri) * range / k;
+                    double riT = d - range / k * (i);
+                    double riB = d - range / k * (i + 1);
+                    Pc += CurrentConcrete.SigmaC(fcd, EpsilonR(ri, x, d)) * (DlugoscOK(d - riT) + DlugoscOK(d - riB)) / 2 * range / k;
                 }
 
                 double[] PAsi = new double[noB];
@@ -383,7 +386,7 @@ namespace KalkulatorPrzekroju
                     x1 = x;
                 }
 
-            } while (Math.Abs(NEd - NRd) > eps);
+            } while (Math.Abs(x1 - x2) > eps);
 
             double Pcz = 0;
             for (int i = 0; i < k; i++)

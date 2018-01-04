@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace KalkulatorPrzekroju
 {
+	[Serializable]
     class RectangleSection : Section
     {
         /// <summary>
@@ -59,7 +60,7 @@ namespace KalkulatorPrzekroju
         
         public override double HTotal { get {return H;}}
 
-        public override int NoB { get => 2; protected set { } }
+        public override int NoB { get {return 2;} protected set { } }
 
         public override double[] Asi { get { return new double[] { As2 / Dimfactor / Dimfactor, As1 / Dimfactor / Dimfactor }; } }
 

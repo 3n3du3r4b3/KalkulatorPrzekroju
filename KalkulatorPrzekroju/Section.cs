@@ -207,7 +207,7 @@ namespace KalkulatorPrzekroju
                 lambda = 0.8 - ((fck - 50) / 400);
             }
 
-            return (((AcTotal * CurrentConcrete.fck / gammaC * alfaCC) / Forcefactor) + AsTotal * CurrentSteel.SigmaS(epsilon, fyd) / Forcefactor);
+            return (((AcTotal * CurrentConcrete.fck / gammaC * alfaCC) / Forcefactor) + (AsTotal * CurrentSteel.SigmaS(epsilon, fyd)) / Forcefactor);
         }
 
         /// <summary>Funkcja zwraca wartość momentu krytycznego dla siły NEd</summary>
@@ -1091,7 +1091,6 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interkacji MEk / NEk
         /// </summary>
-        /// <param name="section">Przekrój obliczany</param>
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <param name="rysaGraniczna">Rysa graniczna w mm</param>
 		/// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC)</param>
