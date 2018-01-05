@@ -112,7 +112,7 @@ namespace KalkulatorPrzekroju
         /// <returns>Pole powierzchni odcinka koła w m2</returns>
         double PoleOK(double x)
         {
-            double R = D / 2 / 1000;
+            double R = D / 2 / Dimfactor;
             double alfa = 2.0 * Math.Acos((R - x) / R);
             double pole = R * R / 2 * (alfa - Math.Sin(alfa));
             return pole;
@@ -125,7 +125,7 @@ namespace KalkulatorPrzekroju
         /// <returns>Długość cięciwy na wysokości x od góry przekroju w m</returns>
         double DlugoscOK(double x)
         {
-            double R = D / 2 / 1000;
+            double R = D / 2 / Dimfactor;
             double alfa = 2.0 * Math.Acos((R - x) / R);
             double dlugosc = 2 * R * Math.Sin(alfa / 2);
             return dlugosc;
@@ -138,7 +138,7 @@ namespace KalkulatorPrzekroju
         /// <returns>Odległość środka ciężkosci odcinka koła od środka koła w m</returns>
         double SrCzOK(double x)
         {
-            double R = D / 2 / 1000;
+            double R = D / 2 / Dimfactor;
             if (x <= 0)
             {
                 return R;
@@ -159,7 +159,7 @@ namespace KalkulatorPrzekroju
             {
                 return 0;
             }
-            double R = D / 2 / 1000;
+            double R = D / 2 / Dimfactor;
             double alfa = 2 * Math.Acos((R - x) / R);
             double Iy = R * R * R * R / 16 * (2 * alfa - Math.Sin(2 * alfa)) - R * R * R * R / 9 * Math.Pow(1 - Math.Cos(alfa), 3) / (alfa - Math.Sin(alfa));
             return Iy;
@@ -171,8 +171,8 @@ namespace KalkulatorPrzekroju
         /// <returns>Tablica z rzędnymi prętów od środka koła w m</returns>
         double[] RzednePretowCent()
         {
-            double R = D / 2 / 1000;
-            double rAs = R - A / 1000;
+            double R = D / 2 / Dimfactor;
+            double rAs = R - A / Dimfactor;
             double[] di = new double[NoB];
             for (int i = 0; i < NoB; i++)
             {
@@ -184,13 +184,13 @@ namespace KalkulatorPrzekroju
 
         protected override double[] RzednePretowUpEdge()
         {
-            double R = D / 2 / 1000;
-            double rAs = R - A / 1000;
+            double R = D / 2 / Dimfactor;
+            double rAs = R - A / Dimfactor;
             double[] di = new double[NoB];
             for (int i = 0; i < NoB; i++)
             {
                 double beta = 2.0 * Math.PI / NoB * ((double)(NoB % 2 + 1) / 2 + i);
-                di[i] = A / 1000 + (1 - Math.Cos(beta)) * rAs;
+                di[i] = A / Dimfactor + (1 - Math.Cos(beta)) * rAs;
             }
             return di;
         }
@@ -202,10 +202,10 @@ namespace KalkulatorPrzekroju
         double[] MomBezwPretow()
         {
             double[] di = RzednePretowCent();
-            double fi = FiB / 1000;
-            double A = Ab / 1000 / 1000;
-            double R = D / 2 / 1000;
-            double rAs = R - this.A / 1000;
+            double fi = FiB / Dimfactor;
+            double A = Ab / Dimfactor / Dimfactor;
+            double R = D / 2 / Dimfactor;
+            double rAs = R - this.A / Dimfactor;
             double[] Iyi = new double[NoB];
             for (int i = 0; i < NoB; i++)
             {
@@ -220,8 +220,8 @@ namespace KalkulatorPrzekroju
             double Es = CurrentSteel.Es;
             double fi = this.Fi;
             double alfa = (1 + fi) * Es / Ec;
-            double R = D / 2 / 1000;
-            double Ap = Ab / 1000 / 1000;
+            double R = D / 2 / Dimfactor;
+            double Ap = Ab / Dimfactor / Dimfactor;
             double PoleBet = PoleOK(x);
             double e = SrCzOK(x);
             double MSbet = PoleBet * (R - e);
@@ -244,11 +244,11 @@ namespace KalkulatorPrzekroju
             double fi = this.Fi;
             double alfa = (1 + fi) * Es / Ec;
             double sc = SrCiezkPrzekr(x);
-            double R = D / 2 / 1000;
-            double Ap = Ab / 1000 / 1000;
+            double R = D / 2 / Dimfactor;
+            double Ap = Ab / Dimfactor / Dimfactor;
             double MomBet = MomBezwOK(x) + PoleOK(x) * Math.Pow(sc - (R - SrCzOK(x)), 2);
             double MomZbr = 0;
-            double MomPret = Math.PI * Math.Pow(FiB / 1000 / 2, 4) / 4;
+            double MomPret = Math.PI * Math.Pow(FiB / Dimfactor / 2, 4) / 4;
             double[] di = RzednePretowCent();
             for (int i = 0; i < NoB; i++)
             {
@@ -284,6 +284,50 @@ namespace KalkulatorPrzekroju
             double hcEff = Math.Min(hcEff1, hcEff2);
             return PoleOK(hcEff);
         }
+        
+        /// <summary>
+        /// Zwraca grubość pierścienia zbrojenia zastępczego w mm
+        /// </summary>
+        /// <returns>Grubość pierścienia zbrojenia zastępczego w mm</returns>
+        protected double ULS_ZbrZastGrubosc(){
+        	return AsTotal/(2*Math.PI*(D/2-A));
+        }
+        
+        /// <summary>
+        /// Zwraca wysokość użyteczną przekroju - odległość środka ciężkości zbrojenia rozciąganego od krawędzi ściskanej przekroju w m
+        /// </summary>
+        /// <param name="x">Wysokosc strefy sciskanej w m</param>
+        /// <returns>Wysokość użyteczna przekroju - odległość środka ciężkości zbrojenia rozciąganego od krawędzi ściskanej przekroju w m</returns>
+        protected double ULS_WysUzyteczna(double x){
+        	double R = D/Dimfactor/2;
+        	double alfaX = 2.0 * Math.Acos((R - x) / R);
+        	double alfa = 2*Math.PI - alfaX;
+        	double W = HTotal/Dimfactor - x;
+        	double gr = ULS_ZbrZastGrubosc()/Dimfactor;
+        	double rZewn = D/Dimfactor/2 - A/Dimfactor + gr/2;
+        	double rWewn = D/Dimfactor/2 - A/Dimfactor - gr/2;
+        	double alfaZewn, alfaWewn;
+        	
+        	if (x <= R-rZewn) {
+        		alfaZewn = 2*Math.PI;
+        	} else {
+        		alfaZewn = 2*Math.PI - 2.0 * Math.Acos((rZewn - (x - (R-rZewn))) / rZewn);
+        	}
+        	
+        	if (x <= R-rWewn) {
+        		alfaWewn = 2*Math.PI;
+        	} else {
+        		alfaWewn = 2*Math.PI - 2.0 * Math.Acos((rWewn - (x - (R-rWewn))) / rWewn);
+        	}
+        	
+        	double PoleZewn = Math.Pow(rZewn,2)/2*(alfaZewn-Math.Sin(alfaZewn));
+        	double PoleWewn = Math.Pow(rWewn,2)/2*(alfaWewn-Math.Sin(alfaWewn));
+        	double eZewn = R - 4.0/3*rZewn*Math.Pow(Math.Sin(alfaZewn/2),3)/(alfaZewn-Math.Sin(alfaZewn)); //od góry przekroju
+        	double eWewn = R - 4.0/3*rWewn*Math.Pow(Math.Sin(alfaWewn/2),3)/(alfaWewn-Math.Sin(alfaWewn));	//od góry przekroju
+        	double Ms = PoleZewn*eZewn - PoleWewn*eWewn;
+        	double As = PoleZewn-PoleWewn;
+        	return Ms/As;
+        }
 
         public override double ULS_MomentKrytyczny(double NEd, DesignSituation situation)
         {
@@ -300,10 +344,10 @@ namespace KalkulatorPrzekroju
             }
             double alfaCC = 0.85;
 
-            double D = this.D / 1000;        // w metrach
-            double a = A / 1000;      // w metrach
-            double Ab = this.Ab / 1000000;     // w metrach kwadratowych
-            double fiB = FiB / 1000;
+            double D = this.D / Dimfactor;        // w metrach
+            double a = A / Dimfactor;      // w metrach
+            double Ab = this.Ab / Dimfactor / Dimfactor;     // w metrach kwadratowych
+            double fiB = FiB / Dimfactor;
             int noB = NoB;
 
             double fyk = CurrentSteel.fyk;          // w MPa
@@ -339,7 +383,7 @@ namespace KalkulatorPrzekroju
             double NRd = 0;
             //d = di.Max();
 
-            NEd = NEd / 1000;
+            NEd = NEd / Forcefactor;
 
             do
             {

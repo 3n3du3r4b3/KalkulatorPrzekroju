@@ -68,7 +68,7 @@ namespace KalkulatorPrzekroju
         /// <param name="r">Odległość od środka ciężkości zbrojenia rozciąganego do zadanego punktu</param>
         /// <param name="x">Wysokość strefy ściskanej</param>
         /// <param name="d">Wysokość użyteczna przekroju</param>
-        /// <returns>Wartość odkształcenia na poziomie r od środka ciężkości zbrojenia rozciąganego</returns>
+        /// <returns>Wartość odkształcenia w promilach na poziomie r od środka ciężkości zbrojenia rozciąganego</returns>
         protected double EpsilonR(double r, double x, double d)
         {
             return CurrentConcrete.epsilon_cu2 * (r + x - d) / x;
