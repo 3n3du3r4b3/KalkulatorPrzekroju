@@ -405,6 +405,18 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
+        private void Button_Preview_Click(object sender, RoutedEventArgs e)
+        {
+            section1 = CreateSection(1);
+            section2 = CreateSection(2);
+            stirrups1 = CreateStirrups(1);
+            stirrups2 = CreateStirrups(2);
+
+            CalcCurves();
+
+            Preview window = new Preview();
+        }
+
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;

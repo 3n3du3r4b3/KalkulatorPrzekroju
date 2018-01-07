@@ -71,6 +71,9 @@
     <Compile Include="CreepCoefficient.cs" />
     <Compile Include="MainPlotView.cs" />
     <Compile Include="MyColor.cs" />
+    <Compile Include="Preview.xaml.cs">
+      <DependentUpon>Preview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RectangleSection.cs" />
     <Compile Include="SavedFile.cs" />
     <Compile Include="Section.cs" />
@@ -103,6 +106,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="CreepWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Preview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
