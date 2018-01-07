@@ -19,10 +19,13 @@ namespace KalkulatorPrzekroju
     /// </summary>
     public partial class Preview : Window
     {
-        public Preview()
+        public Preview(TabItem ind)
         {
+            string currentTab = ind.Header.ToString();
             InitializeComponent();
             this.Show();
+            if (currentTab == "Secton 1") { Console.WriteLine("Good"); }
+            else Console.WriteLine("Not Good");
         }
     }
 }

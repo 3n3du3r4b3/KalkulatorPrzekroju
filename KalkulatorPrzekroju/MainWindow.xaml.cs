@@ -414,7 +414,9 @@ namespace KalkulatorPrzekroju
 
             CalcCurves();
 
-            Preview window = new Preview();
+            TabItem ti = tabControl1.SelectedItem as TabItem;
+
+            Preview window = new Preview(ti);
         }
 
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
