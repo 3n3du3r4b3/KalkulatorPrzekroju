@@ -8,19 +8,6 @@ namespace KalkulatorPrzekroju
 {
     static class CreepCoefficient
     {
-        // zgodnie z EN 1992-1-1 Aneks B
-        /*public double RH { get; private set; }
-        public double Ac { get; private set; }
-        public double u { get; private set; }
-        public double h0 { get; private set; }
-        public double fcm { get; private set; }
-        public double t0 { get; private set; }
-        public double fi0 { get; private set; }
-        public double beta_H { get; private set; }
-        public double beta_C { get; private set; }
-        public double fi_end { get; private set; }
-        public double tend { get; private set; }*/
-
         public static double CreepCoefficientCalc(double Acd, double fcmd, double RH, double u, double t00, double tend, double cem)
         {
             double t0 = cemt(t00,cem);

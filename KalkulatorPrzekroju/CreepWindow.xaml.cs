@@ -27,24 +27,65 @@ namespace KalkulatorPrzekroju
         double fcm;
         bool bridge;
         bool sfume;
-        double cem = 0;
-        //public Section section;
+        bool linear;
+        int divide = 10;
+        double cemcoeff;
+        List<CreepAtDay> creepResults = new List<CreepAtDay>();
 
         string format = "0.###";
-        string formatd = "0";
+
+        Dictionary<string, double> cem = new Dictionary<string, double>()
+        {
+            {"N",0},
+            {"R",1},
+            {"S",-1}
+        };
+
+        private class CreepAtDay
+        {
+            public double day { get; set; }
+            public double cr { get; set; }
+
+            public CreepAtDay(double Ac, double fcm, double RH, double u, double cst, double day, double cemcoeff)
+            {
+                this.day = day;
+                cr = CreepCoefficient.CreepCoefficientCalc(Ac, fcm, RH, u, cst, day, cemcoeff);
+            }
+        }
 
         public void Show(double Acd, double fcmd)
         {
-            this.Ac = Acd;
-            this.fcm = fcmd;
-            this.Show();
-            CoeffShow();
+            Ac = Acd;
+            fcm = fcmd;
+            comboBox_Cement.ItemsSource = cem;
+            Show();
         }
 
         public CreepWindow()
         {
             InitializeComponent();
+        }
 
+        private double[] DayCalc(int div, bool lin)
+        {
+            double[] days = new double[div+1];
+            double pow = Math.Pow((Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), (1/Convert.ToDouble(div)));
+            if (lin)
+            {
+                for (double i = 0; i <= divide; i++)
+                {
+                    days[Convert.ToInt32(i)] = Double.Parse(textBox_Cst.Text) + (i / divide) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
+                }
+            }
+            else
+            {
+                for (double i = 0; i <= divide; i++)
+                {
+                    days[Convert.ToInt32(i)] = Math.Pow(pow,i) + Double.Parse(textBox_Cst.Text) - ((Convert.ToDouble(div) - i)/Convert.ToDouble(div));
+                }
+            }
+
+            return days;
         }
 
         private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
@@ -79,52 +120,37 @@ namespace KalkulatorPrzekroju
             tb.Text = input.ToString(format);
         }
 
-        private void button_Creep_Click(object sender, RoutedEventArgs e)
+        private void textBox_Div_LostFocus(object sender, RoutedEventArgs e)
         {
-            //double[] crCoeff = { 40, 1, 100, 10000 };
-            double divide = 10;
-            double[] cr = new double[Convert.ToInt32(divide)];
-            double[] day = new double[Convert.ToInt32(divide)];
-            for (double i = 1; i <= divide; i++)
-            {
-                cr[Convert.ToInt32(i - 1)] = CreepCoefficient.CreepCoefficientCalc(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text)), cem);
-                day[Convert.ToInt32(i - 1)] = Double.Parse(textBox_Cst.Text) + ((i - 1) / (divide - 1)) * (Double.Parse(textBox_Cse.Text) - Double.Parse(textBox_Cst.Text));
-            }
+            TextBox tb = textBox_Div;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            divide = Int32.Parse(textBox_Div.Text);
         }
 
-        private void CoeffShow()
+        private void button_Creep_Click(object sender, RoutedEventArgs e)
         {
-            /*textBox_creep1.Text = cr[0].ToString(format);
-            textBox_creep2.Text = cr[1].ToString(format);
-            textBox_creep3.Text = cr[2].ToString(format);
-            textBox_creep4.Text = cr[3].ToString(format);
-            textBox_creep5.Text = cr[4].ToString(format);
-            textBox_creep6.Text = cr[5].ToString(format);
-            textBox_creep7.Text = cr[6].ToString(format);
-            textBox_creep8.Text = cr[7].ToString(format);
-            textBox_creep9.Text = cr[8].ToString(format);
-            textBox_creep10.Text = cr[9].ToString(format);
+            creepResults.Clear();
+            this.CreepResults.ItemsSource = null;
+            double[] day = DayCalc(divide,linear);
+            foreach (double i in day)
+            {
+                CreepAtDay temp = new CreepAtDay(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), i, cemcoeff);
+                creepResults.Add(temp);
+            }
+            this.CreepResults.ItemsSource = creepResults;
 
-            textBox_day1.Text = day[0].ToString(formatd);
-            textBox_day2.Text = day[1].ToString(formatd);
-            textBox_day3.Text = day[2].ToString(formatd);
-            textBox_day4.Text = day[3].ToString(formatd);
-            textBox_day5.Text = day[4].ToString(formatd);
-            textBox_day6.Text = day[5].ToString(formatd);
-            textBox_day7.Text = day[6].ToString(formatd);
-            textBox_day8.Text = day[7].ToString(formatd);
-            textBox_day9.Text = day[8].ToString(formatd);
-            textBox_day10.Text = day[9].ToString(formatd);*/
         }
 
         private void button_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void button_Save_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void radio_199211_Checked(object sender, RoutedEventArgs e)
@@ -135,6 +161,16 @@ namespace KalkulatorPrzekroju
         private void radio_19922_Checked(object sender, RoutedEventArgs e)
         {
             bridge = true;
+        }
+
+        private void radio_lin_Checked(object sender, RoutedEventArgs e)
+        {
+            linear = true;
+        }
+
+        private void radio_log_Checked(object sender, RoutedEventArgs e)
+        {
+            linear = false;
         }
 
         private void checkBox_sfume_Checked(object sender, RoutedEventArgs e)
@@ -149,9 +185,10 @@ namespace KalkulatorPrzekroju
 
         private void comboBox_Cement_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (comboBox_Cement.SelectedItem == "N") { cem = 0; }
-            else if (comboBox_Cement.SelectedItem == "R") { cem = 1; }
-            else cem = -1;
+            string key = comboBox_Cement.SelectedItem.ToString();
+            if (String.Compare(key, "N") == 0) { cemcoeff = 0; }
+            else if (String.Compare(key, "R") == 0) { cemcoeff = 1; }
+            else cemcoeff = -1;
         }
     }
 }

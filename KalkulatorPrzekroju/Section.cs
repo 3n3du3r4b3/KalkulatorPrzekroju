@@ -55,6 +55,10 @@ namespace KalkulatorPrzekroju
         /// </summary>
         public Stirrups MyStirrups { get; set; }
         /// <summary>
+        /// Współczynnik pełzania używany w SLS
+        /// </summary>
+        public double CreepCoefficient { get; set; }
+        /// <summary>
         /// Określa sytuację obliczeniową oraz dobiera współcznniki obliczeniowe dla wybranej sytuacji.
         /// </summary>
         public enum DesignSituation { Accidental, PersistentAndTransient }

@@ -6,49 +6,57 @@
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
         Title="Creep" Height="540" Width="600" WindowStyle="ToolWindow" MinWidth="600" MaxWidth="600" MaxHeight="570" MinHeight="570">
-    <Grid x:Name="grid_Creep" Background="#FFE5E5E5">
-            <GroupBox x:Name="groupBox_Creep" Header="Creep Parameters" Margin="10,5,10,0" Height="132" VerticalAlignment="Top">
+    <Grid x:Name="grid_Creep" Background="#FFE5E5E5" Margin="0,0,0,0">
+        <GroupBox x:Name="groupBox_Creep" Header="Creep Parameters" Margin="10,10,10,0" Height="127" VerticalAlignment="Top">
             <Grid>
-                <Label x:Name="labelRH" Content="RH: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="labelRH" Content="RH: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <TextBox x:Name="textBox_RH" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_RH_LostFocus" TabIndex="1" Text="40"/>
-                <Label x:Name="labelRH1" Content="%" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="labelu" Content="u: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="labelRH1" Content="%" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Height="26"/>
+                <Label x:Name="labelu" Content="u: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <TextBox x:Name="textBox_u" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_u_LostFocus" TabIndex="2" Text="1000"/>
-                    <Label x:Name="labelu1" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="labelCst" Content="Creep Start: " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="textBox_Cst" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cst_LostFocus" TabIndex="3" Text="3"/>
-                    <Label x:Name="label1_Copy34" Content="days" HorizontalAlignment="Left" Margin="179,41,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label2_Copy3" Content="Creep End: " HorizontalAlignment="Left" Margin="214,41,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="textBox_Cse" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cse_LostFocus" TabIndex="4" Text="10000"/>
-                    <Label x:Name="label1_Copy23" Content="days" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="labelu1" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top" Height="26"/>
+                <Label x:Name="labelCst" Content="Creep Start: " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Height="26"/>
+                <TextBox x:Name="textBox_Cst" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cst_LostFocus" TabIndex="3" Text="10"/>
+                <Label x:Name="label1_Copy34" Content="days" HorizontalAlignment="Left" Margin="179,41,0,0" VerticalAlignment="Top" Height="26"/>
+                <Label x:Name="label2_Copy3" Content="Creep End: " HorizontalAlignment="Left" Margin="214,41,0,0" VerticalAlignment="Top" Height="26"/>
+                <TextBox x:Name="textBox_Cse" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cse_LostFocus" TabIndex="4" Text="10000"/>
+                <Label x:Name="label1_Copy23" Content="days" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelCem" Content="Cement Type: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-                <StackPanel>
-                    <ComboBox x:Name="comboBox_Cement" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged">
-                        <ComboBoxItem Content="S" HorizontalAlignment="Left"></ComboBoxItem>
-                        <ComboBoxItem Content="N" HorizontalAlignment="Left" IsSelected="True"></ComboBoxItem>
-                        <ComboBoxItem Content="R" HorizontalAlignment="Left"></ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
+                <ComboBox x:Name="comboBox_Cement" ItemsSource="{Binding cem}" DisplayMemberPath="Key" SelectedValue="Key" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged"/>
                 <Label x:Name="label2_Copy4" Content="Use of silica-fume: " HorizontalAlignment="Left" Margin="214,72,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="label1_Copy234" HorizontalAlignment="Left" Margin="324,78,0,15" VerticalAlignment="Center" Checked="checkBox_sfume_Checked" Unchecked="checkBox_sfume_Unchecked"/>
+                <CheckBox x:Name="label1_Copy234" HorizontalAlignment="Left" Margin="324,78,0,6" VerticalAlignment="Center" Checked="checkBox_sfume_Checked" Unchecked="checkBox_sfume_Unchecked" IsEnabled="False"/>
             </Grid>
         </GroupBox>
-            <GroupBox x:Name="groupBox_CResults" Header="Results" Margin="10,137,322,0" Height="66" VerticalAlignment="Top" RenderTransformOrigin="0.522,0.876">
+        <GroupBox x:Name="groupBox_CResults" Header="Results" Margin="10,137,172,0" Height="66" VerticalAlignment="Top" RenderTransformOrigin="0.522,0.876">
+            <Grid Margin="-11,-11,11,-2">
+                <Button x:Name="button_Creep" Content="Calculate" HorizontalAlignment="Left" Margin="20,10,160,10" VerticalAlignment="Center" Width="91" Height="30" TabIndex="9" Click="button_Creep_Click"/>
+                <Label x:Name="label2_Copy5" Content="No of divisions: " HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center"/>
+                <TextBox x:Name="textBox_Div" HorizontalAlignment="Left" Height="23" Margin="220,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="75" TextAlignment="Center" LostFocus="textBox_Div_LostFocus" TabIndex="4" Text="10"/>
+                <RadioButton x:Name="radio_lin" GroupName="div" HorizontalAlignment="Left" Margin="310,10,0,10" VerticalAlignment="Top" Checked="radio_lin_Checked" IsChecked="True">linear</RadioButton>
+                <RadioButton x:Name="radio_log" GroupName="div" HorizontalAlignment="Left" Margin="310,0,-15,10" VerticalAlignment="Bottom" Checked="radio_log_Checked">logarithmic</RadioButton>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupBox_CCode" Header="Code" Margin="428,137,10,0" Height="66" VerticalAlignment="Top">
             <Grid>
-                <Button x:Name="button_Creep" Content="Calculate" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Width="100" Height="30" TabIndex="9" Click="button_Creep_Click"/>
-                </Grid>
-            </GroupBox>
-            <GroupBox x:Name="groupBox_CCode" Header="Code" Margin="278,137,10,0" Height="66" VerticalAlignment="Top">
-                <Grid>
-                    <RadioButton x:Name="radio_199211" GroupName="code" HorizontalAlignment="Left" Margin="44,0,0,10" VerticalAlignment="Top" Checked="radio_199211_Checked" IsChecked="True">EN 1992-1-1</RadioButton>
-                    <RadioButton x:Name="radio_19922" GroupName="code" HorizontalAlignment="Left" Margin="44,0,0,10" VerticalAlignment="Bottom" Checked="radio_19922_Checked">EN 1992-2</RadioButton>
-                </Grid>
-            </GroupBox>
-            <GroupBox x:Name="groupBox_CreepPlot" Header="Plot" Margin="10,208,10,0" Height="277" VerticalAlignment="Top">
-                <Grid>
-                    <!-- <oxy:PlotView x:Name="PlotView_Creep"/> -->
-                </Grid>
-            </GroupBox>
+                <RadioButton x:Name="radio_199211" GroupName="code" HorizontalAlignment="Left" Margin="44,0,0,10" VerticalAlignment="Top" Checked="radio_199211_Checked" IsChecked="True">EN 1992-1-1</RadioButton>
+                <RadioButton x:Name="radio_19922" GroupName="code" HorizontalAlignment="Left" Margin="44,0,0,10" VerticalAlignment="Bottom" Checked="radio_19922_Checked" IsEnabled="False">EN 1992-2</RadioButton>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupBox_CreepResults" Header="Results" Margin="10,208,403,0" Height="290" VerticalAlignment="Top">
+            <Grid HorizontalAlignment="Left" Width="172" Margin="0,0,0,0">
+                <DataGrid Name="CreepResults" ItemsSource="{Binding Source=creepResults}" Margin="10" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Day" Width="42" Binding="{Binding day, StringFormat={}{0:F0}}"/>
+                        <DataGridTextColumn Header="Creep Value" Width="85" Binding="{Binding cr, StringFormat={}{0:F3}}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="groupBox_CreepPlot" Header="Plot" Margin="197,208,10,0" Height="290" VerticalAlignment="Top">
+            <Grid HorizontalAlignment="Right" Width="376" Margin="0,0,0,0">
+                <!-- <oxy:PlotView x:Name="PlotView_Creep"/> -->
+            </Grid>
+        </GroupBox>
         <Button x:Name="button_Cancel" Content="Cancel" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Click="button_Cancel_Click"/>
         <Button x:Name="button_Save" Content="Save and Close" HorizontalAlignment="Right" Margin="0,0,120,10" VerticalAlignment="Bottom" Width="100" Height="30" Click="button_Save_Click"/>
     </Grid>
