@@ -731,7 +731,7 @@ namespace KalkulatorPrzekroju
             //obliczenia parametrów geometryczny dla przekroju okragłego
             double R = D / 2;    //promień przekroju
             double rAs = R - a;  //promień okręgu po którym rozmieszczone są pręty
-            double distAs1toAs2, a2;
+            //double distAs1toAs2, a2;
 
             double Pc = 0;
             double PAs1 = 0;

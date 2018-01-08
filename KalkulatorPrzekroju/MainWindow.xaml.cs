@@ -395,6 +395,8 @@ namespace KalkulatorPrzekroju
             stirrups1 = CreateStirrups(1);
             stirrups2 = CreateStirrups(2);
 
+            //Thread thr = new Thread(CalcCurves);
+            //thr.Start();
             CalcCurves();
 
             Refresh_ULS_MN_Graph();
@@ -877,6 +879,16 @@ namespace KalkulatorPrzekroju
             textBox_cover_As1_2.Text = instance.section2_c1;
             textBox_cover_As2_2.Text = instance.section2_c2;
 
+            textBox_diameter_1.Text = instance.section1_diameter;
+            textBox_diameter_2.Text = instance.section2_diameter;
+            textBox_cover_Circ_1.Text = instance.section1_cover;
+            textBox_cover_Circ_2.Text = instance.section2_cover;
+
+            comboBox_diameter_Circ_1.SelectedIndex = instance.section1_diameterBars;
+            comboBox_diameter_Circ_2.SelectedIndex = instance.section2_diameterBars;
+            textBox_no_Circ_1.Text = instance.section1_noOfBars;
+            textBox_no_Circ_2.Text = instance.section2_noOfBars;
+
             comboBox_diameter_As1_1.SelectedIndex = instance.diameter_As1_1;
             comboBox_diameter_As2_1.SelectedIndex = instance.diameter_As2_1;
             comboBox_diameter_As1_2.SelectedIndex = instance.diameter_As1_2;
@@ -940,6 +952,16 @@ namespace KalkulatorPrzekroju
             instance.section1_c2 = textBox_cover_As2_1.Text;
             instance.section2_c1 = textBox_cover_As1_2.Text;
             instance.section2_c2 = textBox_cover_As2_2.Text;
+
+            instance.section1_diameter = textBox_diameter_1.Text;
+            instance.section2_diameter = textBox_diameter_2.Text;
+            instance.section1_cover = textBox_cover_Circ_1.Text;
+            instance.section2_cover = textBox_cover_Circ_2.Text;
+
+            instance.section1_diameterBars = comboBox_diameter_Circ_1.SelectedIndex;
+            instance.section2_diameterBars = comboBox_diameter_Circ_2.SelectedIndex;
+            instance.section1_noOfBars = textBox_no_Circ_1.Text;
+            instance.section2_noOfBars = textBox_no_Circ_2.Text;
 
             instance.diameter_As1_1 = comboBox_diameter_As1_1.SelectedIndex;
             instance.diameter_As2_1 = comboBox_diameter_As2_1.SelectedIndex;
@@ -1010,7 +1032,7 @@ namespace KalkulatorPrzekroju
 				return false;
 			}
 		}
-
+        
         private void ShowToUpdate()
         {
             if (GraphIsUpToDate())

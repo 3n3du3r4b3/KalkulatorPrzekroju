@@ -24,6 +24,17 @@ namespace KalkulatorPrzekroju
         public string section2_c1 { get; set; }
         public string section2_c2 { get; set; }
 
+
+        public string section1_diameter { get; set; }
+        public string section2_diameter { get; set; }
+        public string section1_cover { get; set; }
+        public string section2_cover { get; set; }
+
+        public int section1_diameterBars { get; set; }
+        public int section2_diameterBars { get; set; }
+        public string section1_noOfBars { get; set; }
+        public string section2_noOfBars { get; set; }
+
         public int diameter_As1_1 { get; set; }
         public int diameter_As2_1 { get; set; }
         public int diameter_As1_2 { get; set; }
