@@ -300,35 +300,254 @@ namespace KalkulatorPrzekroju
         /// <returns>Wysokość użyteczna przekroju - odległość środka ciężkości zbrojenia rozciąganego od krawędzi ściskanej przekroju w m</returns>
         protected double ULS_WysUzyteczna(double x){
         	double R = D/Dimfactor/2;
-        	double alfaX = 2.0 * Math.Acos((R - x) / R);
-        	double alfa = 2*Math.PI - alfaX;
-        	double W = HTotal/Dimfactor - x;
         	double gr = ULS_ZbrZastGrubosc()/Dimfactor;
         	double rZewn = D/Dimfactor/2 - A/Dimfactor + gr/2;
         	double rWewn = D/Dimfactor/2 - A/Dimfactor - gr/2;
         	double alfaZewn, alfaWewn;
-        	
-        	if (x <= R-rZewn) {
-        		alfaZewn = 2*Math.PI;
-        	} else {
-        		alfaZewn = 2*Math.PI - 2.0 * Math.Acos((rZewn - (x - (R-rZewn))) / rZewn);
+
+            if (x <= R - rZewn) {
+                alfaZewn = 2.0 * Math.PI;
+            }
+            else if (x >= R + rZewn) 
+            {
+                alfaZewn = 0;
+            } else {
+                alfaZewn = 2.0 * Math.PI - 2.0 * Math.Acos((rZewn - (x - (R - rZewn))) / rZewn);
         	}
-        	
-        	if (x <= R-rWewn) {
-        		alfaWewn = 2*Math.PI;
-        	} else {
-        		alfaWewn = 2*Math.PI - 2.0 * Math.Acos((rWewn - (x - (R-rWewn))) / rWewn);
+
+            if (x <= R - rWewn) {
+                alfaWewn = 2.0 * Math.PI;
+            }
+            else if (x >= R + rWewn) 
+            {
+                alfaWewn = 0;
+            }
+            else {
+                alfaWewn = 2.0 * Math.PI - 2.0 * Math.Acos((rWewn - (x - (R - rWewn))) / rWewn);
         	}
-        	
-        	double PoleZewn = Math.Pow(rZewn,2)/2*(alfaZewn-Math.Sin(alfaZewn));
-        	double PoleWewn = Math.Pow(rWewn,2)/2*(alfaWewn-Math.Sin(alfaWewn));
-        	double eZewn = R - 4.0/3*rZewn*Math.Pow(Math.Sin(alfaZewn/2),3)/(alfaZewn-Math.Sin(alfaZewn)); //od góry przekroju
-        	double eWewn = R - 4.0/3*rWewn*Math.Pow(Math.Sin(alfaWewn/2),3)/(alfaWewn-Math.Sin(alfaWewn));	//od góry przekroju
-        	double Ms = PoleZewn*eZewn - PoleWewn*eWewn;
-        	double As = PoleZewn-PoleWewn;
-        	return Ms/As;
+
+            if (x <= R - rZewn)
+            {
+                return R;
+            }
+
+            if (x >= R + rZewn)
+            {
+                return R + rZewn;
+            }
+
+            double PoleZewn = Math.Pow(rZewn, 2) / 2 * (alfaZewn - Math.Sin(alfaZewn));
+            double PoleWewn = Math.Pow(rWewn, 2) / 2 * (alfaWewn - Math.Sin(alfaWewn));
+            
+            double eZewn, eWewn;  //od góry przekroju
+            
+            if (x >= R+rZewn) {
+            	eZewn = R+rZewn;
+            } else
+            {
+            	eZewn = R + 4.0 / 3 * rZewn * Math.Pow(Math.Sin(alfaZewn / 2), 3) / (alfaZewn - Math.Sin(alfaZewn));
+            }
+            
+            if (x >= R+rWewn) {
+            	eWewn = R+rWewn;
+            } else
+            {
+            	eWewn = R + 4.0 / 3 * rWewn * Math.Pow(Math.Sin(alfaWewn / 2), 3) / (alfaWewn - Math.Sin(alfaWewn));
+            }
+            
+            double Ms = PoleZewn * eZewn - PoleWewn * eWewn;
+            double As = PoleZewn - PoleWewn;
+            
+            if (x <= R-rZewn) {
+            	return R;
+            } else if (x >= R+rZewn) {
+            	return R + rZewn;
+            }
+            else {
+            	return Ms / As;
+            }
         }
 
+        /// <summary>
+        /// Zwraca odległość środka ciężkości zbrojenia ściskanego od krawędzi ściskanej przekroju w m
+        /// </summary>
+        /// <param name="x">Wysokosc strefy sciskanej w m</param>
+        /// <returns>Odległość środka ciężkości zbrojenia ściskanego od krawędzi ściskanej przekroju w m</returns>
+        protected double ULS_WysA2(double x)
+        {
+            double R = D / Dimfactor / 2;
+            double gr = ULS_ZbrZastGrubosc() / Dimfactor;
+            double rZewn = D / Dimfactor / 2 - A / Dimfactor + gr / 2;
+            double rWewn = D / Dimfactor / 2 - A / Dimfactor - gr / 2;
+            double alfaZewn, alfaWewn;
+
+            if (x <= R - rZewn)
+            {
+                alfaZewn = 0;
+            }
+            else if (x >= R + rZewn)
+            {
+                alfaZewn = 2.0 * Math.PI;
+            }
+            else
+            {
+                alfaZewn = 2.0 * Math.Acos((rZewn - (x - (R - rZewn))) / rZewn);
+            }
+
+            if (x <= R - rWewn)
+            {
+                alfaWewn = 0;
+            }
+            else if (x >= R + rWewn)
+            {
+                alfaWewn = 2.0 * Math.PI;
+            }
+            else
+            {
+                alfaWewn = 2.0 * Math.Acos((rWewn - (x - (R - rWewn))) / rWewn);
+            }
+
+            if (x <= R - rZewn)
+            {
+                return x;
+            }
+
+            if (x >= R + rWewn)
+            {
+                return R;
+            }
+
+            double PoleZewn = Math.Pow(rZewn, 2) / 2 * (alfaZewn - Math.Sin(alfaZewn));
+            double PoleWewn = Math.Pow(rWewn, 2) / 2 * (alfaWewn - Math.Sin(alfaWewn));
+            
+            
+            double eZewn, eWewn;  //od góry przekroju
+            
+            if (x <= R-rZewn) {
+            	eZewn = R-rZewn;
+            } else if (x>=R+rZewn) {
+            	eZewn = R;
+            } else
+            {
+            	eZewn = R - 4.0 / 3 * rZewn * Math.Pow(Math.Sin(alfaZewn / 2), 3) / (alfaZewn - Math.Sin(alfaZewn));
+            }
+            
+            if (x <= R-rWewn) {
+            	eWewn = R-rWewn;
+            } else if (x >= R+rWewn) {
+            	eWewn = R;
+            } else
+            {
+            	eWewn = R - 4.0 / 3 * rWewn * Math.Pow(Math.Sin(alfaWewn / 2), 3) / (alfaWewn - Math.Sin(alfaWewn));
+            }
+            
+            double Ms = PoleZewn * eZewn - PoleWewn * eWewn;
+            double As = PoleZewn - PoleWewn;
+            
+            if (x <= R-rZewn) {
+            	return x;
+            } else if (x >= R+rZewn) {
+            	return R;
+            }
+            else {
+            	return Ms / As;
+            }
+        }
+
+
+        /// <summary>
+        /// Zwraca pole powierzchni zbrojenia rozciąganego (rozmytego po obwodzie) w m2
+        /// </summary>
+        /// <param name="x">Wysokość strefy ściskanej w m</param>
+        /// <returns>Pole powierzchni zbrojenia rozciąganego (rozmytego po obwodzie) w m2</returns>
+        protected double ULS_PoleZbrRozc(double x)
+        {
+            double R = D / Dimfactor / 2;
+            double gr = ULS_ZbrZastGrubosc() / Dimfactor;
+            double rZewn = D / Dimfactor / 2 - A / Dimfactor + gr / 2;
+            double rWewn = D / Dimfactor / 2 - A / Dimfactor - gr / 2;
+            double alfaZewn, alfaWewn;
+
+            if (x <= R - rZewn)
+            {
+                alfaZewn = 2.0 * Math.PI;
+            }
+            else if (x >= R + rZewn)
+            {
+                alfaZewn = 0;
+            }
+            else
+            {
+                alfaZewn = 2.0 * Math.PI - 2.0 * Math.Acos((rZewn - (x - (R - rZewn))) / rZewn);
+            }
+
+            if (x <= R - rWewn)
+            {
+                alfaWewn = 2.0 * Math.PI;
+            }
+            else if (x >= R + rWewn)
+            {
+                alfaWewn = 0;
+            }
+            else
+            {
+                alfaWewn = 2.0 * Math.PI - 2.0 * Math.Acos((rWewn - (x - (R - rWewn))) / rWewn);
+            }
+            
+            double PoleZewn = Math.Pow(rZewn, 2) / 2 * (alfaZewn - Math.Sin(alfaZewn));
+            double PoleWewn = Math.Pow(rWewn, 2) / 2 * (alfaWewn - Math.Sin(alfaWewn));
+
+            return PoleZewn - PoleWewn;
+        }
+
+
+        /// <summary>
+        /// Zwraca pole powierzchni zbrojenia ściskanego (rozmytego po obwodzie) w m2
+        /// </summary>
+        /// <param name="x">Wysokość strefy ściskanej w m</param>
+        /// <returns>Pole powierzchni zbrojenia ściskanego (rozmytego po obwodzie) w m2</returns>
+        protected double ULS_PoleZbrScisk(double x)
+        {
+
+            double R = D / Dimfactor / 2;
+            double gr = ULS_ZbrZastGrubosc() / Dimfactor;
+            double rZewn = D / Dimfactor / 2 - A / Dimfactor + gr / 2;
+            double rWewn = D / Dimfactor / 2 - A / Dimfactor - gr / 2;
+            double alfaZewn, alfaWewn;
+
+            if (x <= R - rZewn)
+            {
+                alfaZewn = 0;
+            }
+            else if (x >= R + rZewn)
+            {
+                alfaZewn = 2.0 * Math.PI;
+            }
+            else
+            {
+                alfaZewn = 2.0 * Math.Acos((rZewn - (x - (R - rZewn))) / rZewn);
+            }
+
+            if (x <= R - rWewn)
+            {
+                alfaWewn = 0;
+            }
+            else if (x >= R + rWewn)
+            {
+                alfaWewn = 2.0 * Math.PI;
+            }
+            else
+            {
+                alfaWewn = 2.0 * Math.Acos((rWewn - (x - (R - rWewn))) / rWewn);
+            }
+
+            double PoleZewn = Math.Pow(rZewn, 2) / 2 * (alfaZewn - Math.Sin(alfaZewn));
+            double PoleWewn = Math.Pow(rWewn, 2) / 2 * (alfaWewn - Math.Sin(alfaWewn));
+
+            return PoleZewn - PoleWewn;
+        }
+
+        /*
         public override double ULS_MomentKrytyczny(double NEd, DesignSituation situation)
         {
             double gammaC, gammaS;
@@ -462,6 +681,122 @@ namespace KalkulatorPrzekroju
                 MAs2i[i] = Convert.ToUInt32(!ki[i]) * Ab * CurrentSteel.SigmaS(EpsilonR(d - di[i], x, d), fyd) * (d - di[i]);
                 MAs2 += MAs2i[i];
             }
+
+            double Ms1 = Pcz + MAs2;
+
+            double MRd = Ms1 - NEd * (d - 0.5 * D);
+
+            return MRd * 1000;
+        }
+        */
+
+        public override double ULS_MomentKrytyczny(double NEd, DesignSituation situation)
+        {
+            double gammaC, gammaS;
+            if (situation == DesignSituation.Accidental)
+            {
+                gammaC = 1.2;
+                gammaS = 1.0;
+            }
+            else
+            {
+                gammaC = 1.5;
+                gammaS = 1.15;
+            }
+            double alfaCC = 0.85;
+
+            double D = this.D / Dimfactor;        // w metrach
+            double a = A / Dimfactor;      // w metrach
+            double Ab = this.Ab / Dimfactor / Dimfactor;     // w metrach kwadratowych
+            double fiB = FiB / Dimfactor;
+            int noB = NoB;
+
+            double fyk = CurrentSteel.fyk;          // w MPa
+            double Es = CurrentSteel.Es;            // w MPa
+            //double Ecm = currentConcrete.Ecm;       // w MPa
+            double fck = CurrentConcrete.fck;       // w MPa
+            double fcd = fck / gammaC * alfaCC;     // w MPa
+            double fyd = fyk / gammaS;
+            double n = CurrentConcrete.n;
+
+            double eps = 0.00001;
+            double epsilonC2 = CurrentConcrete.epsilon_c2;
+            double epsilonCU2 = CurrentConcrete.epsilon_cu2;
+            double x1 = 0;
+            double x2 = 100000 * D;
+
+            double d; //wysokość użyteczna, zależna od wysokości strefy ściskanej x
+            double As; //pole zbrojenia rozciąganego, zależne od wysokości strefy ściskanej x
+
+            //obliczenia parametrów geometryczny dla przekroju okragłego
+            double R = D / 2;    //promień przekroju
+            double rAs = R - a;  //promień okręgu po którym rozmieszczone są pręty
+            double distAs1toAs2, a2;
+
+            double Pc = 0;
+            double PAs1 = 0;
+            double PAs2 = 0;
+            double x, range;
+            int k = 100;
+            double NRd = 0;
+
+            NEd = NEd / Forcefactor;
+
+            do
+            {
+                x = (x1 + x2) / 2;
+                Pc = 0;
+                PAs2 = 0;
+
+                //określenie wysokości użytecznej d która jest zależna od x
+                As = ULS_PoleZbrRozc(x); // sumaryczne pole powierzchni zbrojenia rozciaganego
+
+                d = ULS_WysUzyteczna(x);
+
+                range = Math.Min(x, D);
+                for (int i = 0; i < k; i++)
+                {
+                    double ri = d - range / k * (i + 0.5);
+                    double riT = d - range / k * (i);
+                    double riB = d - range / k * (i + 1);
+                    Pc += CurrentConcrete.SigmaC(fcd, EpsilonR(ri, x, d)) * (PoleOK(d - riB) - PoleOK(d - riT));
+                    PAs2 += CurrentSteel.SigmaS(EpsilonR(ri, x, d), fyd) * (ULS_PoleZbrScisk(d-riB) - ULS_PoleZbrScisk(d-riT));
+                }
+                
+                PAs1 = As * CurrentSteel.SigmaS(EpsilonR(0, x, d), fyd);
+
+                //a2 = ULS_WysA2(x);  //do poprawy
+                //distAs1toAs2 = d - a2;
+                //double PAs2b = ULS_PoleZbrScisk(x) * CurrentSteel.SigmaS(EpsilonR(distAs1toAs2, x, d), fyd);
+
+                NRd = Pc + PAs1 + PAs2;
+
+                if (NRd >= NEd)
+                {
+                    x2 = x;
+                }
+                else
+                {
+                    x1 = x;
+                }
+
+            } while (Math.Abs(NEd - NRd) > eps);
+
+            double Pcz = 0;
+            double MAs2 = 0;
+            for (int i = 0; i < k; i++)
+            {
+                double ri = d - range / k * (i + 0.5);
+                double riT = d - range / k * (i);
+                double riB = d - range / k * (i + 1);
+                double sC = CurrentConcrete.SigmaC(fcd, EpsilonR(ri, x, d));
+                Pcz += sC * (PoleOK(d - riB) - PoleOK(d - riT)) * ri;
+                MAs2 += CurrentSteel.SigmaS(EpsilonR(ri, x, d), fyd) * (ULS_PoleZbrScisk(d-riB) - ULS_PoleZbrScisk(d-riT)) * ri;
+            }
+
+            //a2 = ULS_WysA2(x);
+            //distAs1toAs2 = d - a2;
+            //MAs2 = ULS_PoleZbrScisk(x) * CurrentSteel.SigmaS(EpsilonR(distAs1toAs2, x, d), fyd) * distAs1toAs2;
 
             double Ms1 = Pcz + MAs2;
 
