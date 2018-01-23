@@ -678,7 +678,7 @@
 										TextAlignment="Center"
 										LostFocus="TextBox_ToDouble_LostFocus"
 										TabIndex="10"
-										Text="0" />
+										Text="0.000" />
                                     <Button
 										x:Name="button_CalcCreep1"
 										Content="Calculate..."

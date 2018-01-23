@@ -30,15 +30,17 @@ namespace KalkulatorPrzekroju
         bool linear;
         int divide = 10;
         double cemcoeff;
+        double crinput;
+        public double CrCoeff;
         List<CreepAtDay> creepResults = new List<CreepAtDay>();
 
         string format = "0.###";
 
         Dictionary<string, double> cem = new Dictionary<string, double>()
         {
+            {"S",-1},
             {"N",0},
-            {"R",1},
-            {"S",-1}
+            {"R",1}
         };
 
         private class CreepAtDay
@@ -53,12 +55,18 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        public void Show(double Acd, double fcmd)
+        public void Show(double Acd, double fcmd, double input)
         {
             Ac = Acd;
             fcm = fcmd;
+            crinput = input;
             comboBox_Cement.ItemsSource = cem;
-            Show();
+            ShowDialog();
+        }
+
+        public double Result()
+        {
+            return CrCoeff;
         }
 
         public CreepWindow()
@@ -140,10 +148,12 @@ namespace KalkulatorPrzekroju
                 creepResults.Add(temp);
             }
             this.CreepResults.ItemsSource = creepResults;
+            CrCoeff = creepResults.Last().cr;
         }
 
         private void button_Cancel_Click(object sender, RoutedEventArgs e)
         {
+            CrCoeff = crinput;
             Close();
         }
 

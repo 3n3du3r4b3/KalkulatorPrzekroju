@@ -45,7 +45,7 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Współczynnik pełzania
         /// </summary>
-        public double Fi { get; private set; }
+        public double Fi { get; set; }
         /// <summary>
         /// Stosunek modułów sprężystości stali do betonu z uwzględnieniem współczynnika pełzania
         /// </summary>

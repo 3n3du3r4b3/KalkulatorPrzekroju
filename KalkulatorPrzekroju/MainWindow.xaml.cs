@@ -58,6 +58,7 @@ namespace KalkulatorPrzekroju
         List<CasePoint> points_SLS_CHR;
 
         string format = "0.##";
+        string formatcr = "0.###";
         string thisFile = "";
         string defaultTitle = "Concrete Regular Section Designer CRSD";
         string defaultExt = "CRSD files (*.crsd)|*.crdsd|All files (*.*)|*.*";
@@ -519,7 +520,9 @@ namespace KalkulatorPrzekroju
             CalcCurves();
 
             CreepWindow creepwin1 = new CreepWindow();
-            creepwin1.Show(section1.AcTotal,section1.CurrentConcrete.fcm);
+            creepwin1.Show(section1.AcTotal,section1.CurrentConcrete.fcm,Convert.ToDouble(textBox_creep1.Text));
+            section1.Fi = creepwin1.Result();
+            textBox_creep1.Text = section1.Fi.ToString("F3");
         }
 
         private void button_CalcCreep2_Click(object sender, RoutedEventArgs e)
@@ -532,7 +535,9 @@ namespace KalkulatorPrzekroju
             CalcCurves();
 
             CreepWindow creepwin2 = new CreepWindow();
-            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm);
+            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm,Convert.ToDouble(textBox_creep1.Text));
+            section2.Fi = creepwin2.Result();
+            textBox_creep2.Text = section2.Fi.ToString("F3");
         }
     
 

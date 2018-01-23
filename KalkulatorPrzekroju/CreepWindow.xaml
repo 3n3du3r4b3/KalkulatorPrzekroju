@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="Creep" Height="540" Width="600" WindowStyle="ToolWindow" MinWidth="600" MaxWidth="600" MaxHeight="570" MinHeight="570">
+        Title="Creep" Height="580" Width="600" WindowStyle="ToolWindow" MinWidth="600" MaxWidth="600" MaxHeight="580" MinHeight="580">
     <Grid x:Name="grid_Creep" Background="#FFE5E5E5" Margin="0,0,0,0">
         <GroupBox x:Name="groupBox_Creep" Header="Creep Parameters" Margin="10,10,10,0" Height="127" VerticalAlignment="Top">
             <Grid>
@@ -22,7 +22,7 @@
                 <TextBox x:Name="textBox_Cse" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cse_LostFocus" TabIndex="4" Text="10000"/>
                 <Label x:Name="label1_Copy23" Content="days" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelCem" Content="Cement Type: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="comboBox_Cement" ItemsSource="{Binding cem}" DisplayMemberPath="Key" SelectedValuePath="Value" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged" SelectedIndex="0"/>
+                <ComboBox x:Name="comboBox_Cement" ItemsSource="{Binding cem}" DisplayMemberPath="Key" SelectedValuePath="Value" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged" SelectedIndex="1"/>
                 <Label x:Name="label2_Copy4" Content="Use of silica-fume: " HorizontalAlignment="Left" Margin="214,72,0,0" VerticalAlignment="Top"/>
                 <CheckBox x:Name="label1_Copy234" HorizontalAlignment="Left" Margin="324,78,0,6" VerticalAlignment="Center" Checked="checkBox_sfume_Checked" Unchecked="checkBox_sfume_Unchecked" IsEnabled="False"/>
             </Grid>
@@ -57,7 +57,7 @@
                 <!-- <oxy:PlotView x:Name="PlotView_Creep"/> -->
             </Grid>
         </GroupBox>
-        <Button x:Name="button_Cancel" Content="Cancel" Margin="0,0,10,10" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Click="button_Cancel_Click"/>
-        <Button x:Name="button_Save" Content="Save and Close" HorizontalAlignment="Right" Margin="0,0,120,10" VerticalAlignment="Bottom" Width="100" Height="30" Click="button_Save_Click"/>
+        <Button x:Name="button_Cancel" Content="Cancel" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Click="button_Cancel_Click" RenderTransformOrigin="1.035,0" Margin="0,0,10,10"/>
+        <Button x:Name="button_Save" Content="Save and Close" HorizontalAlignment="Right" Margin="0,0,115,10" VerticalAlignment="Bottom" Width="100" Height="30" Click="button_Save_Click"/>
     </Grid>
 </Window>
