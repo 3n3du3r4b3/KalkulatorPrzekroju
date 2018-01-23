@@ -10,11 +10,12 @@ namespace KalkulatorPrzekroju
     {
         public static double CreepCoefficientCalc(double Acd, double fcmd, double RH, double u, double t00, double tend, double cem)
         {
-            double t0 = cemt(t00,cem);
+            double t0 = t00;
+            double t0mod = cemt(t00,cem);
             double Ac = Acd;
             double fcm = fcmd;
             double h0 = 2 * Ac / (u); //B.6
-            double fi0 = fiRH(RH, h0, alpha1(fcm), alpha2(fcm), fcm) * betafcm(fcm) * betat0(t0); //B.2
+            double fi0 = fiRH(RH, h0, alpha1(fcm), alpha2(fcm), fcm) * betafcm(fcm) * betat0(t0mod); //B.2
             double beta_H = betaH(RH, fcm, h0, alpha3(fcm));
             double beta_C = betaC(beta_H, tend, t0);
             double fi_end = fi0 * beta_C;

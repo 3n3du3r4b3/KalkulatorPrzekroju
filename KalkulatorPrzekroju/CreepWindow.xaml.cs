@@ -140,7 +140,6 @@ namespace KalkulatorPrzekroju
                 creepResults.Add(temp);
             }
             this.CreepResults.ItemsSource = creepResults;
-
         }
 
         private void button_Cancel_Click(object sender, RoutedEventArgs e)
@@ -185,10 +184,7 @@ namespace KalkulatorPrzekroju
 
         private void comboBox_Cement_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            string key = comboBox_Cement.SelectedItem.ToString();
-            if (String.Compare(key, "N") == 0) { cemcoeff = 0; }
-            else if (String.Compare(key, "R") == 0) { cemcoeff = 1; }
-            else cemcoeff = -1;
+            cemcoeff = Convert.ToDouble(comboBox_Cement.SelectedValue);
         }
     }
 }

@@ -22,7 +22,7 @@
                 <TextBox x:Name="textBox_Cse" HorizontalAlignment="Left" Height="23" Margin="286,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cse_LostFocus" TabIndex="4" Text="10000"/>
                 <Label x:Name="label1_Copy23" Content="days" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelCem" Content="Cement Type: " HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="comboBox_Cement" ItemsSource="{Binding cem}" DisplayMemberPath="Key" SelectedValue="Key" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged"/>
+                <ComboBox x:Name="comboBox_Cement" ItemsSource="{Binding cem}" DisplayMemberPath="Key" SelectedValuePath="Value" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged" SelectedIndex="0"/>
                 <Label x:Name="label2_Copy4" Content="Use of silica-fume: " HorizontalAlignment="Left" Margin="214,72,0,0" VerticalAlignment="Top"/>
                 <CheckBox x:Name="label1_Copy234" HorizontalAlignment="Left" Margin="324,78,0,6" VerticalAlignment="Center" Checked="checkBox_sfume_Checked" Unchecked="checkBox_sfume_Unchecked" IsEnabled="False"/>
             </Grid>
