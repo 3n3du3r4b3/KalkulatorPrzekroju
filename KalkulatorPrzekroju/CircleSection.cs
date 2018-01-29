@@ -282,7 +282,7 @@ namespace KalkulatorPrzekroju
             }
 
             double hcEff = Math.Min(hcEff1, hcEff2);
-            return PoleOK(hcEff);
+            return PoleOK(hcEff / Dimfactor) * Dimfactor * Dimfactor;
         }
         
         /// <summary>
