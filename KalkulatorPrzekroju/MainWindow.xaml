@@ -678,7 +678,7 @@
 										TextAlignment="Center"
 										LostFocus="TextBox_ToDouble_LostFocus"
 										TabIndex="10"
-										Text="0.000" />
+										Text="0" />
                                     <Button
 										x:Name="button_CalcCreep1"
 										Content="Calculate..."
@@ -1586,8 +1586,57 @@
 				TabIndex="10">
                 <Grid
 					Background="#FFE5E5E5">
+                    <Label
+						Content="Upper range:"
+						HorizontalAlignment="Left"
+						Margin="10,10,0,0"
+						VerticalAlignment="Top" />
+                    <CheckBox
+                        x:Name="checkBox_ULS_MN_upperRange"
+                        Content="Auto"
+                        HorizontalAlignment="Left"
+						Margin="95,15,0,0"
+						VerticalAlignment="Top"
+						Width="60"
+                        IsChecked="True" Click="checkBox_ULS_MN_upperRange_Click"/>
+                    <TextBox
+							x:Name="textBox_ULS_MN_upperRange"
+							HorizontalAlignment="Left"
+							Height="23"
+							Margin="155,10,0,0"
+							VerticalAlignment="Top"
+							Width="60"
+							TextAlignment="Center"
+							LostFocus="TextBox_ToDouble_LostFocus"
+							TabIndex="10"
+                            IsEnabled="False" />
+                    <Label
+						Content="Lower range:"
+						HorizontalAlignment="Left"
+						Margin="245,10,0,0"
+						VerticalAlignment="Top" />
+                    <CheckBox
+                        x:Name="checkBox_ULS_MN_lowerRange"
+                        Content="Auto"
+                        HorizontalAlignment="Left"
+						Margin="330,15,0,0"
+						VerticalAlignment="Top"
+						Width="60"
+                        IsChecked="True" Click="checkBox_ULS_MN_lowerRange_Click"/>
+                    <TextBox
+							x:Name="textBox_ULS_MN_lowerRange"
+							HorizontalAlignment="Left"
+							Height="23"
+							Margin="390,10,0,0"
+							VerticalAlignment="Top"
+							Width="60"
+							TextAlignment="Center"
+							LostFocus="TextBox_ToDouble_LostFocus"
+							TabIndex="10"
+                            IsEnabled="False" />
+
                     <oxy:PlotView
-						x:Name="PlotView_ULS_MN" />
+						x:Name="PlotView_ULS_MN" Margin="0" />
                     <Button
 						x:Name="button_SaveToPDF_ULS_MN"
 						Content="Save To PDF"
@@ -1603,7 +1652,7 @@
                 <Grid
 					Background="#FFE5E5E5">
                     <oxy:PlotView
-						x:Name="PlotView_ULS_VN" />
+						x:Name="PlotView_ULS_VN" Margin="0" />
                     <Button
 						x:Name="button_SaveToPDF_ULS_VN"
 						Content="Save To PDF"
@@ -1619,7 +1668,7 @@
                 <Grid
 					Background="#FFE5E5E5">
                     <oxy:PlotView
-						x:Name="PlotView_SLS_Crack" />
+						x:Name="PlotView_SLS_Crack" Margin="0" />
                     <Button
 						x:Name="button_SaveToPDF_SLS_Crack"
 						Content="Save To PDF"
@@ -1635,7 +1684,7 @@
                 <Grid
 					Background="#FFE5E5E5">
                     <oxy:PlotView
-						x:Name="PlotView_SLS_Stresess" />
+						x:Name="PlotView_SLS_Stresess" Margin="0" />
                     <Button
 						x:Name="button_SaveToPDF_SLS_Stresses"
 						Content="Save To PDF"

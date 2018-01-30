@@ -57,8 +57,7 @@ namespace KalkulatorPrzekroju
         List<CasePoint> points_SLS_QPR;
         List<CasePoint> points_SLS_CHR;
 
-        string format = "0.##";
-        string formatcr = "0.###";
+        string format = "0.###";
         string thisFile = "";
         string defaultTitle = "Concrete Regular Section Designer CRSD";
         string defaultExt = "CRSD files (*.crsd)|*.crdsd|All files (*.*)|*.*";
@@ -520,7 +519,9 @@ namespace KalkulatorPrzekroju
             CalcCurves();
 
             CreepWindow creepwin1 = new CreepWindow();
-            creepwin1.Show(section1.AcTotal,section1.CurrentConcrete.fcm,Convert.ToDouble(textBox_creep1.Text));
+            double creep1;
+            Double.TryParse(textBox_creep1.Text, out creep1);
+            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1);
             section1.Fi = creepwin1.Result();
             textBox_creep1.Text = section1.Fi.ToString("F3");
         }
@@ -535,7 +536,9 @@ namespace KalkulatorPrzekroju
             CalcCurves();
 
             CreepWindow creepwin2 = new CreepWindow();
-            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm,Convert.ToDouble(textBox_creep1.Text));
+            double creep2;
+            Double.TryParse(textBox_creep2.Text, out creep2);
+            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2);
             section2.Fi = creepwin2.Result();
             textBox_creep2.Text = section2.Fi.ToString("F3");
         }
@@ -866,7 +869,17 @@ namespace KalkulatorPrzekroju
             }
             return taLista;
         }
-        
+
+        private void checkBox_ULS_MN_upperRange_Click(object sender, RoutedEventArgs e)
+        {
+            textBox_ULS_MN_upperRange.IsEnabled = !(bool)checkBox_ULS_MN_upperRange.IsChecked;
+        }
+
+        private void checkBox_ULS_MN_lowerRange_Click(object sender, RoutedEventArgs e)
+        {
+            textBox_ULS_MN_lowerRange.IsEnabled = !(bool)checkBox_ULS_MN_lowerRange.IsChecked;
+        }
+
         private void ReadFromInstance(SavedFile instance)
         {
             section1 = instance.section1;
