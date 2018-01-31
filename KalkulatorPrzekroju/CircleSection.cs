@@ -94,8 +94,7 @@ namespace KalkulatorPrzekroju
                 Equals(this.CurrentSteel, s2.CurrentSteel) &&
                 this.Fi == s2.Fi &&
                 this.Ab == s2.Ab &&
-                this.A == s2.A &&
-                this.Fi == s2.Fi)
+                this.A == s2.A)
             {
                 return true;
             }

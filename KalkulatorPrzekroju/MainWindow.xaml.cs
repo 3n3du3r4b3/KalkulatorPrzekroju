@@ -522,8 +522,10 @@ namespace KalkulatorPrzekroju
             double creep1;
             Double.TryParse(textBox_creep1.Text, out creep1);
             creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1);
-            section1.Fi = creepwin1.Result();
-            textBox_creep1.Text = section1.Fi.ToString("F3");
+            //section1.SetCreepFactor(creepwin1.Result());
+            //textBox_creep1.Text = section1.Fi.ToString("F3");
+            textBox_creep1.Text = creepwin1.Result().ToString("F3");
+            ShowToUpdate();
         }
 
         private void button_CalcCreep2_Click(object sender, RoutedEventArgs e)
@@ -539,8 +541,10 @@ namespace KalkulatorPrzekroju
             double creep2;
             Double.TryParse(textBox_creep2.Text, out creep2);
             creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2);
-            section2.Fi = creepwin2.Result();
-            textBox_creep2.Text = section2.Fi.ToString("F3");
+            //section2.SetCreepFactor(creepwin2.Result());
+            //textBox_creep2.Text = section2.Fi.ToString("F3");
+            textBox_creep2.Text = creepwin2.Result().ToString("F3");
+            ShowToUpdate();
         }
     
 
@@ -579,7 +583,8 @@ namespace KalkulatorPrzekroju
 							Double.Parse(textBox_cover_As2_1.Text),
 							CreateStirrups(1)
 						);
-					} else
+                    }
+                    else
 						section = null;
 				} else if (radioBut_Circular_sec1.IsChecked == true) {
 					section = new CircleSection(
@@ -591,7 +596,12 @@ namespace KalkulatorPrzekroju
 						Int32.Parse(textBox_no_Circ_1.Text));
 				} else
 						section = null;
-			} else if (i == 2) {
+
+                double fi1 = 0;
+                Double.TryParse(textBox_creep1.Text, out fi1);
+                section.SetCreepFactor(fi1);
+            }
+            else if (i == 2) {
 				if (radioBut_Rectangle_sec2.IsChecked == true) {
 					if (comboBox_As1_spac_no_2.Text == "spacing") {
 						section = new RectangleSection(
@@ -633,9 +643,15 @@ namespace KalkulatorPrzekroju
 						Int32.Parse(textBox_no_Circ_2.Text));
 				} else
 						section = null;
-			} else
+
+                double fi2 = 0;
+                Double.TryParse(textBox_creep2.Text, out fi2);
+                section.SetCreepFactor(fi2);
+
+            } else
 				section = null;
-			return section;
+            
+            return section;
 		}
 
         private Stirrups CreateStirrups(int i)
