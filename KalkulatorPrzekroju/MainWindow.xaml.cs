@@ -259,7 +259,26 @@ namespace KalkulatorPrzekroju
 
         private void MenuItem_Close_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            if (thisFile != "")
+            {
+                string lastChar = thisFile.Substring(thisFile.Length - 1);
+                if (lastChar != "*")
+                {
+                    this.Close();
+                }
+            }
+
+            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                MenuItem_Save_Click(sender, e);
+                this.Close();
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                this.Close();
+            }
         }
 
         private void MenuItem_Save_Click(object sender, RoutedEventArgs e)
@@ -280,8 +299,9 @@ namespace KalkulatorPrzekroju
                 }
                 thisInstance = instance;
                 ShowToUpdate();
+
+                MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
-            MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
         private void MenuItem_SaveAs_Click(object sender, RoutedEventArgs e)
@@ -306,6 +326,7 @@ namespace KalkulatorPrzekroju
                 ShowToUpdate();
             }
             this.Title = defaultTitle + " (" + newFile + ")";
+            thisFile = newFile;
             MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
@@ -365,8 +386,6 @@ namespace KalkulatorPrzekroju
         {
             ShowToUpdate();
         }
-
-
 
         private void DataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
