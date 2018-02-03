@@ -64,8 +64,8 @@
 					Header="Methodology" />
                 <MenuItem
 					Header="Help" />
-                <MenuItem
-					Header="About..." />
+                <MenuItem x:Name="MenuItem_About"
+					Header="About..." Click="MenuItem_About_Click" />
             </MenuItem>
         </Menu>
         <DockPanel
@@ -1686,7 +1686,7 @@
 						Margin="5,0,0,5"
 						VerticalAlignment="Bottom"
 						Width="75"
-						Opacity="0.5" />
+						Opacity="0.5" Click="button_SaveToPDF_ULS_MN_Click" Visibility="Hidden" />
                 </Grid>
             </TabItem>
             <TabItem
@@ -1702,7 +1702,7 @@
 						Margin="5,0,0,5"
 						VerticalAlignment="Bottom"
 						Width="75"
-						Opacity="0.5" />
+						Opacity="0.5" Click="button_SaveToPDF_ULS_VN_Click" Visibility="Hidden" />
                 </Grid>
             </TabItem>
             <TabItem
@@ -1718,7 +1718,7 @@
 						Margin="5,0,0,5"
 						VerticalAlignment="Bottom"
 						Width="75"
-						Opacity="0.5" />
+						Opacity="0.5" Visibility="Hidden" Click="button_SaveToPDF_SLS_Crack_Click" />
                 </Grid>
             </TabItem>
             <TabItem
@@ -1734,7 +1734,7 @@
 						Margin="5,0,0,5"
 						VerticalAlignment="Bottom"
 						Width="75"
-						Opacity="0.5" />
+						Opacity="0.5" Click="button_SaveToPDF_SLS_Stresses_Click" Visibility="Hidden" />
                 </Grid>
             </TabItem>
         </TabControl>

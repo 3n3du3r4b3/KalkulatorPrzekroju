@@ -548,10 +548,77 @@ namespace KalkulatorPrzekroju
             textBox_creep2.Text = creepwin2.Result().ToString("F3");
             ShowToUpdate();
         }
-    
+
+        private void button_SaveToPDF_ULS_MN_Click(object sender, RoutedEventArgs e)
+        {
+            ExportToPDF(diagram_ULS_MN, "EN-1992 ULS Resistance - Curvature Axial Force [kN] / Bending Moment [kNm]");
+        }
+
+        private void button_SaveToPDF_ULS_VN_Click(object sender, RoutedEventArgs e)
+        {
+            ExportToPDF(diagram_ULS_VN, "EN-1992 ULS Resistance - Curvature Axial Force [kN] / Shear Force [kN]");
+        }
+
+        private void button_SaveToPDF_SLS_Crack_Click(object sender, RoutedEventArgs e)
+        {
+            ExportToPDF(diagram_SLS_Crack, "EN-1992 SLS Range - Curvature Axial Force [kN] / Bending Moment [kNm]");
+        }
+
+        private void button_SaveToPDF_SLS_Stresses_Click(object sender, RoutedEventArgs e)
+        {
+            ExportToPDF(diagram_SLS_Stressess, "EN-1992 SLS Range - Curvature Axial Force [kN] / Bending Moment [kNm]");
+        }
+        /*
+        private void checkBox_ULS_MN_upperRange_Click(object sender, RoutedEventArgs e)
+        {
+            textBox_ULS_MN_upperRange.IsEnabled = !(bool)checkBox_ULS_MN_upperRange.IsChecked;
+        }
+
+        private void checkBox_ULS_MN_lowerRange_Click(object sender, RoutedEventArgs e)
+        {
+            textBox_ULS_MN_lowerRange.IsEnabled = !(bool)checkBox_ULS_MN_lowerRange.IsChecked;
+        }
+        */
+        private void checkBox_Click(object sender, RoutedEventArgs e)
+        {
+            ShowToUpdate();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (thisFile != "")
+            {
+                string lastChar = thisFile.Substring(thisFile.Length - 1);
+                if (lastChar != "*")
+                {
+                    return;
+                }
+            }
+
+            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                MenuItem_Save_Click(sender, null);
+                return;
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+
+        }
+
+        private void MenuItem_About_Click(object sender, RoutedEventArgs e)
+        {
+            string text = "Thank you for using this application. Hope you like it! \n\nAuthors (algorithms, code and interface):\nTomasz Ślusarczyk \nMarcin Obara\n\n" +
+                "In case of any question or willing to contact: tom.slusarczyk@gmail.com \n\nAll rights reserved. \nPoland, Kraków, 3rd Fabruary 2018";
+            MessageBox.Show(text, "About...", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
 
         // KONIEC OPROGRAMOWANIA KONTROLEK
-        
+
         private Section CreateSection(int i)
         {
 			Section section;
@@ -730,6 +797,7 @@ namespace KalkulatorPrzekroju
                 diagram_ULS_MN.AddPointSerie(points_MN, "ULS Case", ustawienia.ULSMN_DataPointColor.GetMedia(), ustawienia.ULSMN_DataPointWeight);
             }
             PlotView_ULS_MN.Model = diagram_ULS_MN.wykres;
+            button_SaveToPDF_ULS_MN.Visibility = Visibility.Visible;
         }
 
         private void Refresh_ULS_VN_Graph()
@@ -756,6 +824,7 @@ namespace KalkulatorPrzekroju
                 diagram_ULS_VN.AddPointSerie(points_VN, "ULS Case", ustawienia.ULSVN_DataPointColor.GetMedia(), ustawienia.ULSVN_DataPointWeight);
             }
             PlotView_ULS_VN.Model = diagram_ULS_VN.wykres;
+            button_SaveToPDF_ULS_VN.Visibility = Visibility.Visible;
         }
 
         private void Refresh_SLS_Crack_Graph()
@@ -782,6 +851,7 @@ namespace KalkulatorPrzekroju
                 diagram_SLS_Crack.AddPointSerie(points_SLS_QPR, "SLS QPR Case", ustawienia.SLS_Crack_DataPointColor.GetMedia(), ustawienia.SLS_Crack_DataPointWeight);
             }
             PlotView_SLS_Crack.Model = diagram_SLS_Crack.wykres;
+            button_SaveToPDF_SLS_Crack.Visibility = Visibility.Visible;
         }
 
         private void Refresh_SLS_Stresses_Graph()
@@ -807,6 +877,7 @@ namespace KalkulatorPrzekroju
                 diagram_SLS_Stressess.AddPointSerie(points_SLS_CHR, "SLS CHR Case", ustawienia.SLS_Stress_DataPointColor.GetMedia(), ustawienia.SLS_Stress_DataPointWeight);
             }
             PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
+            button_SaveToPDF_SLS_Stresses.Visibility = Visibility.Visible;
         }
 
         private List<CasePoint> ReadFileCSV()
@@ -860,46 +931,6 @@ namespace KalkulatorPrzekroju
                 }
             }
             return taLista;
-        }
-
-        private void checkBox_ULS_MN_upperRange_Click(object sender, RoutedEventArgs e)
-        {
-            textBox_ULS_MN_upperRange.IsEnabled = !(bool)checkBox_ULS_MN_upperRange.IsChecked;
-        }
-
-        private void checkBox_ULS_MN_lowerRange_Click(object sender, RoutedEventArgs e)
-        {
-            textBox_ULS_MN_lowerRange.IsEnabled = !(bool)checkBox_ULS_MN_lowerRange.IsChecked;
-        }
-
-        private void checkBox_Click(object sender, RoutedEventArgs e)
-        {
-            ShowToUpdate();
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (thisFile != "")
-            {
-                string lastChar = thisFile.Substring(thisFile.Length - 1);
-                if (lastChar != "*")
-                {
-                    return;
-                }
-            }
-
-            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                MenuItem_Save_Click(sender, null);
-                return;
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                return;
-            }
-
         }
 
         private void ReadFromInstance(SavedFile instance)
@@ -982,7 +1013,7 @@ namespace KalkulatorPrzekroju
             checkBox_creep2_4steel.IsChecked = instance.consider4steel2;
             checkBox_creep2_4width.IsChecked = instance.consider4crack2;
         }
-
+        
         private void SaveToInstance(SavedFile instance)
         {
             instance.section1 = section1;
@@ -1116,6 +1147,34 @@ namespace KalkulatorPrzekroju
             		Title = defaultTitle + " (" + thisFile + ")" + " *";
             	}
             }
+        }
+
+        private void ExportToPDF(MainPlotView model, string heading)
+        {
+            if (model.wykres != null)
+            {
+                model.wykres.Title = heading;
+
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog
+                {
+                    Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*"
+                };
+
+                if (saveFileDialog1.ShowDialog() == true)
+                {
+                    using (var stream = File.Create(saveFileDialog1.FileName))
+                    {
+                        double factor = 1.4;
+                        var pdfExporter = new PdfExporter { Width = factor * model.wykres.Width, Height = factor * model.wykres.Height };
+                        pdfExporter.Export(model.wykres, stream);
+
+                        Process.Start(saveFileDialog1.FileName);
+                    }
+                }
+                model.wykres.Title = null;
+            }
+            else
+                MessageBox.Show("No picture to save!", "Saving as PDF", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
     }
