@@ -68,7 +68,7 @@ namespace KalkulatorPrzekroju
 
         public override double AsTotal { get { return As1 + As2; } }
 
-        public override Section ReversedSection { get { return new RectangleSection(CurrentConcrete, CurrentSteel, B, H, Fi2, Spacing2, C2, As2, Fi1, Spacing1, C1, As1, MyStirrups, Fi); } }
+        public override Section ReversedSection { get { Section sec = new RectangleSection(CurrentConcrete, CurrentSteel, B, H, Fi2, Spacing2, C2, As2, Fi1, Spacing1, C1, As1, MyStirrups, Fi); return sec; } }
 
         RectangleSection(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double As1, double fi2, double spacing2, double c2, double As2, Stirrups stirrups, double fi)
         {
@@ -231,7 +231,10 @@ namespace KalkulatorPrzekroju
                 this.Fi1 == s2.Fi1 &&
                 this.Fi2 == s2.Fi2 &&
                 this.Spacing1 == s2.Spacing1 &&
-                this.Spacing2 == s2.Spacing2)
+                this.Spacing2 == s2.Spacing2 &&
+                this.considerFi4concrete == s2.considerFi4concrete &&
+                this.considerFi4crack == s2.considerFi4crack &&
+                this.considerFi4steel == s2.considerFi4steel)
             {
                 return true;
             }
@@ -241,21 +244,13 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        public override double ULS_MomentKrytyczny(double NEd, DesignSituation situation)
+        public override double ULS_MomentKrytyczny(double NEd, ULS_Set factors)
         {
-            double gammaC, gammaS;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaC = 1.2;
-                gammaS = 1.0;
-            }
-            else
-            {
-                gammaC = 1.5;
-                gammaS = 1.15;
-            }
-            double alfaCC = 0.85;
-            
+            double alfaCC, gammaC, gammaS;
+            alfaCC = factors.alfaCC;
+            gammaS = factors.gammaS;
+            gammaC = factors.gammaC;
+
             double h = H / 1000;        // w metrach
             double b = B / 1000;        // w metrach
             double a1 = A1 / 1000;      // w metrach
@@ -328,18 +323,12 @@ namespace KalkulatorPrzekroju
             return MRd * 1000;
         }
         
-        public override double ULS_ScinanieBeton(double NEd, DesignSituation situation)
+        public override double ULS_ScinanieBeton(double NEd, ULS_Set factors)
         {
-            double gammaC;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaC = 1.2;
-            }
-            else
-            {
-                gammaC = 1.5;
-            }
-            double alfaCC = 0.85;
+            double alfaCC, gammaC, gammaS;
+            alfaCC = factors.alfaCC;
+            gammaS = factors.gammaS;
+            gammaC = factors.gammaC;
 
             double k1 = 0.15;
 
@@ -374,22 +363,14 @@ namespace KalkulatorPrzekroju
             return VRdc * 1000;
         }
         
-        public override double ULS_ScinanieTotal(double NEd, DesignSituation situation)
+        public override double ULS_ScinanieTotal(double NEd, ULS_Set factors)
         {
-            double gammaC, gammaS;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaC = 1.2;
-                gammaS = 1.0;
-            }
-            else
-            {
-                gammaC = 1.5;
-                gammaS = 1.15;
-            }
-            double alfaCC = 0.85;
+            double alfaCC, gammaC, gammaS;
+            alfaCC = factors.alfaCC;
+            gammaS = factors.gammaS;
+            gammaC = factors.gammaC;
 
-            double VRdc = ULS_ScinanieBeton(NEd, situation);
+            double VRdc = ULS_ScinanieBeton(NEd, factors);
 
             double d = (H - A1) / 1000;         // wysokosc uzyteczna przekroju w metrach
             double Asw = this.MyStirrups.Asw / 1000 / 1000;
@@ -499,6 +480,11 @@ namespace KalkulatorPrzekroju
 
             double hcEff = Math.Min(hcEff1, hcEff2);
             return hcEff * B;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

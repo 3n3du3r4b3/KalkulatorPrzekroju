@@ -59,6 +59,29 @@ namespace KalkulatorPrzekroju
 
         public int NoOfPoints { get; set; }
 
+        //static protected Factors fact = new Factors(Factors.Settings.zachowane);
+        /*
+        static Dictionary<string, double> accidentalFact = new Dictionary<string, double>
+        {
+            {"alfaCC", AlfaCC },
+            {"gammaC", GammaC_Accidental },
+            {"gammaS", GammaS_Accidental }
+        };
+
+        static Dictionary<string, double> persAndTransFact = new Dictionary<string, double>
+        {
+            {"alfaCC", AlfaCC },
+            {"gammaC", GammaC_PermAndTrans },
+            {"gammaS", GammaS_PermAndTrans }
+        };
+
+        static Dictionary<Section.DesignSituation, Dictionary<string, double>> factors = new Dictionary<Section.DesignSituation, Dictionary<string, double>>
+        {
+            { Section.DesignSituation.Accidental, accidentalFact },
+            { Section.DesignSituation.PersistentAndTransient, persAndTransFact }
+        };
+        */
+        
         public Factors(Settings settings)
         {
             if (settings == Settings.domyslne)
@@ -130,4 +153,35 @@ namespace KalkulatorPrzekroju
             this.Crack_kt = 0.4;    
         }
     }
+
+    public class ULS_Set
+    {
+        public double gammaC { get; private set; }
+
+        public double gammaS { get; private set; }
+
+        public double alfaCC { get; private set; }
+
+        public double alfaCT { get; private set; }
+
+        public ULS_Set(Factors factors, DesignSituation designSituation)
+        {
+            switch (designSituation)
+            {
+                case DesignSituation.Accidental:
+                    this.gammaC = factors.GammaC_Accidental;
+                    this.gammaS = factors.GammaS_Accidental;
+                    this.alfaCC = factors.AlfaCC;
+                    this.alfaCT = factors.AlfaCT;
+                    break;
+
+                case DesignSituation.PersistentAndTransient:
+                    this.gammaC = factors.GammaC_PermAndTrans;
+                    this.gammaS = factors.GammaS_PermAndTrans;
+                    this.alfaCC = factors.AlfaCC;
+                    this.alfaCT = factors.AlfaCT;
+                    break;
+            }
+        }
+    } 
 }

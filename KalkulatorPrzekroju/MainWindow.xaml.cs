@@ -366,6 +366,8 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
+
+
         private void DataGrid_ULS_MN_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Refresh_ULS_MN_Graph();
@@ -599,7 +601,7 @@ namespace KalkulatorPrzekroju
 
                 double fi1 = 0;
                 Double.TryParse(textBox_creep1.Text, out fi1);
-                section.SetCreepFactor(fi1);
+                section.SetCreepFactor(fi1, (bool)checkBox_creep1_4concrete.IsChecked, (bool)checkBox_creep1_4steel.IsChecked, (bool)checkBox_creep1_4width.IsChecked);
             }
             else if (i == 2) {
 				if (radioBut_Rectangle_sec2.IsChecked == true) {
@@ -646,11 +648,11 @@ namespace KalkulatorPrzekroju
 
                 double fi2 = 0;
                 Double.TryParse(textBox_creep2.Text, out fi2);
-                section.SetCreepFactor(fi2);
+                section.SetCreepFactor(fi2, (bool)checkBox_creep2_4concrete.IsChecked, (bool)checkBox_creep2_4steel.IsChecked, (bool)checkBox_creep2_4width.IsChecked);
 
             } else
 				section = null;
-            
+
             return section;
 		}
 
@@ -684,49 +686,23 @@ namespace KalkulatorPrzekroju
         
         private void CalcCurves()
         {
-            tab1_ULS = section1.ULS_MN_Curve(
-                (Section.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
-                wspolczynniki.NoOfPoints
-                );
+            ULS_Set factors = new ULS_Set(wspolczynniki, (DesignSituation)comboBox_DesignSituation_1.SelectedIndex);
 
-            tab2_ULS = section2.ULS_MN_Curve(
-                (Section.DesignSituation)comboBox_DesignSituation_2.SelectedIndex,
-                wspolczynniki.NoOfPoints
-                );
+            tab1_ULS = section1.ULS_MN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabSLS_Crack = section1.SLS_Crack_Curve(
-                wspolczynniki.NoOfPoints,
-                wspolczynniki.Crack_wklim,
-                wspolczynniki.Crack_kt,
-                wspolczynniki.Crack_k1
-                );
+            tab2_ULS = section2.ULS_MN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabSLS_NonCrack = section1.SLS_Crack_Curve(
-                wspolczynniki.NoOfPoints,
-                0,
-                wspolczynniki.Crack_kt,
-                wspolczynniki.Crack_k1
-                );
+            tabSLS_Crack = section1.SLS_Crack_Curve(wspolczynniki, true);
+
+            tabSLS_NonCrack = section1.SLS_Crack_Curve(wspolczynniki, false);
             
-            tabVRdc1 = section1.ULS_VRdcN_Curve(
-                (Section.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
-                wspolczynniki.NoOfPoints
-                );
+            tabVRdc1 = section1.ULS_VRdcN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabVRd1 = section1.ULS_VRdN_Curve(
-                (Section.DesignSituation)comboBox_DesignSituation_1.SelectedIndex,
-                wspolczynniki.NoOfPoints
-                );
+            tabVRd1 = section1.ULS_VRdN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabSLS_SteelStress = section1.SLS_StressSteel_Curve(
-                     wspolczynniki.NoOfPoints,
-                     wspolczynniki.Stresses_k3
-                     );
+            tabSLS_SteelStress = section1.SLS_StressSteel_Curve(wspolczynniki);
 
-            tabSLS_ConcreteStress = section1.SLS_StressConcrete_Curve(
-                     wspolczynniki.NoOfPoints,
-                     wspolczynniki.Stresses_k1
-                     );
+            tabSLS_ConcreteStress = section1.SLS_StressConcrete_Curve(wspolczynniki);
 
         }
 
@@ -896,6 +872,11 @@ namespace KalkulatorPrzekroju
             textBox_ULS_MN_lowerRange.IsEnabled = !(bool)checkBox_ULS_MN_lowerRange.IsChecked;
         }
 
+        private void checkBox_Click(object sender, RoutedEventArgs e)
+        {
+            ShowToUpdate();
+        }
+
         private void ReadFromInstance(SavedFile instance)
         {
             section1 = instance.section1;
@@ -968,6 +949,13 @@ namespace KalkulatorPrzekroju
 
             textBox_creep1.Text = instance.creep1.ToString();
             textBox_creep2.Text = instance.creep2.ToString();
+
+            checkBox_creep1_4concrete.IsChecked = instance.consider4concrete1;
+            checkBox_creep1_4steel.IsChecked = instance.consider4steel1;
+            checkBox_creep1_4width.IsChecked = instance.consider4crack1;
+            checkBox_creep2_4concrete.IsChecked = instance.consider4concrete2;
+            checkBox_creep2_4steel.IsChecked = instance.consider4steel2;
+            checkBox_creep2_4width.IsChecked = instance.consider4crack2;
         }
 
         private void SaveToInstance(SavedFile instance)
@@ -1044,6 +1032,13 @@ namespace KalkulatorPrzekroju
 
             instance.creep1 = textBox_creep1.Text;
             instance.creep2 = textBox_creep2.Text;
+
+            instance.consider4concrete1 = (bool)checkBox_creep1_4concrete.IsChecked;
+            instance.consider4steel1 = (bool)checkBox_creep1_4steel.IsChecked;
+            instance.consider4crack1 = (bool)checkBox_creep1_4width.IsChecked;
+            instance.consider4concrete2 = (bool)checkBox_creep2_4concrete.IsChecked;
+            instance.consider4steel2 = (bool)checkBox_creep2_4steel.IsChecked;
+            instance.consider4crack2 = (bool)checkBox_creep2_4width.IsChecked;
         }
 
         private bool GraphIsUpToDate()

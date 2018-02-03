@@ -5,8 +5,8 @@
 	Title="MainWindow"
 	Width="960"
 	MinWidth="960"
-	MinHeight="710"
-	Height="710"
+	MinHeight="720"
+	Height="720"
 	RenderTransformOrigin="0.5,0.5">
     <Grid>
         <DockPanel
@@ -653,8 +653,8 @@
                             <GroupBox
 								x:Name="GroupBox_Creep"
 								Header="Creep"
-								Width="310"
-								Height="65"
+								Width="424"
+								Height="80"
 								Grid.Column="0"
 								Grid.Row="0"
 								HorizontalAlignment="Left"
@@ -686,7 +686,28 @@
 										Margin="210,5,0,12"
 										Width="75"
 										Opacity="1"
-                                        Click="button_CalcCreep1_Click"/>
+                                        Click="button_CalcCreep1_Click" VerticalAlignment="Top" Height="25"/>
+                                    <Label
+                                        Content="Consider for:"
+                                        HorizontalAlignment="Left"
+										Margin="10,30,0,0"
+										Width="85" VerticalAlignment="Top"/>
+                                    <CheckBox
+                                        x:Name="checkBox_creep1_4steel"
+                                        Content="Steel stress"
+                                        HorizontalAlignment="Left"
+										Margin="95,36,0,0" VerticalAlignment="Top" IsChecked="True" LostFocus="ListBox_LostFocus" Click="checkBox_Click"/>
+                                    <CheckBox
+                                        x:Name="checkBox_creep1_4concrete"
+                                        Content="Concrete stress"
+                                        HorizontalAlignment="Left"
+										Margin="195,36,0,0" VerticalAlignment="Top" IsChecked="True" LostFocus="ListBox_LostFocus" Click="checkBox_Click"/>
+                                    <CheckBox
+                                        x:Name="checkBox_creep1_4width"
+                                        Content="Crack width"
+                                        HorizontalAlignment="Left"
+										Margin="315,36,0,0"
+										Width="85" VerticalAlignment="Top" LostFocus="ListBox_LostFocus" Click="checkBox_Click"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>
@@ -1258,10 +1279,12 @@
                             <GroupBox
 								x:Name="GroupBox_Creep2"
 								Header="Creep"
-								Height="65"
-								VerticalAlignment="Top"
-								Width="310"
+								Width="424"
+								Height="80"
+								Grid.Column="0"
+								Grid.Row="0"
 								HorizontalAlignment="Left"
+								VerticalAlignment="Top"
 								Margin="10,470,0,0">
                                 <Grid>
                                     <Label
@@ -1286,12 +1309,31 @@
 										x:Name="button_CalcCreep2"
 										Content="Calculate..."
 										HorizontalAlignment="Left"
-										Margin="210,5,0,0"
-										VerticalAlignment="Top"
+										Margin="210,5,0,12"
 										Width="75"
 										Opacity="1"
-										Height="25"
-                                        Click="button_CalcCreep2_Click"/>
+                                        Click="button_CalcCreep1_Click" VerticalAlignment="Top" Height="25"/>
+                                    <Label
+                                        Content="Consider for:"
+                                        HorizontalAlignment="Left"
+										Margin="10,30,0,0"
+										Width="85" VerticalAlignment="Top"/>
+                                    <CheckBox
+                                        x:Name="checkBox_creep2_4steel"
+                                        Content="Steel stress"
+                                        HorizontalAlignment="Left"
+										Margin="95,36,0,0" VerticalAlignment="Top" IsChecked="True" LostFocus="ListBox_LostFocus" Click="checkBox_Click"/>
+                                    <CheckBox
+                                        x:Name="checkBox_creep2_4concrete"
+                                        Content="Concrete stress"
+                                        HorizontalAlignment="Left"
+										Margin="195,36,0,0" VerticalAlignment="Top" IsChecked="True" LostFocus="ListBox_LostFocus" Click="checkBox_Click"/>
+                                    <CheckBox
+                                        x:Name="checkBox_creep2_4width"
+                                        Content="Crack width"
+                                        HorizontalAlignment="Left"
+										Margin="315,36,0,0"
+										Width="85" VerticalAlignment="Top" LostFocus="ListBox_LostFocus" Click="checkBox_Click"/>
                                 </Grid>
                             </GroupBox>
                         </Grid>

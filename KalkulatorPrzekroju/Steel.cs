@@ -135,5 +135,10 @@ namespace KalkulatorPrzekroju
 
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
 }

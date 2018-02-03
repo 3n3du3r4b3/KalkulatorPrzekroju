@@ -7,6 +7,11 @@ using System.IO;
 
 namespace KalkulatorPrzekroju
 {
+    /// <summary>
+    /// Określa sytuację obliczeniową oraz dobiera współcznniki obliczeniowe dla wybranej sytuacji.
+    /// </summary>
+    public enum DesignSituation { Accidental, PersistentAndTransient }
+
     [Serializable]
     abstract class Section
     {
@@ -45,7 +50,19 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Współczynnik pełzania
         /// </summary>
-        public double Fi { get; private set; }
+        public double Fi { get; protected set; }
+        /// <summary>
+        /// Uwzględnij współczynnik pełzania dla stali
+        /// </summary>
+        public bool considerFi4steel { get; protected set; }
+        /// <summary>
+        /// Uwzględnij współczynnik pełzania dla betonu
+        /// </summary>
+        public bool considerFi4concrete { get; protected set; }
+        /// <summary>
+        /// Uwzględnij współczynnik pełzania dla zarysowania
+        /// </summary>
+        public bool considerFi4crack { get; protected set; }
         /// <summary>
         /// Stosunek modułów sprężystości stali do betonu z uwzględnieniem współczynnika pełzania
         /// </summary>
@@ -54,15 +71,7 @@ namespace KalkulatorPrzekroju
         /// Klasa określająca strzemiona w przekroju
         /// </summary>
         public Stirrups MyStirrups { get; set; }
-        /// <summary>
-        /// Współczynnik pełzania używany w SLS
-        /// </summary>
-        public double CreepCoefficient { get; set; }
-        /// <summary>
-        /// Określa sytuację obliczeniową oraz dobiera współcznniki obliczeniowe dla wybranej sytuacji.
-        /// </summary>
-        public enum DesignSituation { Accidental, PersistentAndTransient }
-
+        
         protected double Dimfactor { get { return 1000.0; } }         // scale factor do wymiarow: 1000 - jedn podst to mmm
         protected double Forcefactor { get { return 1000.0; } }       // scale factor dla sil: 1000 - jedn podst to kN
 
@@ -82,7 +91,27 @@ namespace KalkulatorPrzekroju
         /// Ustawia wartość współczynnika pełzania dla przekroju, jeśli podana wartość będzie mniejsza od zera, współczynnik przyjmie wartość zero.
         /// </summary>
         /// <param name="fi">Współczynnik pełzania</param>
-        public void SetCreepFactor(double fi)
+        /// <param name="forConcrete">Uwzględnij dla betonu</param>
+        /// <param name="forSteel">Uwzględnij dla stali</param>
+        /// <param name="forCrack">Uwzględnij dla zarysowania</param>
+        public void SetCreepFactor(double fi, bool forConcrete, bool forSteel, bool forCrack)
+        {
+            SetCreepFactor(fi);
+            ReversedSection.SetCreepFactor(fi);
+
+            this.considerFi4concrete = forConcrete;
+            this.considerFi4steel = forSteel;
+            this.considerFi4crack = forCrack;
+            ReversedSection.considerFi4concrete = forConcrete;
+            ReversedSection.considerFi4steel = forSteel;
+            ReversedSection.considerFi4crack = forCrack;
+        }
+
+        /// <summary>
+        /// Ustawia wartość współczynnika pełzania dla przekroju, jeśli podana wartość będzie mniejsza od zera, współczynnik przyjmie wartość zero.
+        /// </summary>
+        /// <param name="fi">Współczynnik pełzania</param>
+        protected void SetCreepFactor(double fi)
         {
             if (fi >= 0)
             {
@@ -163,18 +192,9 @@ namespace KalkulatorPrzekroju
         /// </summary>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <returns>Wartość krytycznej osiowej siły rozciągającej dla przekroju w kN</returns>
-        public double ULS_SilaKrytycznaRozciagajaca(DesignSituation situation)
+        public double ULS_SilaKrytycznaRozciagajaca(ULS_Set factors)
         {
-            double gammaS;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaS = 1.0;
-            }
-            else
-            {
-                gammaS = 1.15;
-            }
-
+            double gammaS = factors.gammaS;
             return -((AsTotal) * (CurrentSteel.fyk / gammaS) / Forcefactor);
         }
 
@@ -183,38 +203,16 @@ namespace KalkulatorPrzekroju
         /// </summary>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <returns>Wartość krytycznej osiowej siły ściskającej dla przekroju w kN</returns>
-        public double ULS_SilaKrytycznaSciskajaca(DesignSituation situation)
+        public double ULS_SilaKrytycznaSciskajaca(ULS_Set factors)
         {
-            double gammaC, gammaS;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaC = 1.2;
-                gammaS = 1.0;
-            }
-            else
-            {
-                gammaC = 1.5;
-                gammaS = 1.15;
-            }
-            double alfaCC = 0.85;
-
-            double lambda, eta;
-            double fck = CurrentConcrete.fck;
+            double alfaCC, gammaC, gammaS;
+            alfaCC = factors.alfaCC;
+            gammaS = factors.gammaS;
+            gammaC = factors.gammaC;
+            
             double epsilon = CurrentConcrete.epsilon_cu2;
-            double Es = CurrentSteel.Es;
             double fyd = CurrentSteel.fyk / gammaS;
-
-            if (fck <= 50)
-            {
-                eta = 1;
-                lambda = 0.8;
-            }
-            else
-            {
-                eta = 1.0 - ((fck - 50) / 200);
-                lambda = 0.8 - ((fck - 50) / 400);
-            }
-
+            
             return (((AcTotal * CurrentConcrete.fck / gammaC * alfaCC) / Forcefactor) + (AsTotal * CurrentSteel.SigmaS(epsilon, fyd)) / Forcefactor);
         }
 
@@ -222,7 +220,7 @@ namespace KalkulatorPrzekroju
         /// <param name="NEd"> Siła podłużna w kN </param>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param> 
         /// <returns>Zwraca moment krytyczny w kNm</returns>
-        public abstract double ULS_MomentKrytyczny(double NEd, DesignSituation situation);
+        public abstract double ULS_MomentKrytyczny(double NEd, ULS_Set factors);
 
         /// <summary>
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interakcji.
@@ -230,10 +228,10 @@ namespace KalkulatorPrzekroju
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <param name="NoOfPoints">Liczba punktów tworzących krzywą (liczba punktów z jednej strony osi)</param>
         /// <returns></returns>
-        public double[][] ULS_MN_Curve(DesignSituation situation, int NoOfPoints)
+        public double[][] ULS_MN_Curve(ULS_Set factors, int NoOfPoints)
         {
-            double max = ULS_SilaKrytycznaSciskajaca(situation);
-            double min = ULS_SilaKrytycznaRozciagajaca(situation);
+            double max = ULS_SilaKrytycznaSciskajaca(factors);
+            double min = ULS_SilaKrytycznaRozciagajaca(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
@@ -242,10 +240,10 @@ namespace KalkulatorPrzekroju
 
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = ULS_MomentKrytyczny(Ned, situation);
+                results[i][1] = ULS_MomentKrytyczny(Ned, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.ULS_MomentKrytyczny(Ned, situation);
+                results[results.Length - i - 1][1] = -ReversedSection.ULS_MomentKrytyczny(Ned, factors);
             }
 
             return results;
@@ -257,7 +255,7 @@ namespace KalkulatorPrzekroju
         /// <param name="NEd">Siła podłużna w przekroju w kN</param>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <returns>Zwraca wartość nośności betonu na ścinanie przekroju w kN</returns>
-        public abstract double ULS_ScinanieBeton(double NEd, DesignSituation situation);
+        public abstract double ULS_ScinanieBeton(double NEd, ULS_Set factors);
 
         /// <summary>
         /// Funkcja oblicza nośność przekroju ze zbrojeniem na ścinanie przy podanej sile podłużnej
@@ -265,7 +263,7 @@ namespace KalkulatorPrzekroju
         /// <param name="NEd">Siła podłużna w przekroju w kN</param>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <returns>Zwraca wartość nośności przekroju zbrojonego na ścinanie w kN</returns>
-        public abstract double ULS_ScinanieTotal(double NEd, DesignSituation situation);
+        public abstract double ULS_ScinanieTotal(double NEd, ULS_Set factors);
 
         /// <summary>
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interkacji VRdC / NEd
@@ -273,10 +271,10 @@ namespace KalkulatorPrzekroju
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <returns></returns>
-        public double[][] ULS_VRdcN_Curve(DesignSituation situation, int NoOfPoints)
+        public double[][] ULS_VRdcN_Curve(ULS_Set factors, int NoOfPoints)
         {
-            double max = ULS_SilaKrytycznaSciskajaca(situation);
-            double min = ULS_SilaKrytycznaRozciagajaca(situation);
+            double max = ULS_SilaKrytycznaSciskajaca(factors);
+            double min = ULS_SilaKrytycznaRozciagajaca(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
@@ -284,10 +282,10 @@ namespace KalkulatorPrzekroju
                 double Ned = max - (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = ULS_ScinanieBeton(Ned, situation);
+                results[i][1] = ULS_ScinanieBeton(Ned, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieBeton(Ned, situation);
+                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieBeton(Ned, factors);
             }
 
             return results;
@@ -299,10 +297,10 @@ namespace KalkulatorPrzekroju
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <returns></returns>
-        public double[][] ULS_VRdN_Curve(DesignSituation situation, int NoOfPoints)
+        public double[][] ULS_VRdN_Curve(ULS_Set factors, int NoOfPoints)
         {
-            double max = ULS_SilaKrytycznaSciskajaca(situation);
-            double min = ULS_SilaKrytycznaRozciagajaca(situation);
+            double max = ULS_SilaKrytycznaSciskajaca(factors);
+            double min = ULS_SilaKrytycznaRozciagajaca(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
@@ -310,10 +308,10 @@ namespace KalkulatorPrzekroju
                 double Ned = max - (max - min) / NoOfPoints * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = ULS_ScinanieTotal(Ned, situation);
+                results[i][1] = ULS_ScinanieTotal(Ned, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieTotal(Ned, situation);
+                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieTotal(Ned, factors);
             }
 
             return results;
@@ -561,8 +559,10 @@ namespace KalkulatorPrzekroju
         /// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC / 0.8 dla prętów żebrowanych)</param>
         /// <param name="kt">współczynnik kt zależny od czasu trwania obciążenia (0.6 obc. krótkotrwałe, 0.4 obc. długotrwałe)</param>
         /// <returns>Zwraca szerokość rozwarcia rysy w mm</returns>
-        public double SLS_CrackWidth(double NEd, double MEd, double kt, double k1, bool lowerFace)
+        public double SLS_CrackWidth(double NEd, double MEd, Factors factors, bool lowerFace, bool cracked)
         {
+            double kt = factors.Crack_kt;
+            double k1 = factors.Crack_k1;
             StressState naprezenia = SLS_GetStresses(NEd, MEd, true);
             double alfaE = CurrentSteel.Es / CurrentConcrete.Ecm;
             double As;    //w milimetrach kwadratowych!!
@@ -697,8 +697,14 @@ namespace KalkulatorPrzekroju
         /// <param name="NEd">siła osiowa w kN</param>
         /// <param name="wspRedukcji">współczynnik określający dopuszczalny stopień naprężenia w stali (wsp * fyk)</param>
         /// <returns>Zwraca moment krytyczny w kNm</returns>
-        public double SLS_MomentKrytycznyStal(double NEd, double wspRedukcji)
-        {
+        public double SLS_MomentKrytycznyStal(double NEd, Factors factors)
+        {   /*
+            double tempFi = this.Fi;
+            if (considerFi4steel == false)
+            {
+                SetCreepFactor(0.0);
+            }*/
+            double wspRedukcji = factors.Stresses_k3;
             double minMoment = SLS_MimosrodOsiowegoRozciagania(NEd) * NEd;
             double maxMoment = minMoment + 100;
             double momentKryt = (maxMoment + minMoment) / 2;
@@ -730,7 +736,11 @@ namespace KalkulatorPrzekroju
                 }
 
                 momentKryt = (maxMoment + minMoment) / 2;
-            }
+            }/*
+            if (considerFi4steel == false)
+            {
+                SetCreepFactor(tempFi);
+            }*/
             return momentKryt;
         }
 
@@ -741,8 +751,14 @@ namespace KalkulatorPrzekroju
         /// <param name="NEd">siła osiowa w kN</param>
         /// <param name="wspRedukcji">współczynnik określający dopuszczalny stopień naprężenia w betonie (wsp * fck)</param>
         /// <returns>Zwraca moment krytyczny w kNm</returns>
-        public double SLS_MomentKrytycznyBeton(double NEd, double wspRedukcji)
-        {
+        public double SLS_MomentKrytycznyBeton(double NEd, Factors factors)
+        {/*
+            double tempFi = this.Fi;
+            if (considerFi4concrete == false)
+            {
+                SetCreepFactor(0.0);
+            }*/
+            double wspRedukcji = factors.Stresses_k1;
             double minMoment = SLS_MimosrodOsiowegoRozciagania(NEd) * NEd;
             double maxMoment = minMoment + 100;
             double momentKryt;
@@ -774,7 +790,11 @@ namespace KalkulatorPrzekroju
                 }
 
                 momentKryt = (maxMoment + minMoment) / 2;
-            }
+            } /*
+            if (considerFi4concrete == false)
+            {
+                SetCreepFactor(tempFi);
+            }*/
             return momentKryt;
         }
 
@@ -787,8 +807,14 @@ namespace KalkulatorPrzekroju
         /// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC / 0.8 dla prętów żebrowanych)</param>
         /// <param name="kt">współczynnik kt zależny od czasu trwania obciążenia (0.6 obc. krótkotrwałe, 0.4 obc. długotrwałe)</param>
         /// <returns>Zwraca moment krytycny w kNm</returns>
-        public double SLS_MomentKrytycznyRysa(double NEd, double rysaGraniczna, double kt, double k1)
-        {
+        public double SLS_MomentKrytycznyRysa(double NEd, Factors factors, bool cracked)
+        {/*
+            double tempFi = this.Fi;
+            if (considerFi4crack == false)
+            {
+                SetCreepFactor(0.0);
+            }*/
+            double rysaGraniczna = factors.Crack_wklim;
             double AcTotal = this.AcTotal / Dimfactor / Dimfactor;
             double AsTotal = this.AsTotal / Dimfactor / Dimfactor;
 
@@ -797,7 +823,7 @@ namespace KalkulatorPrzekroju
             // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
             double xc1 = SrCiezkPrzekr(HTotal / Dimfactor);
 
-            if (rysaGraniczna == 0)
+            if (!cracked)
             {
                 double A = SprowPolePrzekr(HTotal / Dimfactor);
                 double Iy = MomBezwPrzekr(HTotal / Dimfactor);
@@ -819,8 +845,8 @@ namespace KalkulatorPrzekroju
             {
                 double wkP, wkL;
                 double moment = NEd * (HTotal / Dimfactor / 2 - xc2);
-                wkP = SLS_CrackWidth(NEd, moment, kt, k1, true);
-                wkL = SLS_CrackWidth(NEd, moment, kt, k1, false);
+                wkP = SLS_CrackWidth(NEd, moment, factors, true, cracked);
+                wkL = SLS_CrackWidth(NEd, moment, factors, false, cracked);
 
                 double mom11, mom22, momLL, momPP, momCC;
                 mom11 = moment;
@@ -831,8 +857,8 @@ namespace KalkulatorPrzekroju
                     while (wkP > wkL)
                     {
                         mom11 -= 0.01 * Math.Abs(NEd);
-                        wkP = SLS_CrackWidth(NEd, mom11, kt, k1, true);
-                        wkL = SLS_CrackWidth(NEd, mom11, kt, k1, false);
+                        wkP = SLS_CrackWidth(NEd, mom11, factors, true, cracked);
+                        wkL = SLS_CrackWidth(NEd, mom11, factors, false, cracked);
                     }
                 }
                 else if (wkP < wkL)
@@ -840,8 +866,8 @@ namespace KalkulatorPrzekroju
                     while (wkP < wkL)
                     {
                         mom11 += 0.01 * Math.Abs(NEd);
-                        wkP = SLS_CrackWidth(NEd, mom11, kt, k1, true);
-                        wkL = SLS_CrackWidth(NEd, mom11, kt, k1, false);
+                        wkP = SLS_CrackWidth(NEd, mom11, factors, true, cracked);
+                        wkL = SLS_CrackWidth(NEd, mom11, factors, false, cracked);
                     }
                 }
                 else
@@ -853,8 +879,8 @@ namespace KalkulatorPrzekroju
 
                 while (Math.Abs(wkP - wkL) > 0.000001 || wkL == 0 || wkP == 0)
                 {
-                    wkP = SLS_CrackWidth(NEd, momCC, kt, k1, true);
-                    wkL = SLS_CrackWidth(NEd, momCC, kt, k1, false);
+                    wkP = SLS_CrackWidth(NEd, momCC, factors, true, cracked);
+                    wkL = SLS_CrackWidth(NEd, momCC, factors, false, cracked);
 
                     if (wkP > wkL)
                         momPP = momCC;
@@ -874,7 +900,7 @@ namespace KalkulatorPrzekroju
 
             double mom1 = Moment0;
             double mom2 = Moment0;
-            double wk0 = SLS_CrackWidth(NEd, Moment0, kt, k1, true);
+            double wk0 = SLS_CrackWidth(NEd, Moment0, factors, true, cracked);
             double delta;
             bool warunek;
 
@@ -886,7 +912,7 @@ namespace KalkulatorPrzekroju
             do
             {
                 mom1 += delta;
-                double wkS = SLS_CrackWidth(NEd, mom1, kt, k1, true);
+                double wkS = SLS_CrackWidth(NEd, mom1, factors, true, cracked);
 
                 if (delta > 0 && wkS <= rysaGraniczna)
                     warunek = true;
@@ -904,7 +930,7 @@ namespace KalkulatorPrzekroju
             double eps = 0.00001;
             while (Math.Abs(momP - momL) > eps)
             {
-                double wk = SLS_CrackWidth(NEd, momC, kt, k1, true);
+                double wk = SLS_CrackWidth(NEd, momC, factors, true, cracked);
                 if (wk > rysaGraniczna)
                 {
                     momP = momC;
@@ -915,7 +941,11 @@ namespace KalkulatorPrzekroju
                 }
 
                 momC = (momP + momL) / 2;
-            }
+            }/*
+            if (considerFi4crack == false)
+            {
+                SetCreepFactor(tempFi);
+            }*/
             return momL;
         }
 
@@ -924,13 +954,24 @@ namespace KalkulatorPrzekroju
         /// </summary>
         /// <param name="wspRedukcji">współczynnik do którego ograniczamy naprężenia w betonie</param>
         /// <returns>Zwraca wartość siły osiowej w kN</returns>
-        public double SLS_SilaOsiowaKrytycznaBeton(double wspRedukcji)
-        {
+        public double SLS_SilaOsiowaKrytycznaBeton(Factors factors)
+        {/*
+            double tempFi = this.Fi;
+            if (considerFi4concrete == false)
+            {
+                SetCreepFactor(0.0);
+            }*/
+            double wspRedukcji = factors.Stresses_k1;
             double A_I = SprowPolePrzekr(HTotal / Dimfactor);                  // sprowadzone pole powierzchni przekroju w m2
             // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
 
             double Force = wspRedukcji * CurrentConcrete.fck * A_I * Forcefactor;
-
+            /*
+            if (considerFi4concrete == false)
+            {
+                SetCreepFactor(tempFi);
+            }
+            */
             return Force;
         }
 
@@ -939,15 +980,16 @@ namespace KalkulatorPrzekroju
         /// </summary>
         /// <param name="wspRedukcji"></param>
         /// <returns>Siła w kN</returns>
-        public double SLS_SilaOsiowaKrytycznaStal(double wspRedukcji)
+        public double SLS_SilaOsiowaKrytycznaStal(Factors factors)
         {
+            double wspRedukcji = factors.Stresses_k3;
             double AsTotal = this.AsTotal / Dimfactor / Dimfactor;
 
             double A_I = SprowPolePrzekr(HTotal / Dimfactor);                  // sprowadzone pole powierzchni przekroju w m2
 
             double Force1 = A_I * CurrentConcrete.fctm;
             double Force2 = AsTotal * wspRedukcji * CurrentSteel.fyk;
-
+            
             return -Math.Max(Force1, Force2) * Forcefactor;
         }
 
@@ -958,9 +1000,16 @@ namespace KalkulatorPrzekroju
         /// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC)</param>
         /// <param name="kt">współczynnik kt zależny od czasu trwania obciążenia (0.6 obc. krótkotrwałe, 0.4 obc. długotrwałe)</param>
         /// <returns>Zwraca wartość siły osiowej w kN</returns>
-        public double SLS_SilaOsiowaKrytycznaRysa(double rysaGraniczna, double kt, double k1)
-        {
-            if (rysaGraniczna == 0)
+        public double SLS_SilaOsiowaKrytycznaRysa(Factors factors, bool cracked)
+        {/*
+            double tempFi = this.Fi;
+            if (considerFi4crack == false)
+            {
+                SetCreepFactor(0.0);
+            }
+            */
+            double rysaGraniczna = factors.Crack_wklim;
+            if (!cracked)
             {
                 return SLS_SilaRysujacaOsiowa();
             }
@@ -1002,8 +1051,8 @@ namespace KalkulatorPrzekroju
             while (Math.Abs(maxForce - minForce) > eps)
             {
                 moment = Force * (HTotal / Dimfactor / 2 - xc2);
-                wkP = SLS_CrackWidth(Force, moment, kt, k1, true);
-                wkL = SLS_CrackWidth(Force, moment, kt, k1, false);
+                wkP = SLS_CrackWidth(Force, moment, factors, true, cracked);
+                wkL = SLS_CrackWidth(Force, moment, factors, false, cracked);
 
                 double mom1, mom2, momL, momP, momC;
                 mom1 = moment;
@@ -1014,8 +1063,8 @@ namespace KalkulatorPrzekroju
                     while (wkP >= wkL)
                     {
                         mom1 -= 0.01 * Math.Abs(Force);
-                        wkP = SLS_CrackWidth(Force, mom1, kt, k1, true);
-                        wkL = SLS_CrackWidth(Force, mom1, kt, k1, false);
+                        wkP = SLS_CrackWidth(Force, mom1, factors, true, cracked);
+                        wkL = SLS_CrackWidth(Force, mom1, factors, false, cracked);
                     }
                 }
                 else if (wkP <= wkL)
@@ -1023,8 +1072,8 @@ namespace KalkulatorPrzekroju
                     while (wkP < wkL)
                     {
                         mom1 += 0.01 * Math.Abs(Force);
-                        wkP = SLS_CrackWidth(Force, mom1, kt, k1, true);
-                        wkL = SLS_CrackWidth(Force, mom1, kt, k1, false);
+                        wkP = SLS_CrackWidth(Force, mom1, factors, true, cracked);
+                        wkL = SLS_CrackWidth(Force, mom1, factors, false, cracked);
                     }
                 }
                 else
@@ -1038,8 +1087,8 @@ namespace KalkulatorPrzekroju
                 {
                     while (Math.Abs(wkP - wkL) > 0.000001 && Math.Abs(momL - momP) > 0.000001) // || wkL == 0 || wkP == 0)
                     {
-                        wkP = SLS_CrackWidth(Force, momC, kt, k1, true);
-                        wkL = SLS_CrackWidth(Force, momC, kt, k1, false);
+                        wkP = SLS_CrackWidth(Force, momC, factors, true, cracked);
+                        wkL = SLS_CrackWidth(Force, momC, factors, false, cracked);
 
                         if (wkP > wkL)
                             momP = momC;
@@ -1063,8 +1112,14 @@ namespace KalkulatorPrzekroju
                 }
                 Force = (maxForce + minForce) / 2;
             }
-            wkP = SLS_CrackWidth(Force, moment, kt, k1, true);
-            wkL = SLS_CrackWidth(Force, moment, kt, k1, false);
+            wkP = SLS_CrackWidth(Force, moment, factors, true, cracked);
+            wkL = SLS_CrackWidth(Force, moment, factors, false, cracked);
+            /*
+            if (considerFi4crack == false)
+            {
+                SetCreepFactor(tempFi);
+            }
+            */
             return maxForce;
         }
 
@@ -1074,10 +1129,18 @@ namespace KalkulatorPrzekroju
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <param name="wspRedukcjiBeton">Współczynnik do którego redukowane są naprężenie w betonie</param>
         /// <returns></returns>
-        public double[][] SLS_StressConcrete_Curve(int NoOfPoints, double wspRedukcjiBeton)
+        public double[][] SLS_StressConcrete_Curve(Factors factors)
         {
-            double max = SLS_SilaOsiowaKrytycznaBeton(wspRedukcjiBeton);
-            double min = 0.5 * SLS_SilaOsiowaKrytycznaStal(0.8);
+            double tempFi = this.Fi;
+            if (!considerFi4concrete)
+            {
+                SetCreepFactor(0.0);
+            }
+            int NoOfPoints = factors.NoOfPoints;
+            double wspRedukcjiBeton = factors.Stresses_k1;
+
+            double max = SLS_SilaOsiowaKrytycznaBeton(factors);
+            double min = 0.5 * SLS_SilaOsiowaKrytycznaStal(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
@@ -1085,12 +1148,13 @@ namespace KalkulatorPrzekroju
                 double Ned = min + (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = SLS_MomentKrytycznyBeton(Ned, wspRedukcjiBeton);
+                results[i][1] = SLS_MomentKrytycznyBeton(Ned, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyBeton(Ned, wspRedukcjiBeton);
+                results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyBeton(Ned, factors);
             }
 
+            SetCreepFactor(tempFi);
             return results;
         }
 
@@ -1100,10 +1164,17 @@ namespace KalkulatorPrzekroju
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <param name="wspRedukcjiStal">Współczynnik do którego redukowane są naprężenia w stali</param>
         /// <returns></returns>
-        public double[][] SLS_StressSteel_Curve(int NoOfPoints, double wspRedukcjiStal)
+        public double[][] SLS_StressSteel_Curve(Factors factors)
         {
-            double max = 0.25 * SLS_SilaOsiowaKrytycznaBeton(0.6);
-            double min = SLS_SilaOsiowaKrytycznaStal(wspRedukcjiStal);
+            double tempFi = this.Fi;
+            if (!considerFi4steel)
+            {
+                SetCreepFactor(0.0);
+            }
+            int NoOfPoints = factors.NoOfPoints;
+            double wspRedukcjiStal = factors.Stresses_k3;
+            double max = 0.25 * SLS_SilaOsiowaKrytycznaBeton(factors);
+            double min = SLS_SilaOsiowaKrytycznaStal(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
@@ -1111,11 +1182,13 @@ namespace KalkulatorPrzekroju
                 double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = SLS_MomentKrytycznyStal(Ned, wspRedukcjiStal);
+                results[i][1] = SLS_MomentKrytycznyStal(Ned, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyStal(Ned, wspRedukcjiStal);
+                results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyStal(Ned, factors);
             }
+            
+            SetCreepFactor(tempFi);
 
             return results;
         }
@@ -1128,10 +1201,17 @@ namespace KalkulatorPrzekroju
 		/// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC)</param>
 		/// <param name="kt">współczynnik kt zależny od czasu trwania obciążenia (0.6 obc. krótkotrwałe, 0.4 obc. długotrwałe)</param>
         /// <returns></returns>
-        public double[][] SLS_Crack_Curve(int NoOfPoints, double rysaGraniczna, double kt, double k1)
+        public double[][] SLS_Crack_Curve(Factors factors, bool cracked)
         {
-            double max = 0.25 * SLS_SilaOsiowaKrytycznaBeton(1.0);
-            double min = SLS_SilaOsiowaKrytycznaRysa(rysaGraniczna, kt, k1);
+            double tempFi = this.Fi;
+            if (!considerFi4crack)
+            {
+                SetCreepFactor(0.0);
+            }
+            int NoOfPoints = factors.NoOfPoints;
+            double rysaGraniczna = factors.Crack_wklim;
+            double max = 0.25 * SLS_SilaOsiowaKrytycznaBeton(factors);
+            double min = SLS_SilaOsiowaKrytycznaRysa(factors, cracked);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
@@ -1141,15 +1221,11 @@ namespace KalkulatorPrzekroju
                 results[i][0] = Ned;
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[i][1] = SLS_MomentKrytycznyRysa(Ned, rysaGraniczna, kt, k1);
-                results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyRysa(Ned, rysaGraniczna, kt, k1);
-
-                if (i == 98)
-                {
-                    //bool nic = true;
-                }
+                results[i][1] = SLS_MomentKrytycznyRysa(Ned, factors, cracked);
+                results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyRysa(Ned, factors, cracked);
             }
 
+            SetCreepFactor(tempFi);
             return results;
         }
 
@@ -1163,7 +1239,7 @@ namespace KalkulatorPrzekroju
             double fyk = CurrentSteel.fyk;
             double AcTotal = this.AcTotal / Dimfactor / Dimfactor;
             double AsTotal = this.AsTotal / Dimfactor / Dimfactor;
-            double alfaE = CurrentSteel.Es / CurrentConcrete.Ecm;
+            double alfaE = AlfaE;
             double A_I = AcTotal + alfaE * AsTotal;
             return -A_I * fctm * Forcefactor;
         }
@@ -1196,6 +1272,11 @@ namespace KalkulatorPrzekroju
             {
                 return HTotal / Dimfactor / 2 - xc2;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

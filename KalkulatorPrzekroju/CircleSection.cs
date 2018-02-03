@@ -56,7 +56,7 @@ namespace KalkulatorPrzekroju
 
         public override double AsTotal { get { return NoB * Ab; } }
 
-        public override Section ReversedSection { get { return new CircleSection(CurrentConcrete, CurrentSteel, D, FiB, C, NoB); } }
+        public override Section ReversedSection { get { Section sec = new CircleSection(CurrentConcrete, CurrentSteel, D, FiB, C, NoB, Fi); return sec; } }
 
         /// <summary>
         /// Konstruktor przekroju
@@ -82,6 +82,31 @@ namespace KalkulatorPrzekroju
             SetCreepFactor(0);
         }
 
+        /// <summary>
+        /// Konstruktor przekroju
+        /// </summary>
+        /// <param name="concrete">Obiekt reprezentujący klasę betonu dla przekroju</param>
+        /// <param name="steel">Obiekt reprezentujący klasę stali zbrojeniowej w przekroju</param>
+        /// <param name="d">Średnica przekroju w milimetrach</param>
+        /// <param name="fiB">Średnica prętów zbrojenia w mm</param>
+        /// <param name="c">Otulina zbrojenia w mm</param>
+        /// <param name="noB">Ilość prętów zbrojenia w przekroju - MINIMUM 4 sztuki!</param>
+        /// <param name="Fi">Współczynnik pełzania</param>
+        public CircleSection(Concrete concrete, Steel steel, double d, double fiB, double c, int noB, double Fi)
+        {
+            this.D = d;
+            this.FiB = fiB;
+            this.C = c;
+
+            this.NoB = noB;
+
+            CurrentConcrete = concrete;
+            CurrentSteel = steel;
+            this.Ab = (fiB / 2) * (fiB / 2) * Math.PI;
+            this.A = c + fiB / 2;
+            SetCreepFactor(Fi);
+        }
+
         public override bool Equals(object obj)
         {
             CircleSection s2 = obj as CircleSection;
@@ -94,7 +119,10 @@ namespace KalkulatorPrzekroju
                 Equals(this.CurrentSteel, s2.CurrentSteel) &&
                 this.Fi == s2.Fi &&
                 this.Ab == s2.Ab &&
-                this.A == s2.A)
+                this.A == s2.A &&
+                this.considerFi4concrete == s2.considerFi4concrete &&
+                this.considerFi4crack == s2.considerFi4crack &&
+                this.considerFi4steel == s2.considerFi4steel)
             {
                 return true;
             }
@@ -288,7 +316,8 @@ namespace KalkulatorPrzekroju
         /// Zwraca grubość pierścienia zbrojenia zastępczego w mm
         /// </summary>
         /// <returns>Grubość pierścienia zbrojenia zastępczego w mm</returns>
-        protected double ULS_ZbrZastGrubosc(){
+        protected double ULS_ZbrZastGrubosc()
+        {
         	return AsTotal/(2*Math.PI*(D/2-A));
         }
         
@@ -297,7 +326,8 @@ namespace KalkulatorPrzekroju
         /// </summary>
         /// <param name="x">Wysokosc strefy sciskanej w m</param>
         /// <returns>Wysokość użyteczna przekroju - odległość środka ciężkości zbrojenia rozciąganego od krawędzi ściskanej przekroju w m</returns>
-        protected double ULS_WysUzyteczna(double x){
+        protected double ULS_WysUzyteczna(double x)
+        {
         	double R = D/Dimfactor/2;
         	double gr = ULS_ZbrZastGrubosc()/Dimfactor;
         	double rZewn = D/Dimfactor/2 - A/Dimfactor + gr/2;
@@ -545,164 +575,13 @@ namespace KalkulatorPrzekroju
 
             return PoleZewn - PoleWewn;
         }
-
-        /*
-        public override double ULS_MomentKrytyczny(double NEd, DesignSituation situation)
+        
+        public override double ULS_MomentKrytyczny(double NEd, ULS_Set factors)
         {
-            double gammaC, gammaS;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaC = 1.2;
-                gammaS = 1.0;
-            }
-            else
-            {
-                gammaC = 1.5;
-                gammaS = 1.15;
-            }
-            double alfaCC = 0.85;
-
-            double D = this.D / Dimfactor;        // w metrach
-            double a = A / Dimfactor;      // w metrach
-            double Ab = this.Ab / Dimfactor / Dimfactor;     // w metrach kwadratowych
-            double fiB = FiB / Dimfactor;
-            int noB = NoB;
-
-            double fyk = CurrentSteel.fyk;          // w MPa
-            double Es = CurrentSteel.Es;            // w MPa
-            //double Ecm = currentConcrete.Ecm;       // w MPa
-            double fck = CurrentConcrete.fck;       // w MPa
-            double fcd = fck / gammaC * alfaCC;     // w MPa
-            double fyd = fyk / gammaS;
-            double n = CurrentConcrete.n;
-
-            double eps = 0.00001;
-            double epsilonC2 = CurrentConcrete.epsilon_c2;
-            double epsilonCU2 = CurrentConcrete.epsilon_cu2;
-            double x1 = 0;
-            double x2 = 100000 * D;
-
-            double d; //wysokość użyteczna, zależna od wysokości strefy ściskanej x
-            double As; //pole zbrojenia rozciąganego, zależne od wysokości strefy ściskanej x
-
-            //obliczenia parametrów geometryczny dla przekroju okragłego
-            double R = D / 2;    //promień przekroju
-            double rAs = R - a;  //promień okręgu po którym rozmieszczone są pręty
-            double[] di; //tablica z odległościami prętów od górnej krawędzi przekroju (ściskanej)
-            bool[] ki; //tablica okreslajaca czy dany pret jest rozciagany (true), ściskany(false)
-
-            di = RzednePretowUpEdge();
-
-            double Pc = 0;
-            double PAs1 = 0;
-            double PAs2 = 0;
-            double x, range;
-            int k = 100;
-            double NRd = 0;
-            //d = di.Max();
-
-            NEd = NEd / Forcefactor;
-
-            do
-            {
-                x = (x1 + x2) / 2;
-                Pc = 0;
-
-                //określenie wysokości użytecznej d która jest zależna od x
-                As = 0; // sumaryczne pole powierzchni zbrojenia rozciaganego
-                double Asd = 0; //moment statyczny zbrojenia rozciaganego wzgledem gornej krawedzi przekroju
-
-                ki = CzyPretRozciagany(x);
-
-                for (int i = 0; i < noB; i++)
-                {
-                    Asd += Ab * Convert.ToUInt32(ki[i]) * di[i];
-                    As += Ab * Convert.ToUInt32(ki[i]);
-                }
-
-                if (As == 0)
-                {
-                    d = D;
-                }
-                else
-                    d = Asd / As; //wysokość uzyteczna znana 
-
-                range = Math.Min(x, D);
-                for (int i = 0; i < k; i++)
-                {
-                    double ri = d - range / k * (i + 0.5);
-                    double riT = d - range / k * (i);
-                    double riB = d - range / k * (i + 1);
-                    Pc += CurrentConcrete.SigmaC(fcd, EpsilonR(ri, x, d)) * (DlugoscOK(d - riT) + DlugoscOK(d - riB)) / 2 * range / k;
-                }
-
-                double[] PAsi = new double[noB];
-                PAs1 = 0;
-                PAs2 = 0;
-                for (int i = 0; i < noB; i++)
-                {
-                    PAsi[i] = Ab * CurrentSteel.SigmaS(EpsilonR(d - di[i], x, d), fyd);
-                    if (!ki[i])
-                    {
-                        PAs2 += PAsi[i];
-                    }
-                    else
-                    {
-                        PAs1 += Ab * CurrentSteel.SigmaS(EpsilonR(0, x, d), fyd);
-                    }
-                }
-
-                NRd = Pc + PAs1 + PAs2;
-
-                if (NRd >= NEd)
-                {
-                    x2 = x;
-                }
-                else
-                {
-                    x1 = x;
-                }
-
-            } while (Math.Abs(x1 - x2) > eps);
-
-            double Pcz = 0;
-            for (int i = 0; i < k; i++)
-            {
-                double ri = d - range / k * (i + 0.5);
-                double sC = CurrentConcrete.SigmaC(fcd, EpsilonR(ri, x, d));
-                Pcz += sC * DlugoscOK(d - ri) * (range / k) * ri;
-            }
-
-            double[] MAs2i = new double[noB];
-            double MAs2 = 0;
-            for (int i = 0; i < noB; i++)
-            {
-                MAs2i[i] = Convert.ToUInt32(!ki[i]) * Ab * CurrentSteel.SigmaS(EpsilonR(d - di[i], x, d), fyd) * (d - di[i]);
-                MAs2 += MAs2i[i];
-            }
-
-            double Ms1 = Pcz + MAs2;
-
-            double MRd = Ms1 - NEd * (d - 0.5 * D);
-
-            return MRd * 1000;
-        }
-        */
-
-        public override double ULS_MomentKrytyczny(double NEd, DesignSituation situation)
-        {
-            double gammaC, gammaS;
-            if (situation == DesignSituation.Accidental)
-            {
-                gammaC = 1.2;
-                gammaS = 1.0;
-            }
-            else
-            {
-                gammaC = 1.5;
-                gammaS = 1.15;
-            }
-            double alfaCC = 0.85;
+            double alfaCC, gammaC, gammaS;
+            alfaCC = factors.alfaCC;
+            gammaS = factors.gammaS;
+            gammaC = factors.gammaC;
 
             double D = this.D / Dimfactor;        // w metrach
             double a = A / Dimfactor;      // w metrach
@@ -804,14 +683,19 @@ namespace KalkulatorPrzekroju
             return MRd * 1000;
         }
 
-        public override double ULS_ScinanieBeton(double NEd, DesignSituation situation)
+        public override double ULS_ScinanieBeton(double NEd, ULS_Set factors)
         {
             return 0;
         }
 
-        public override double ULS_ScinanieTotal(double NEd, DesignSituation situation)
+        public override double ULS_ScinanieTotal(double NEd, ULS_Set factors)
         {
             return 0;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
     }

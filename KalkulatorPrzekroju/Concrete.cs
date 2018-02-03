@@ -233,5 +233,10 @@ namespace KalkulatorPrzekroju
             }
             return sigma;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

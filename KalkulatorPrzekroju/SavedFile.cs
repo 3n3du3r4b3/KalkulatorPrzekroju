@@ -83,5 +83,12 @@ namespace KalkulatorPrzekroju
         public string creep1 { get; set; }
         public string creep2 { get; set; }
 
+        public bool consider4steel1 { get; set; }
+        public bool consider4concrete1 { get; set; }
+        public bool consider4crack1 { get; set; }
+        public bool consider4steel2 { get; set; }
+        public bool consider4concrete2 { get; set; }
+        public bool consider4crack2 { get; set; }
+
     }
 }
