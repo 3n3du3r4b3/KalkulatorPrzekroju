@@ -259,26 +259,7 @@ namespace KalkulatorPrzekroju
 
         private void MenuItem_Close_Click(object sender, RoutedEventArgs e)
         {
-            if (thisFile != "")
-            {
-                string lastChar = thisFile.Substring(thisFile.Length - 1);
-                if (lastChar != "*")
-                {
-                    this.Close();
-                }
-            }
-
-            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                MenuItem_Save_Click(sender, e);
-                this.Close();
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                this.Close();
-            }
+            this.Close();
         }
 
         private void MenuItem_Save_Click(object sender, RoutedEventArgs e)
@@ -894,6 +875,31 @@ namespace KalkulatorPrzekroju
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
             ShowToUpdate();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (thisFile != "")
+            {
+                string lastChar = thisFile.Substring(thisFile.Length - 1);
+                if (lastChar != "*")
+                {
+                    return;
+                }
+            }
+
+            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                MenuItem_Save_Click(sender, null);
+                return;
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+
         }
 
         private void ReadFromInstance(SavedFile instance)

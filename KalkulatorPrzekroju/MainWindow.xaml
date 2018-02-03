@@ -7,7 +7,7 @@
 	MinWidth="960"
 	MinHeight="720"
 	Height="720"
-	RenderTransformOrigin="0.5,0.5">
+	RenderTransformOrigin="0.5,0.5" Closing="Window_Closing">
     <Grid>
         <DockPanel
 			HorizontalAlignment="Left"
