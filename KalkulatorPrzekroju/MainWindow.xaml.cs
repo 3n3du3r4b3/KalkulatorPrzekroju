@@ -568,7 +568,7 @@ namespace KalkulatorPrzekroju
         {
             ExportToPDF(diagram_SLS_Stressess, "EN-1992 SLS Range - Curvature Axial Force [kN] / Bending Moment [kNm]");
         }
-        /*
+        
         private void checkBox_ULS_MN_upperRange_Click(object sender, RoutedEventArgs e)
         {
             textBox_ULS_MN_upperRange.IsEnabled = !(bool)checkBox_ULS_MN_upperRange.IsChecked;
@@ -578,7 +578,7 @@ namespace KalkulatorPrzekroju
         {
             textBox_ULS_MN_lowerRange.IsEnabled = !(bool)checkBox_ULS_MN_lowerRange.IsChecked;
         }
-        */
+        
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
             ShowToUpdate();
