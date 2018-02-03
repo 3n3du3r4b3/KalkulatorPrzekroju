@@ -302,13 +302,16 @@ namespace KalkulatorPrzekroju
                     BinaryFormatter formatter = new BinaryFormatter();
                     formatter.Serialize(output, instance);
                 }
+                MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 thisInstance = instance;
                 newFile = saveFileDialog1.FileName;
                 ShowToUpdate();
             }
+            else
+                MessageBox.Show("File not saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Error);
+            
             this.Title = defaultTitle + " (" + newFile + ")";
             thisFile = newFile;
-            MessageBox.Show("Saved!", "Saving", MessageBoxButton.OK, MessageBoxImage.Asterisk);
         }
 
         private void MenuItem_Open_Click(object sender, RoutedEventArgs e)
