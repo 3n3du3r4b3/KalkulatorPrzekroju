@@ -21,6 +21,7 @@ namespace KalkulatorPrzekroju
     /// </summary>
     public partial class CreepWindow : Window
     {
+        CreepPlotView diagram_Creep;
         double[] cr;
         double[] day;
         double Ac;
@@ -33,6 +34,9 @@ namespace KalkulatorPrzekroju
         double crinput;
         public double CrCoeff;
         List<CreepAtDay> creepResults = new List<CreepAtDay>();
+
+        public MyColor Creep_LineColor = new MyColor(OxyColors.Red);
+        public double Creep_LineWeight = 2;
 
         string format = "0.###";
 
@@ -142,13 +146,19 @@ namespace KalkulatorPrzekroju
             creepResults.Clear();
             this.CreepResults.ItemsSource = null;
             double[] day = DayCalc(divide,linear);
-            foreach (double i in day)
+            double[][] points_Creep = new double[day.Length][];
+            for (int i=0; i<day.Length; i++)
             {
-                CreepAtDay temp = new CreepAtDay(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), i, cemcoeff);
+                CreepAtDay temp = new CreepAtDay(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff);
                 creepResults.Add(temp);
+                points_Creep[i] = new double[] { temp.cr, day[i] };
             }
+
             this.CreepResults.ItemsSource = creepResults;
             CrCoeff = creepResults.Last().cr;
+            diagram_Creep = new CreepPlotView();
+            diagram_Creep.AddLineSerie(points_Creep, "Creep Coefficient", Creep_LineColor.GetMedia(), Creep_LineWeight);
+            PlotView_Creep.Model = diagram_Creep.wykres;
         }
 
         private void button_Cancel_Click(object sender, RoutedEventArgs e)
