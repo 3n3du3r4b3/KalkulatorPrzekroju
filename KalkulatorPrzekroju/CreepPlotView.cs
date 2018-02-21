@@ -23,7 +23,7 @@ namespace KalkulatorPrzekroju
         public CreepPlotView()
         {
             wykres = new PlotModel();
-            wykres.LegendPosition = LegendPosition.TopLeft;
+            wykres.LegendPosition = LegendPosition.BottomCenter;
             wykres.Axes.Clear();
             wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());
             wykres.Axes.Add(new OxyPlot.Axes.LinearAxis());

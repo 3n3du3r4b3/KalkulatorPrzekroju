@@ -1312,7 +1312,7 @@
 										Margin="210,5,0,12"
 										Width="75"
 										Opacity="1"
-                                        Click="button_CalcCreep1_Click" VerticalAlignment="Top" Height="25"/>
+                                        Click="button_CalcCreep2_Click" VerticalAlignment="Top" Height="25"/>
                                     <Label
                                         Content="Consider for:"
                                         HorizontalAlignment="Left"

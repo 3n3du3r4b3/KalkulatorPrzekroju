@@ -11,7 +11,7 @@
         <GroupBox x:Name="groupBox_Creep" Header="Creep Parameters" Margin="10,10,10,0" Height="127" VerticalAlignment="Top">
             <Grid>
                 <Label x:Name="labelRH" Content="RH: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="26"/>
-                <TextBox x:Name="textBox_RH" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_RH_LostFocus" TabIndex="1" Text="40"/>
+                <TextBox x:Name="textBox_RH" HorizontalAlignment="Left" Height="23" Margin="99,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_RH_LostFocus" TabIndex="1" Text="70"/>
                 <Label x:Name="labelRH1" Content="%" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelu" Content="u: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <TextBox x:Name="textBox_u" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_u_LostFocus" TabIndex="2" Text="1000"/>
@@ -32,9 +32,9 @@
             <Grid Margin="-11,-11,11,-2">
                 <Button x:Name="button_Creep" Content="Calculate" HorizontalAlignment="Left" Margin="20,10,160,10" VerticalAlignment="Center" Width="91" Height="30" TabIndex="9" Click="button_Creep_Click"/>
                 <Label x:Name="label2_Copy5" Content="No of divisions: " HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textBox_Div" HorizontalAlignment="Left" Height="23" Margin="220,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="75" TextAlignment="Center" LostFocus="textBox_Div_LostFocus" TabIndex="4" Text="10"/>
-                <RadioButton x:Name="radio_lin" GroupName="div" HorizontalAlignment="Left" Margin="310,10,0,10" VerticalAlignment="Top" Checked="radio_lin_Checked" IsChecked="True">linear</RadioButton>
-                <RadioButton x:Name="radio_log" GroupName="div" HorizontalAlignment="Left" Margin="310,0,-15,10" VerticalAlignment="Bottom" Checked="radio_log_Checked">logarithmic</RadioButton>
+                <TextBox x:Name="textBox_Div" HorizontalAlignment="Left" Height="23" Margin="220,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="75" TextAlignment="Center" LostFocus="textBox_Div_LostFocus" TabIndex="4" Text="16"/>
+                <RadioButton x:Name="radio_lin" GroupName="div" HorizontalAlignment="Left" Margin="310,10,0,10" VerticalAlignment="Top" Checked="radio_lin_Checked">linear</RadioButton>
+                <RadioButton x:Name="radio_log" GroupName="div" HorizontalAlignment="Left" Margin="310,0,-15,10" VerticalAlignment="Bottom" Checked="radio_log_Checked" IsChecked="True">logarithmic</RadioButton>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="groupBox_CCode" Header="Code" Margin="428,137,10,0" Height="66" VerticalAlignment="Top">

@@ -149,7 +149,7 @@ namespace KalkulatorPrzekroju
             double[][] points_Creep = new double[day.Length][];
             for (int i=0; i<day.Length; i++)
             {
-                CreepAtDay temp = new CreepAtDay(Ac, /*fcm*/ 45, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff);
+                CreepAtDay temp = new CreepAtDay(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff);
                 creepResults.Add(temp);
                 points_Creep[i] = new double[] { temp.cr, day[i] };
             }

@@ -24,7 +24,7 @@ namespace KalkulatorPrzekroju
 
         private static double cemt(double t0, double cem)
         {
-            return Math.Max(t0 * Math.Pow(9/(2+Math.Pow(t0,1.2))+1,(cem)),0.5);
+            return t0 * Math.Max((Math.Pow(9 / (2 + Math.Pow(t0, 1.2)) + 1, cem)), 0.5);
         }
 
         private static double alpha1(double fcm)

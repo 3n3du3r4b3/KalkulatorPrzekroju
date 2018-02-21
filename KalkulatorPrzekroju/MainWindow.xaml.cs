@@ -421,9 +421,9 @@ namespace KalkulatorPrzekroju
 
             CalcCurves();
 
-            TabItem ti = tabControl1.SelectedItem as TabItem;
+            int ti = tabControl1.SelectedIndex;
 
-            Preview window = new Preview(ti);
+            Preview window = new Preview(ti/*,section1,section2*/);
         }
 
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
@@ -527,8 +527,6 @@ namespace KalkulatorPrzekroju
             double creep1;
             Double.TryParse(textBox_creep1.Text, out creep1);
             creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1);
-            //section1.SetCreepFactor(creepwin1.Result());
-            //textBox_creep1.Text = section1.Fi.ToString("F3");
             textBox_creep1.Text = creepwin1.Result().ToString("F3");
             ShowToUpdate();
         }
@@ -546,8 +544,6 @@ namespace KalkulatorPrzekroju
             double creep2;
             Double.TryParse(textBox_creep2.Text, out creep2);
             creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2);
-            //section2.SetCreepFactor(creepwin2.Result());
-            //textBox_creep2.Text = section2.Fi.ToString("F3");
             textBox_creep2.Text = creepwin2.Result().ToString("F3");
             ShowToUpdate();
         }
