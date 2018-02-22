@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="Preview" Height="500" Width="500">
-    <Grid>
-        <Canvas Name="PreviewWindow">
-        </Canvas>
-    </Grid>
+        Title="Preview" Height="700" Width="700">
+    <Viewbox Height="700" Width="700" Name="Outline" Stretch="Uniform">
+        <Canvas Name="PreviewCanvas" Height="700" Width="700">
+            </Canvas>
+    </Viewbox>
 </Window>

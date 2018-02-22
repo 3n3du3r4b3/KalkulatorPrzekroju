@@ -101,6 +101,7 @@ namespace KalkulatorPrzekroju
 
             SetCreepFactor(fi);
             MyStirrups = stirrups;
+            draw = new DrawInfo(H, B, true);
         }
 
         /// <summary>
@@ -155,6 +156,7 @@ namespace KalkulatorPrzekroju
             
             SetCreepFactor(0);
             MyStirrups = stirrups;
+            draw = new DrawInfo(H, B, true);
         }
 
         /// <summary>
@@ -211,6 +213,7 @@ namespace KalkulatorPrzekroju
 
             SetCreepFactor(0);
             MyStirrups = stirrups;
+            draw = new DrawInfo(H, B, false);
         }
 
         public override bool Equals(object obj)

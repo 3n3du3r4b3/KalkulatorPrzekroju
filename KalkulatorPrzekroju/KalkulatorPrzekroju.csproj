@@ -91,6 +91,7 @@
     <Compile Include="CircleSection.cs" />
     <Compile Include="CreepCoefficient.cs" />
     <Compile Include="CreepPlotView.cs" />
+    <Compile Include="DrawInfo.cs" />
     <Compile Include="MainPlotView.cs" />
     <Compile Include="MyColor.cs" />
     <Compile Include="Preview.xaml.cs">

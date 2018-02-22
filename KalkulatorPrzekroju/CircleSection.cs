@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,6 +80,7 @@ namespace KalkulatorPrzekroju
             this.Ab = (fiB / 2) * (fiB / 2) * Math.PI;
             this.A = c + fiB / 2;
             SetCreepFactor(0);
+            draw = new DrawInfo(D);
         }
 
         /// <summary>
@@ -105,6 +106,7 @@ namespace KalkulatorPrzekroju
             this.Ab = (fiB / 2) * (fiB / 2) * Math.PI;
             this.A = c + fiB / 2;
             SetCreepFactor(Fi);
+            draw = new DrawInfo(D);
         }
 
         public override bool Equals(object obj)
