@@ -26,6 +26,9 @@ namespace KalkulatorPrzekroju
             this.Width = 500;
             this.Height = this.Width;
             this.Show();
+            Rectangle rsec;
+            Ellipse csec;
+
             SetBackground();
 
             if (ind == 0)
@@ -34,12 +37,18 @@ namespace KalkulatorPrzekroju
                 {
                     double W = s1.B;
                     double H = s1.H;
-                    DrawRectangle(H, W);
+                    rsec = DrawRectangle(H, W);
+                    PreviewCanvas.Children.Add(rsec);
+                    Canvas.SetTop(rsec, 50);
+                    Canvas.SetLeft(rsec, 50);
                 }
                 else
                 {
                     double D = s1.D;
-                    DrawCircle(D);
+                    csec = DrawCircle(D);
+                    PreviewCanvas.Children.Add(csec);
+                    Canvas.SetTop(csec, 50);
+                    Canvas.SetLeft(csec, 50);
                 }
             }
             else if (ind == 1)
@@ -48,24 +57,41 @@ namespace KalkulatorPrzekroju
                 {
                     double W = s2.B;
                     double H = s2.H;
-                    DrawRectangle(H, W);
+                    rsec = DrawRectangle(H, W);
+                    PreviewCanvas.Children.Add(rsec);
+                    Canvas.SetTop(rsec, 50);
+                    Canvas.SetLeft(rsec, 50);
                 }
                 else
                 {
                     double D = s2.D;
-                    DrawCircle(D);
+                    csec = DrawCircle(D);
+                    PreviewCanvas.Children.Add(csec);
+                    Canvas.SetTop(csec, 50);
+                    Canvas.SetLeft(csec, 50);
                 }
             }
             else Console.WriteLine("Not Good");
+        }
+
+        void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //StretchVbox();
+            ScaleTransform myScale = new ScaleTransform();
+            TransformGroup myTransform = new TransformGroup();
+            myTransform.Children.Add(myScale);
+            myScale.ScaleX = this.ActualWidth/500;
+            myScale.ScaleY = myScale.ScaleX;
+            PreviewCanvas.RenderTransform = myTransform;
         }
 
         private void StretchVbox()
     {
         Viewbox Outline = new Viewbox();
         Outline.StretchDirection = StretchDirection.Both;
-        Outline.Stretch = Stretch.Fill;
-        Outline.MaxWidth = 800;
-        Outline.MaxHeight = 800;
+        Outline.Stretch = Stretch.UniformToFill;
+        Outline.MaxWidth = 1200;
+        Outline.MaxHeight = 1200;
     }
 
         private void SetBackground()
@@ -85,12 +111,7 @@ namespace KalkulatorPrzekroju
         PreviewCanvas.Background = bkground;
     }
 
-        void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        StretchVbox();
-    }
-
-        private void DrawRectangle(double H, double B)
+        private Rectangle DrawRectangle(double H, double B)
     {
         double aH = PreviewCanvas.ActualHeight;
         double aB = PreviewCanvas.ActualWidth;
@@ -109,18 +130,16 @@ namespace KalkulatorPrzekroju
             trH = 0.8 * (aB / B) * H;
         }
 
-        Rectangle rsec = new Rectangle();
-        rsec.Height = trH;
-        rsec.Width = trB;
-        rsec.Stroke = new SolidColorBrush(Colors.Black);
-        rsec.StrokeThickness = 1;
-        rsec.Fill = new SolidColorBrush(Colors.LightGoldenrodYellow);
-        PreviewCanvas.Children.Add(rsec);
-        Canvas.SetTop(rsec, 50);
-        Canvas.SetLeft(rsec, 50);
+            Rectangle rsec = new Rectangle();
+            rsec.Height = trH;
+            rsec.Width = trB;
+            rsec.Stroke = new SolidColorBrush(Colors.Black);
+            rsec.StrokeThickness = 1;
+            rsec.Fill = new SolidColorBrush(Colors.LightGoldenrodYellow);
+            return rsec;
     }
 
-        private void DrawCircle(double D)
+        private Ellipse DrawCircle(double D)
         {
             double aH = PreviewCanvas.ActualHeight;
             double aB = PreviewCanvas.ActualWidth;
@@ -145,9 +164,7 @@ namespace KalkulatorPrzekroju
             csec.Stroke = new SolidColorBrush(Colors.Black);
             csec.StrokeThickness = 1;
             csec.Fill = new SolidColorBrush(Colors.LightGoldenrodYellow);
-            PreviewCanvas.Children.Add(csec);
-            Canvas.SetTop(csec, 50);
-            Canvas.SetLeft(csec, 50);
+            return csec;
         }
     }
 }
