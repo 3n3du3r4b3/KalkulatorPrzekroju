@@ -20,58 +20,63 @@ namespace KalkulatorPrzekroju
     /// </summary>
     public partial class Preview : Window
     {
+
         public Preview(int ind, DrawInfo s1, DrawInfo s2)
         {
             InitializeComponent();
-            this.Width = 500;
-            this.Height = this.Width;
             this.Show();
-            Rectangle rsec;
-            Ellipse csec;
 
-            SetBackground();
+            GeometryGroup sectionOutline = new GeometryGroup();
+            GeometryGroup rebar = new GeometryGroup();
+            GeometryGroup dimline = new GeometryGroup();
+            //DrawingGroup sectgroup = new DrawingGroup();
+            GeometryDrawing sectionDrawing = new GeometryDrawing();
+            Label secName = new Label();
+
+            SetBackground(prCanvas);
+
+            Path outlinePath = new Path();
+            outlinePath.Stroke = new SolidColorBrush(Colors.Black);
+
 
             if (ind == 0)
             {
+                secName.Content = "Section 1";
                 if (s1.isRectangle)
                 {
                     double W = s1.B;
                     double H = s1.H;
-                    rsec = DrawRectangle(H, W);
-                    PreviewCanvas.Children.Add(rsec);
-                    Canvas.SetTop(rsec, 50);
-                    Canvas.SetLeft(rsec, 50);
+                    RectangleGeometry rsec = DrawRectangle(H, W);
+                    sectionOutline.Children.Add(rsec);
                 }
                 else
                 {
                     double D = s1.D;
-                    csec = DrawCircle(D);
-                    PreviewCanvas.Children.Add(csec);
-                    Canvas.SetTop(csec, 50);
-                    Canvas.SetLeft(csec, 50);
+                    EllipseGeometry csec = DrawCircle(D);
+                    sectionOutline.Children.Add(csec);
                 }
+                
             }
             else if (ind == 1)
             {
+                secName.Content = "Section 2";
                 if (s2.isRectangle)
                 {
                     double W = s2.B;
                     double H = s2.H;
-                    rsec = DrawRectangle(H, W);
-                    PreviewCanvas.Children.Add(rsec);
-                    Canvas.SetTop(rsec, 50);
-                    Canvas.SetLeft(rsec, 50);
+                    RectangleGeometry rsec = DrawRectangle(H, W);
+                    sectionOutline.Children.Add(rsec);
                 }
                 else
                 {
                     double D = s2.D;
-                    csec = DrawCircle(D);
-                    PreviewCanvas.Children.Add(csec);
-                    Canvas.SetTop(csec, 50);
-                    Canvas.SetLeft(csec, 50);
+                    EllipseGeometry csec = DrawCircle(D);
+                    sectionOutline.Children.Add(csec);
                 }
             }
             else Console.WriteLine("Not Good");
+
+            Outline.Data = sectionOutline;
         }
 
         void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -82,7 +87,7 @@ namespace KalkulatorPrzekroju
             myTransform.Children.Add(myScale);
             myScale.ScaleX = this.ActualWidth/500;
             myScale.ScaleY = myScale.ScaleX;
-            PreviewCanvas.RenderTransform = myTransform;
+            //myGrid.RenderTransform = myTransform;
         }
 
         private void StretchVbox()
@@ -94,77 +99,95 @@ namespace KalkulatorPrzekroju
         Outline.MaxHeight = 1200;
     }
 
-        private void SetBackground()
+        private void SetBackground(Canvas can)
     {
-        LinearGradientBrush bkground = new LinearGradientBrush();
-        bkground.StartPoint = new Point(0, 0);
-        bkground.EndPoint = new Point(0, 1);
+        LinearGradientBrush bkgr = new LinearGradientBrush();
+        bkgr.StartPoint = new Point(0, 0);
+        bkgr.EndPoint = new Point(0, 1);
         GradientStop whiteGS = new GradientStop();
         whiteGS.Color = Colors.White;
         whiteGS.Offset = 0.0;
-        bkground.GradientStops.Add(whiteGS);
+        bkgr.GradientStops.Add(whiteGS);
         GradientStop grayGS = new GradientStop();
         grayGS.Color = Colors.LightGray;
         grayGS.Offset = 1.0;
-        bkground.GradientStops.Add(grayGS);
+        bkgr.GradientStops.Add(grayGS);
 
-        PreviewCanvas.Background = bkground;
+        can.Background = bkgr;
     }
 
-        private Rectangle DrawRectangle(double H, double B)
-    {
-        double aH = PreviewCanvas.ActualHeight;
-        double aB = PreviewCanvas.ActualWidth;
-
-        double trH;
-        double trB;
-
-        if (H / aH > B / aB)
+        private RectangleGeometry DrawRectangle(double B, double H)
         {
-            trH = 0.8 * aH;
-            trB = 0.8 * (aH / H) * B;
-        }
-        else
-        {
-            trB = 0.8 * aB;
-            trH = 0.8 * (aB / B) * H;
-        }
 
-            Rectangle rsec = new Rectangle();
-            rsec.Height = trH;
-            rsec.Width = trB;
-            rsec.Stroke = new SolidColorBrush(Colors.Black);
-            rsec.StrokeThickness = 1;
-            rsec.Fill = new SolidColorBrush(Colors.LightGoldenrodYellow);
+            double aH = prCanvas.ActualHeight;
+            double aB = prCanvas.ActualWidth;
+            double scale = 0.8;
+
+            double trH;
+            double trB;
+
+            if (H / aH > B / aB)
+            {
+                trH = scale * aH;
+                trB = scale * (aH / H) * B;
+            }
+            else
+            {
+                trB = scale * aB;
+                trH = scale * (aB / B) * H;
+            }
+            
+            Rect myRect1 = new Rect();
+            myRect1.X = prCanvas.ActualHeight/2 - trH/2;
+            myRect1.Y = prCanvas.ActualWidth/2 - trB/2;
+            myRect1.Width = trH;
+            myRect1.Height = trB;
+            RectangleGeometry rsec = new RectangleGeometry();
+            rsec.Rect = myRect1;
             return rsec;
-    }
+        }
 
-        private Ellipse DrawCircle(double D)
+        private EllipseGeometry DrawCircle(double D)
         {
-            double aH = PreviewCanvas.ActualHeight;
-            double aB = PreviewCanvas.ActualWidth;
+            double aH = prCanvas.ActualHeight;
+            double aB = prCanvas.ActualWidth;
+            double scale = 0.8;
 
             double trH;
             double trB;
 
             if (D / aH > D / aB)
             {
-                trH = 0.8 * aH;
-                trB = 0.8 * (aH / D) * D;
+                trH = scale * aH;
+                trB = scale * (aH / D) * D;
             }
             else
             {
-                trB = 0.8 * aB;
-                trH = 0.8 * (aB / D) * D;
+                trB = scale * aB;
+                trH = scale * (aB / D) * D;
             }
 
-            Ellipse csec = new Ellipse();
-            csec.Height = trH;
-            csec.Width = trB;
-            csec.Stroke = new SolidColorBrush(Colors.Black);
-            csec.StrokeThickness = 1;
-            csec.Fill = new SolidColorBrush(Colors.LightGoldenrodYellow);
+            Rect myRect1 = new Rect();
+            myRect1.X = prCanvas.ActualHeight / 2 - trH / 2;
+            myRect1.Y = prCanvas.ActualWidth / 2 - trB / 2;
+            myRect1.Width = trH;
+            myRect1.Height = trB;
+            EllipseGeometry csec = new EllipseGeometry(myRect1);
             return csec;
+        }
+
+        private class DimLine
+        {
+            public DimLine(double H, double B)
+            {
+            }
+        }
+
+        private class Reinforcement
+        {
+            public Reinforcement(double H, double B)
+            {
+            }
         }
     }
 }
