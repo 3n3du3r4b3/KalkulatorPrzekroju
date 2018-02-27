@@ -39,6 +39,8 @@ namespace KalkulatorPrzekroju
 
         public double GammaS_Accidental { get; set; }
 
+        public double Shear_Teta { get; set; }
+
         public double AlfaCC { get; set; }
 
         public double AlfaCT { get; set; }
@@ -108,6 +110,7 @@ namespace KalkulatorPrzekroju
                     GammaS_PermAndTrans = zapisane.GammaS_PermAndTrans;
                     AlfaCC = zapisane.AlfaCC;
                     AlfaCT = zapisane.AlfaCT;
+                    Shear_Teta = zapisane.Shear_Teta;
                     Stresses_k1 = zapisane.Stresses_k1;
                     Stresses_k3 = zapisane.Stresses_k3;
                     Crack_k1 = zapisane.Crack_k1;
@@ -144,6 +147,7 @@ namespace KalkulatorPrzekroju
             this.GammaS_PermAndTrans = 1.15;
             this.AlfaCC = 0.85;
             this.AlfaCT = 1.0;
+            this.Shear_Teta = 21.801;
             this.Stresses_k1 = 0.6;
             this.Stresses_k3 = 0.8;
             this.Crack_k1 = 0.8;
