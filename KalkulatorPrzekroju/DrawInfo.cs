@@ -1,5 +1,9 @@
-﻿namespace KalkulatorPrzekroju
+﻿using System;
+using System.Runtime.Serialization.Formatters.Binary;
+
+namespace KalkulatorPrzekroju
 {
+    [Serializable]
     public class DrawInfo
     {
         public double H;
