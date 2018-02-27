@@ -46,6 +46,9 @@ namespace KalkulatorPrzekroju
         double[][] tabSLS_ConcreteStress;
         double[][] tabSLS_SteelStress;
         double[][] tabVRd1;
+        double[][] tabVRd2;
+        double[][] tabVRd3;
+        double[][] tabVRd4;
         double[][] tabVRdc1;
         double[][] tabSLS_NonCrack;
         double[][] tabSLS_Crack;
@@ -765,7 +768,13 @@ namespace KalkulatorPrzekroju
             
             tabVRdc1 = section1.ULS_VRdcN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabVRd1 = section1.ULS_VRdN_Curve(factors, wspolczynniki.NoOfPoints);
+            tabVRd1 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 1.0, wspolczynniki.NoOfPoints);
+
+            tabVRd2 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 0.75, wspolczynniki.NoOfPoints);
+
+            tabVRd3 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 0.5, wspolczynniki.NoOfPoints);
+
+            tabVRd4 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 0.25, wspolczynniki.NoOfPoints);
 
             tabSLS_SteelStress = section1.SLS_StressSteel_Curve(wspolczynniki);
 
@@ -812,10 +821,42 @@ namespace KalkulatorPrzekroju
                 diagram_ULS_VN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
             }
 
+            Color thisColor = ustawienia.ULSVN_VrdLineColor.GetMedia();
+
             if (tabVRd1 != null)
             {
-                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s");
-                diagram_ULS_VN.AddLineSerie(tabVRd1, "Section 1 - VRd.s", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
+                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 100% MRd");
+                diagram_ULS_VN.AddLineSerie(tabVRd1, "Section 1 - VRd.s - 100% MRd", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
+            }
+
+            if (tabVRd2 != null)
+            {
+                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 75% MRd");
+                float partR = thisColor.ScR * 0.75f;
+                float partG = thisColor.ScG * 0.75f;
+                float partB = thisColor.ScB * 0.75f;
+                Color myColor = Color.FromScRgb(thisColor.ScA, partR, partG, partB);
+                diagram_ULS_VN.AddLineSerie(tabVRd2, "Section 1 - VRd.s - 75% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
+            }
+
+            if (tabVRd3 != null)
+            {
+                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 50% MRd");
+                float partR = thisColor.ScR * 0.5f;
+                float partG = thisColor.ScG * 0.5f;
+                float partB = thisColor.ScB * 0.5f;
+                Color myColor = Color.FromScRgb(thisColor.ScA, partR, partG, partB);
+                diagram_ULS_VN.AddLineSerie(tabVRd3, "Section 1 - VRd.s - 50% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
+            }
+
+            if (tabVRd4 != null)
+            {
+                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 25% MRd");
+                float partR = thisColor.ScR * 0.25f;
+                float partG = thisColor.ScG * 0.25f;
+                float partB = thisColor.ScB * 0.25f;
+                Color myColor = Color.FromScRgb(thisColor.ScA, partR, partG, partB);
+                diagram_ULS_VN.AddLineSerie(tabVRd4, "Section 1 - VRd.s - 25% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
             }
 
             if (points_VN != null)
@@ -992,6 +1033,9 @@ namespace KalkulatorPrzekroju
             tabSLS_ConcreteStress = instance.tabSLS_ConcreteStress;
             tabSLS_SteelStress = instance.tabSLS_SteelStress;
             tabVRd1 = instance.tabVRd1;
+            tabVRd2 = instance.tabVRd2;
+            tabVRd3 = instance.tabVRd3;
+            tabVRd4 = instance.tabVRd4;
             tabVRdc1 = instance.tabVRdc1;
             tabSLS_NonCrack = instance.tabSLS_NonCrack;
             tabSLS_Crack = instance.tabSLS_Crack;
@@ -1075,6 +1119,9 @@ namespace KalkulatorPrzekroju
             instance.tabSLS_ConcreteStress = tabSLS_ConcreteStress;
             instance.tabSLS_SteelStress = tabSLS_SteelStress;
             instance.tabVRd1 = tabVRd1;
+            instance.tabVRd2 = tabVRd2;
+            instance.tabVRd3 = tabVRd3;
+            instance.tabVRd4 = tabVRd4;
             instance.tabVRdc1 = tabVRdc1;
             instance.tabSLS_NonCrack = tabSLS_NonCrack;
             instance.tabSLS_Crack = tabSLS_Crack;

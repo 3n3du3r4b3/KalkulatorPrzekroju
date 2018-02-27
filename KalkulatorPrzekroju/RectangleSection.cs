@@ -335,20 +335,24 @@ namespace KalkulatorPrzekroju
 
             double k1 = 0.15;
 
-            double b = this.B / 1000;                                    // szerokość przekroju w metrach
+            double b = this.B / Dimfactor;                                    // szerokość przekroju w metrach
             double bw = b;
-            double h = this.H / 1000;                                    // wysokość przekroju w metrach
-            double d = h - (this.A1 / 1000);                             // wysokosc uzyteczna przekroju w metrach
+            double h = this.H / Dimfactor;                                    // wysokość przekroju w metrach
+            double d = h - (this.A1 / Dimfactor);                             // wysokosc uzyteczna przekroju w metrach
 
             double fck = this.CurrentConcrete.fck;
             double fcd = fck / gammaC * alfaCC;                             //obliczeniowa nośność betonu na ściskanie
-            double sigmaCP1 = NEd / (b * h) / 1000;
+            double sigmaCP1 = NEd / (b * h) / Forcefactor;
             double sigmaCP2 = 0.2 * fcd;
-            double sigmaCP = Math.Max(sigmaCP1, sigmaCP2);
+            double sigmaCP = Math.Min(sigmaCP1, sigmaCP2);
 
-            double k = 1 + Math.Sqrt(200 / (d * 1000));
+            if (sigmaCP < -CurrentConcrete.fctk005/gammaC) {
+            	sigmaCP = -CurrentConcrete.fctk005 / gammaC;
+            }
+            
+            double k = 1 + Math.Sqrt(200 / (d * Dimfactor));
 
-            double Asl = Math.Min(this.As1, this.As2) / 1000 / 1000;                // to trzeba jeszcze dobrze przeanalizowac jak dobierac to zbrojenie
+            double Asl = As1 / Dimfactor / Dimfactor;                // to trzeba jeszcze dobrze przeanalizowac jak dobierac to zbrojenie
 
             double rol = Math.Min(Asl / (bw * d), 0.02);
 
@@ -363,37 +367,65 @@ namespace KalkulatorPrzekroju
             double VEdmax = 0.5 * bw * d * ni * fcd;
             VRdc = Math.Min(VRdc, VEdmax);
 
-            return VRdc * 1000;
+            return VRdc * Forcefactor;
         }
         
-        public override double ULS_ScinanieTotal(double NEd, ULS_Set factors)
+        public override double ULS_ScinanieTotal(double NEd, double teta, double part, ULS_Set factors)
         {
             double alfaCC, gammaC, gammaS;
             alfaCC = factors.alfaCC;
             gammaS = factors.gammaS;
             gammaC = factors.gammaC;
 
-            double VRdc = ULS_ScinanieBeton(NEd, factors);
+            //double VRdc = ULS_ScinanieBeton(NEd, factors);
 
-            double d = (H - A1) / 1000;         // wysokosc uzyteczna przekroju w metrach
-            double Asw = this.MyStirrups.Asw / 1000 / 1000;
-            double s = this.MyStirrups.Swd / 1000;
-            double z = 0.9 * d;           // ramię sił wewnętrznych - trzeba sprawdzić jak to analizować, dla czystego zginania z=0.9d
-            double bw = B / 1000;
-            double fywd = 0.8 * CurrentSteel.fyk / gammaS;
+            double d = (H - A1) / Dimfactor;         // wysokosc uzyteczna przekroju w metrach
+            double Asw = this.MyStirrups.Asw / Dimfactor / Dimfactor;
+            double s = this.MyStirrups.Swd / Dimfactor;
+            double z; // = 0.9 * d;           // ramię sił wewnętrznych - trzeba sprawdzić jak to analizować, dla czystego zginania z=0.9d
+            double bw = B / Dimfactor;
+            double fywd = Math.Min(0.8 * CurrentSteel.fyk,  CurrentSteel.fyk/ gammaS);
             double fcd = CurrentConcrete.fck / gammaC * alfaCC;
 
-            double cotQ;
-            if (NEd >= 0)
+            double MEd;
+            double x;
+            
+            MEd = part * ULS_MomentKrytyczny(NEd, factors);
+            x = SLS_GetStresses(NEd, MEd, true).WysokośćStrefySciskanej;
+            z = d - Math.Max(0.5 * x, A2/Dimfactor);
+            /*            				// ROZWAŻYĆ KIEDYŚ CZY JEST TAKI SENS
+                        double MEd1, MEd2;
+                        MEd1 = 0;
+                        MEd2 = ULS_MomentKrytyczny(NEd, factors);
+                        do{
+                            MEd = (MEd1 + MEd2) / 2;
+                            x = SLS_GetStresses(NEd, MEd, true).WysokośćStrefySciskanej;
+                            z = d - 0.5*x;
+                        } while (Math.Abs(MEd1-MEd2) < 0.001);
+                        */
+
+            double cotQ = Math.Tan(Math.PI / 2 - teta / 360 * Math.PI);
+
+            if (NEd < 0 && cotQ > 1.25)
             {
-                cotQ = 2.0;
-            }
-            else
                 cotQ = 1.25;
+            }
             
             double VRds = Asw / s * z * fywd * cotQ;            // w meganiotonach
 
             double alfaCW = 1;
+            						// DO GŁĘBSZEGO ROZWAŻENIA CZY MOZNA TAK ZASTOSOWAĆ
+            double sigmaCP = NEd / AcTotal * Forcefactor;
+            
+            if (sigmaCP > 0) {
+            	if (sigmaCP <= 0.25 * fcd) {
+            		alfaCW = 1 + (sigmaCP / fcd);
+            	} else if (sigmaCP <= 0.5 * fcd) {
+            		alfaCW  = 1.25;
+            	} else if (sigmaCP < fcd) {
+            		alfaCW  = 2.5 * (1-(sigmaCP / fcd));
+            	}
+            }
 
             double alfa = this.MyStirrups.Alfa / (2 * Math.PI);
 

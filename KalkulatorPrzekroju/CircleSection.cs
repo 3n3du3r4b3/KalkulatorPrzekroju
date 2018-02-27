@@ -690,7 +690,7 @@ namespace KalkulatorPrzekroju
             return 0;
         }
 
-        public override double ULS_ScinanieTotal(double NEd, ULS_Set factors)
+        public override double ULS_ScinanieTotal(double NEd, double teta, double part, ULS_Set factors)
         {
             return 0;
         }

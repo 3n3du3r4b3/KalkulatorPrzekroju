@@ -29,9 +29,9 @@ namespace KalkulatorPrzekroju
         {
             this.wspolczynniki = wsp;
             this.factors = wspolczynniki;
-            this.Show();
-            
             ReadFactors();
+            this.ShowDialog();
+            
         }
 
         public WindowFactors()
@@ -47,6 +47,9 @@ namespace KalkulatorPrzekroju
             textBox_gammaS_PT.Text = factors.GammaS_PermAndTrans.ToString(format);
             textBox_alfaCC.Text = factors.AlfaCC.ToString(format);
             textBox_alfaCT.Text = factors.AlfaCT.ToString(format);
+
+            textBox_ULS_Shear_teta.Text = factors.Shear_Teta.ToString(format);
+            label_Cot_teta.Content = "Current cot(θ) = " + Math.Tan(Math.PI / 2 - factors.Shear_Teta / 360 * 2 * Math.PI).ToString("0.##");
 
             textBox_crack_k1.Text = factors.Crack_k1.ToString(format);
             textBox_crack_k3.Text = factors.Crack_k3.ToString(format);
@@ -83,6 +86,7 @@ namespace KalkulatorPrzekroju
             wspolczynniki.GammaC_PermAndTrans = Double.Parse(textBox_gammaC_PT.Text);
             wspolczynniki.GammaS_Accidental = Double.Parse(textBox_gammaS_ACC.Text);
             wspolczynniki.GammaS_PermAndTrans = Double.Parse(textBox_gammaS_PT.Text);
+            wspolczynniki.Shear_Teta = Double.Parse(textBox_ULS_Shear_teta.Text);
             wspolczynniki.NoOfPoints = Int32.Parse(textBox_general_NoOfPoints.Text);
             wspolczynniki.Stresses_k1 = Double.Parse(textBox_stress_k1.Text);
             wspolczynniki.Stresses_k3 = Double.Parse(textBox_stress_k3.Text);
@@ -205,6 +209,23 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+        }
+
+        private void textBox_ULS_Shear_teta_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox; //textBox_ULS_Shear_teta;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            if (Math.Tan(Math.PI / 2 - input / 360 * 2 * Math.PI) < 1.0)
+            {
+                input = (Math.PI / 2 - Math.Atan(1.0)) / (2 * Math.PI) * 360;
+            }
+            if (Math.Tan(Math.PI / 2 - input / 360 * 2 * Math.PI) > 2.5)
+            {
+                input = (Math.PI / 2 - Math.Atan(2.5)) / (2 * Math.PI) * 360;
+            }
+            tb.Text = input.ToString(format);
+            label_Cot_teta.Content = "Current cot(θ) = " + Math.Tan(Math.PI / 2 - input / 360 * 2 * Math.PI).ToString("0.##");
         }
         // koniec kontroli wprowadzania danych przez użytkownika
     }

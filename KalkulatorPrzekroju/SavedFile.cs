@@ -69,6 +69,9 @@ namespace KalkulatorPrzekroju
         public double[][] tabSLS_ConcreteStress { get; set; }
         public double[][] tabSLS_SteelStress { get; set; }
         public double[][] tabVRd1 { get; set; }
+        public double[][] tabVRd2 { get; set; }
+        public double[][] tabVRd3 { get; set; }
+        public double[][] tabVRd4 { get; set; }
         public double[][] tabVRdc1 { get; set; }
         public double[][] tabSLS_NonCrack { get; set; }
         public double[][] tabSLS_Crack { get; set; }

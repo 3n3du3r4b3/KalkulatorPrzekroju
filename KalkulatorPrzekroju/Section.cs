@@ -265,9 +265,11 @@ namespace KalkulatorPrzekroju
         /// Funkcja oblicza nośność przekroju ze zbrojeniem na ścinanie przy podanej sile podłużnej
         /// </summary>
         /// <param name="NEd">Siła podłużna w przekroju w kN</param>
+        /// <param name="teta">Kąt krzyżulców ściskanych w stopniach</param>
+        /// <param name="part">Współczynnik w zakresie od 0 do 1 wskzujący dla jakiej części MRd należy wyznaczyć nośność na ścinanie</param>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <returns>Zwraca wartość nośności przekroju zbrojonego na ścinanie w kN</returns>
-        public abstract double ULS_ScinanieTotal(double NEd, ULS_Set factors);
+        public abstract double ULS_ScinanieTotal(double NEd, double teta, double part, ULS_Set factors);
 
         /// <summary>
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interkacji VRdC / NEd
@@ -283,7 +285,7 @@ namespace KalkulatorPrzekroju
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = max - (max - min) / NoOfPoints * i;
+            	double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = ULS_ScinanieBeton(Ned, factors);
@@ -299,23 +301,24 @@ namespace KalkulatorPrzekroju
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interkacji VRd / NEd
         /// </summary>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
+        /// <param name="part">Współczynnik w zakresie od 0 do 1 wskzujący dla jakiej części MRd należy wyznaczyć nośność na ścinanie</param>
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <returns></returns>
-        public double[][] ULS_VRdN_Curve(ULS_Set factors, int NoOfPoints)
+        public double[][] ULS_VRdN_Curve(ULS_Set factors, double teta, double part, int NoOfPoints)
         {
-            double max = ULS_SilaKrytycznaSciskajaca(factors);
+            double max = 0.75 * ULS_SilaKrytycznaSciskajaca(factors);
             double min = ULS_SilaKrytycznaRozciagajaca(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-                double Ned = max - (max - min) / NoOfPoints * i;
+            	double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = ULS_ScinanieTotal(Ned, factors);
+                results[i][1] = ULS_ScinanieTotal(Ned, teta, part, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieTotal(Ned, factors);
+                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieTotal(Ned, teta, part, factors);
             }
 
             return results;
