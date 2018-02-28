@@ -90,6 +90,7 @@
     <Compile Include="CasePoint.cs" />
     <Compile Include="CircleSection.cs" />
     <Compile Include="CreepCoefficient.cs" />
+    <Compile Include="CreepParams.cs" />
     <Compile Include="CreepPlotView.cs" />
     <Compile Include="DrawInfo.cs" />
     <Compile Include="MainPlotView.cs" />

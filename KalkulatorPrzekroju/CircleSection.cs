@@ -81,6 +81,7 @@ namespace KalkulatorPrzekroju
             this.A = c + fiB / 2;
             SetCreepFactor(0);
             draw = new DrawInfo(D);
+            crp = new CreepParams(false);
         }
 
         /// <summary>
@@ -107,6 +108,7 @@ namespace KalkulatorPrzekroju
             this.A = c + fiB / 2;
             SetCreepFactor(Fi);
             draw = new DrawInfo(D);
+            crp = new CreepParams(false);
         }
 
         public override bool Equals(object obj)

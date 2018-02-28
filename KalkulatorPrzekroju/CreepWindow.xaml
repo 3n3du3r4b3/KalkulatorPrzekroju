@@ -15,7 +15,7 @@
                 <Label x:Name="labelRH1" Content="%" HorizontalAlignment="Left" Margin="179,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelu" Content="u: " HorizontalAlignment="Left" Margin="235,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <TextBox x:Name="textBox_u" HorizontalAlignment="Left" Height="23" Margin="286,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_u_LostFocus" TabIndex="2" Text="1000"/>
-                <Label x:Name="labelu1" Content="mm" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top" Height="26"/>
+                <Label x:Name="labelu1" Content="{Binding labelutext}" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelCst" Content="Creep Start: " HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Height="26"/>
                 <TextBox x:Name="textBox_Cst" HorizontalAlignment="Left" Height="23" Margin="99,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_Cst_LostFocus" TabIndex="3" Text="10"/>
                 <Label x:Name="label1_Copy34" Content="days" HorizontalAlignment="Left" Margin="179,41,0,0" VerticalAlignment="Top" Height="26"/>

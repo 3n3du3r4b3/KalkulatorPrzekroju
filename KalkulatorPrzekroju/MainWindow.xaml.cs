@@ -530,8 +530,9 @@ namespace KalkulatorPrzekroju
             CreepWindow creepwin1 = new CreepWindow();
             double creep1;
             Double.TryParse(textBox_creep1.Text, out creep1);
-            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1);
-            textBox_creep1.Text = creepwin1.Result().ToString("F3");
+            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1, section1.crp);
+            textBox_creep1.Text = creepwin1.CrCoeff.ToString("F3");
+            section1.crp = creepwin1.crp;
             ShowToUpdate();
         }
 
@@ -547,8 +548,9 @@ namespace KalkulatorPrzekroju
             CreepWindow creepwin2 = new CreepWindow();
             double creep2;
             Double.TryParse(textBox_creep2.Text, out creep2);
-            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2);
-            textBox_creep2.Text = creepwin2.Result().ToString("F3");
+            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2.crp);
+            textBox_creep2.Text = creepwin2.CrCoeff.ToString("F3");
+            section2.crp = creepwin2.crp;
             ShowToUpdate();
         }
 

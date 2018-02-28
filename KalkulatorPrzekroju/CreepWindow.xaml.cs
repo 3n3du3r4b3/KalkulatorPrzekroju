@@ -32,7 +32,9 @@ namespace KalkulatorPrzekroju
         int divide = 10;
         double cemcoeff;
         double crinput;
+        string labelutext;
         public double CrCoeff;
+        public CreepParams crp = new CreepParams();
         List<CreepAtDay> creepResults = new List<CreepAtDay>();
 
         public MyColor Creep_LineColor = new MyColor(OxyColors.Red);
@@ -59,13 +61,29 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        public void Show(double Acd, double fcmd, double input)
+        public void Show(double Acd, double fcmd, double input, CreepParams crp)
         {
-            Ac = Acd;
-            fcm = fcmd;
-            crinput = input;
-            comboBox_Cement.ItemsSource = cem;
-            ShowDialog();
+            if (!crp.filled)
+            {
+                Ac = Acd;
+                fcm = fcmd;
+                crinput = input;
+                comboBox_Cement.ItemsSource = cem;
+                double u = Double.Parse(textBox_u.Text);
+                labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2*Ac/u);
+                ShowDialog();
+            }
+            else
+            {
+                Ac = crp.Acd;
+                textBox_RH.Text = Convert.ToString(crp.RH);
+                fcm = crp.fcm;
+                crinput = input;
+                comboBox_Cement.ItemsSource = crp.cem;
+                double u = Double.Parse(textBox_u.Text);
+                labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2 * Ac / u);
+                ShowDialog();
+            }
         }
 
         public double Result()
@@ -114,6 +132,9 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            double u = Double.Parse(textBox_u.Text);
+            double h0 = 2 * Ac / u;
+            labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", h0);
         }
 
         private void textBox_Cst_LostFocus(object sender, RoutedEventArgs e)
@@ -159,6 +180,7 @@ namespace KalkulatorPrzekroju
             diagram_Creep = new CreepPlotView();
             diagram_Creep.AddLineSerie(points_Creep, "Creep Coefficient", Creep_LineColor.GetMedia(), Creep_LineWeight);
             PlotView_Creep.Model = diagram_Creep.wykres;
+            crp = new CreepParams(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[day.Length-1], cemcoeff, bridge, sfume, true);
         }
 
         private void button_Cancel_Click(object sender, RoutedEventArgs e)
