@@ -65,6 +65,19 @@ namespace KalkulatorPrzekroju
             textBox_stress_k3.Text = factors.Stresses_k3.ToString(format);
 
             textBox_general_NoOfPoints.Text = factors.NoOfPoints.ToString();
+
+            if (factors.Annex == NationalAnnex.BS)
+            {
+                RadioButton_NA_BS.IsChecked = true;
+            }
+            else if (factors.Annex == NationalAnnex.EN)
+            {
+                RadioButton_NA_EN.IsChecked = true;
+            }
+            else if (factors.Annex == NationalAnnex.PN)
+            {
+                RadioButton_NA_PN.IsChecked = true;
+            }
         }
         
 
@@ -95,6 +108,20 @@ namespace KalkulatorPrzekroju
                 wspolczynniki.Crack_kt = 0.4;
             else
                 wspolczynniki.Crack_kt = 0.6;
+
+            if (RadioButton_NA_EN.IsChecked == true)
+            {
+                wspolczynniki.Annex = NationalAnnex.EN;
+            }
+            else if (RadioButton_NA_BS.IsChecked == true)
+            {
+                wspolczynniki.Annex = NationalAnnex.BS;
+            }
+            else if (RadioButton_NA_PN.IsChecked == true)
+            {
+                wspolczynniki.Annex = NationalAnnex.PN;
+            }
+
 
             wspolczynniki.SaveToFile();
         }
@@ -215,6 +242,21 @@ namespace KalkulatorPrzekroju
         {
             TextBox tb = sender as TextBox; //textBox_ULS_Shear_teta;
             double input;
+            double cotMax = 2.5;
+
+            if (RadioButton_NA_EN.IsChecked == true)
+            {
+                cotMax = 2.5;
+            }
+            else if (RadioButton_NA_BS.IsChecked == true)
+            {
+                cotMax = 2.5;
+            }
+            else if (RadioButton_NA_PN.IsChecked == true)
+            {
+                cotMax = 2.0;
+            }
+            
             Double.TryParse(tb.Text, out input);
             if (Math.Tan(Math.PI / 2 - input / 360 * 2 * Math.PI) < 1.0)
             {
@@ -222,10 +264,15 @@ namespace KalkulatorPrzekroju
             }
             if (Math.Tan(Math.PI / 2 - input / 360 * 2 * Math.PI) > 2.5)
             {
-                input = (Math.PI / 2 - Math.Atan(2.5)) / (2 * Math.PI) * 360;
+                input = (Math.PI / 2 - Math.Atan(cotMax)) / (2 * Math.PI) * 360;
             }
             tb.Text = input.ToString(format);
             label_Cot_teta.Content = "Current cot(θ) = " + Math.Tan(Math.PI / 2 - input / 360 * 2 * Math.PI).ToString("0.##");
+        }
+
+        private void RadioButton_NA_Checked(object sender, RoutedEventArgs e)
+        {
+            textBox_ULS_Shear_teta_LostFocus(textBox_ULS_Shear_teta, e);
         }
         // koniec kontroli wprowadzania danych przez użytkownika
     }
