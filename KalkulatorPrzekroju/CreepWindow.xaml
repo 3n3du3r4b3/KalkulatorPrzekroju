@@ -46,8 +46,8 @@
                     <ColumnDefinition Width="158*"/>
                     <ColumnDefinition Width="55*"/>
                 </Grid.ColumnDefinitions>
-                <RadioButton x:Name="radio_199211" GroupName="code" HorizontalAlignment="Left" Margin="44,0,0,0" VerticalAlignment="Top" Checked="radio_199211_Checked" IsChecked="True">EN 1992-1-1</RadioButton>
-                <RadioButton x:Name="radio_19922" GroupName="code" HorizontalAlignment="Left" Margin="44,0,0,10" VerticalAlignment="Bottom" Checked="radio_19922_Checked" IsEnabled="False">EN 1992-2</RadioButton>
+                <RadioButton x:Name="radio_199211" GroupName="code" HorizontalAlignment="Left" Margin="100,0,0,0" VerticalAlignment="Top" Checked="radio_199211_Checked" IsChecked="True">EN 1992-1-1</RadioButton>
+                <RadioButton x:Name="radio_19922" GroupName="code" HorizontalAlignment="Left" Margin="100,0,0,8" VerticalAlignment="Bottom" Checked="radio_19922_Checked" IsEnabled="False">EN 1992-2</RadioButton>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="groupBox_CreepResults" Header="Results" Margin="10,208,518,0" Height="290" VerticalAlignment="Top">

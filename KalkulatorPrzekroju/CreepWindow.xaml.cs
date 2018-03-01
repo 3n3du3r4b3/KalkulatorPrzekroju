@@ -69,8 +69,9 @@ namespace KalkulatorPrzekroju
             textBox_Cse.Text = Convert.ToString(crp.tend);
             textBox_fcm.Text = Convert.ToString(fcmd);
             crinput = input;
-            //cemcoeff = crp.cemv;
-            //comboBox_Cement.SelectedValue = cemcoeff;
+            comboBox_Cement.ItemsSource = cemdict;
+            cemcoeff = crp.cemv;
+            comboBox_Cement.SelectedValue = cemcoeff;
             textBox_u.Text = Convert.ToString(crp.u);
             labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2 * Ac / crp.u);
             ShowDialog();
