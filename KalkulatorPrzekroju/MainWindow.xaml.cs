@@ -42,6 +42,8 @@ namespace KalkulatorPrzekroju
         MainPlotView diagram_SLS_Crack;
         MainPlotView diagram_SLS_Stressess;
         SavedFile thisInstance;
+        CreepParams section1crp;
+        CreepParams section2crp;
 
         double[][] tabSLS_ConcreteStress;
         double[][] tabSLS_SteelStress;
@@ -369,6 +371,26 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
+       /*private void TextBox_Cr1_TextChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            int input;
+            Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            //section1crp = null;
+            //ShowToUpdate();
+        }
+
+        private void TextBox_Cr2_TextChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            int input;
+            Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            //section2crp = null;
+            //ShowToUpdate();
+        }*/
+
         private void ListBox_LostFocus(object sender, RoutedEventArgs e)
         {
             ShowToUpdate();
@@ -530,9 +552,13 @@ namespace KalkulatorPrzekroju
             CreepWindow creepwin1 = new CreepWindow();
             double creep1;
             Double.TryParse(textBox_creep1.Text, out creep1);
-            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1, section1.crp);
+            if(section1crp == null)
+            {
+                section1crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
+            }
+            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1, section1crp);
             textBox_creep1.Text = creepwin1.CrCoeff.ToString("F3");
-            section1.crp = creepwin1.crp;
+            section1crp = creepwin1.crp;
             ShowToUpdate();
         }
 
@@ -548,9 +574,13 @@ namespace KalkulatorPrzekroju
             CreepWindow creepwin2 = new CreepWindow();
             double creep2;
             Double.TryParse(textBox_creep2.Text, out creep2);
-            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2.crp);
+            if (section2crp == null)
+            {
+                section1crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
+            }
+            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2crp);
             textBox_creep2.Text = creepwin2.CrCoeff.ToString("F3");
-            section2.crp = creepwin2.crp;
+            section2crp = creepwin2.crp;
             ShowToUpdate();
         }
 

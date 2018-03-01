@@ -78,7 +78,6 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Klasa przechowująca dane do liczenia creepa
         /// </summary>
-        public CreepParams crp { get; set; }
 
         protected double Dimfactor { get { return 1000.0; } }         // scale factor do wymiarow: 1000 - jedn podst to mmm
         protected double Forcefactor { get { return 1000.0; } }       // scale factor dla sil: 1000 - jedn podst to kN

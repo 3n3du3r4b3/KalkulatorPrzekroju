@@ -677,6 +677,7 @@
 										Width="60"
 										TextAlignment="Center"
 										LostFocus="TextBox_ToDouble_LostFocus"
+                                        
 										TabIndex="10"
 										Text="0" />
                                     <Button
@@ -1303,6 +1304,7 @@
 										Width="60"
 										TextAlignment="Center"
 										LostFocus="TextBox_ToDouble_LostFocus"
+                                       
 										TabIndex="10"
 										Text="0" />
                                     <Button

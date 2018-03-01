@@ -42,7 +42,7 @@ namespace KalkulatorPrzekroju
 
         string format = "0.###";
 
-        Dictionary<string, double> cem = new Dictionary<string, double>()
+        Dictionary<string, double> cemdict = new Dictionary<string, double>()
         {
             {"S",-1},
             {"N",0},
@@ -63,27 +63,17 @@ namespace KalkulatorPrzekroju
 
         public void Show(double Acd, double fcmd, double input, CreepParams crp)
         {
-            if (!crp.filled)
-            {
-                Ac = Acd;
-                fcm = fcmd;
-                crinput = input;
-                comboBox_Cement.ItemsSource = cem;
-                double u = Double.Parse(textBox_u.Text);
-                labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2*Ac/u);
-                ShowDialog();
-            }
-            else
-            {
-                Ac = crp.Acd;
-                textBox_RH.Text = Convert.ToString(crp.RH);
-                fcm = crp.fcm;
-                crinput = input;
-                comboBox_Cement.ItemsSource = crp.cem;
-                double u = Double.Parse(textBox_u.Text);
-                labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2 * Ac / u);
-                ShowDialog();
-            }
+            Ac = Acd;
+            textBox_RH.Text = Convert.ToString(crp.RH);
+            textBox_Cst.Text = Convert.ToString(crp.t0);
+            textBox_Cse.Text = Convert.ToString(crp.tend);
+            textBox_fcm.Text = Convert.ToString(fcmd);
+            crinput = input;
+            //cemcoeff = crp.cemv;
+            //comboBox_Cement.SelectedValue = cemcoeff;
+            textBox_u.Text = Convert.ToString(crp.u);
+            labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2 * Ac / crp.u);
+            ShowDialog();
         }
 
         public double Result()
@@ -118,13 +108,6 @@ namespace KalkulatorPrzekroju
             return days;
         }
 
-        private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox tb = textBox_RH;
-            double input;
-            Double.TryParse(tb.Text, out input);
-            tb.Text = input.ToString(format);
-        }
 
         private void textBox_u_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -133,16 +116,20 @@ namespace KalkulatorPrzekroju
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
             double u = Double.Parse(textBox_u.Text);
+            if (u<=0) { u = 1000; textBox_u.Text = Convert.ToString(u); }
             double h0 = 2 * Ac / u;
             labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", h0);
         }
 
-        private void textBox_Cst_LostFocus(object sender, RoutedEventArgs e)
+        private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tb = textBox_Cst;
+            TextBox tb = textBox_RH;
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            double RH = Double.Parse(textBox_RH.Text);
+            if (RH < 40) { RH = 40; textBox_RH.Text = Convert.ToString(RH); } else if (RH > 99) { RH = 99; textBox_RH.Text = Convert.ToString(RH); }
+            
         }
 
         private void textBox_Cse_LostFocus(object sender, RoutedEventArgs e)
@@ -151,6 +138,30 @@ namespace KalkulatorPrzekroju
             double input;
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
+            double cse = Double.Parse(textBox_Cse.Text);
+            double cst = Double.Parse(textBox_Cst.Text);
+            if(cse<cst) { cse = cst + 1; textBox_Cse.Text = Convert.ToString(cse); }
+        }
+
+        private void textBox_Cst_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_Cst;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            double cse = Double.Parse(textBox_Cse.Text);
+            double cst = Double.Parse(textBox_Cst.Text);
+            if (cse < cst) { cst = cse - 1; textBox_Cst.Text = Convert.ToString(cst); }
+        }
+
+        private void textBox_fcm_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = textBox_fcm;
+            double input;
+            Double.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            double fcm = Double.Parse(textBox_fcm.Text);
+            if (fcm <= 0) { fcm = 20; textBox_fcm.Text = Convert.ToString(fcm); }
         }
 
         private void textBox_Div_LostFocus(object sender, RoutedEventArgs e)
@@ -160,6 +171,7 @@ namespace KalkulatorPrzekroju
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
             divide = Int32.Parse(textBox_Div.Text);
+            if (divide <= 0) { divide = 10; textBox_Div.Text = Convert.ToString(divide); }
         }
 
         private void button_Creep_Click(object sender, RoutedEventArgs e)
@@ -170,7 +182,7 @@ namespace KalkulatorPrzekroju
             double[][] points_Creep = new double[day.Length][];
             for (int i=0; i<day.Length; i++)
             {
-                CreepAtDay temp = new CreepAtDay(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff);
+                CreepAtDay temp = new CreepAtDay(Ac, Double.Parse(textBox_fcm.Text), Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff);
                 creepResults.Add(temp);
                 points_Creep[i] = new double[] { temp.cr, day[i] };
             }
@@ -180,11 +192,13 @@ namespace KalkulatorPrzekroju
             diagram_Creep = new CreepPlotView();
             diagram_Creep.AddLineSerie(points_Creep, "Creep Coefficient", Creep_LineColor.GetMedia(), Creep_LineWeight);
             PlotView_Creep.Model = diagram_Creep.wykres;
-            crp = new CreepParams(Ac, fcm, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[day.Length-1], cemcoeff, bridge, sfume, true);
+            crp = new CreepParams(Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[day.Length-1], Convert.ToDouble(comboBox_Cement.SelectedValue), bridge, sfume);
+            button_Save.IsEnabled = true;
         }
 
         private void button_Cancel_Click(object sender, RoutedEventArgs e)
         {
+            crp = new CreepParams(Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), Double.Parse(textBox_Cse.Text), Convert.ToDouble(comboBox_Cement.SelectedValue), bridge, sfume);
             CrCoeff = crinput;
             Close();
         }
