@@ -269,11 +269,10 @@ namespace KalkulatorPrzekroju
         /// Funkcja oblicza nośność przekroju ze zbrojeniem na ścinanie przy podanej sile podłużnej
         /// </summary>
         /// <param name="NEd">Siła podłużna w przekroju w kN</param>
-        /// <param name="teta">Kąt krzyżulców ściskanych w stopniach</param>
         /// <param name="part">Współczynnik w zakresie od 0 do 1 wskzujący dla jakiej części MRd należy wyznaczyć nośność na ścinanie</param>
         /// <param name="situation">Określa sytuację obliczeniową dla której przeprowadzone zostaną obliczenia</param>
         /// <returns>Zwraca wartość nośności przekroju zbrojonego na ścinanie w kN</returns>
-        public abstract double ULS_ScinanieTotal(double NEd, double teta, double part, ULS_Set factors);
+        public abstract double ULS_ScinanieTotal(double NEd, double part, ULS_Set factors);
 
         /// <summary>
         /// Funkcja zwraca wskaźnik macierzy złożonej z punktów tworzących krzywą interkacji VRdC / NEd
@@ -308,9 +307,9 @@ namespace KalkulatorPrzekroju
         /// <param name="part">Współczynnik w zakresie od 0 do 1 wskzujący dla jakiej części MRd należy wyznaczyć nośność na ścinanie</param>
         /// <param name="NoOfPoints">Liczba punktów towrzących krzywą</param>
         /// <returns></returns>
-        public double[][] ULS_VRdN_Curve(ULS_Set factors, double teta, double part, int NoOfPoints)
+        public double[][] ULS_VRdN_Curve(ULS_Set factors, double part, int NoOfPoints)
         {
-            double max = 0.75 * ULS_SilaKrytycznaSciskajaca(factors);
+            double max = 0.99 * CurrentConcrete.fck * factors.alfaCC / factors.gammaC * AcTotal / Dimfactor / Dimfactor * Forcefactor;
             double min = ULS_SilaKrytycznaRozciagajaca(factors);
             double[][] results = new double[2 * NoOfPoints][];
 
@@ -319,10 +318,10 @@ namespace KalkulatorPrzekroju
             	double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
-                results[i][1] = ULS_ScinanieTotal(Ned, teta, part, factors);
+                results[i][1] = ULS_ScinanieTotal(Ned, part, factors);
                 results[results.Length - i - 1] = new double[2];
                 results[results.Length - i - 1][0] = Ned;
-                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieTotal(Ned, teta, part, factors);
+                results[results.Length - i - 1][1] = -ReversedSection.ULS_ScinanieTotal(Ned, part, factors);
             }
 
             return results;
@@ -353,8 +352,9 @@ namespace KalkulatorPrzekroju
         /// Efektywne pole powierzchni współpracującego przekroju roziąganego dla zarysowania
         /// </summary>
         /// <param name="x">Wysokość strefy ściskanej w mm</param>
+        /// <param name="lowerFace">prawda - funkcja liczy dla dolnej (prawej) powierzchni przekroju, fałsz - dla górnej</param>
         /// <returns>Pole powierzchni w mm2</returns>
-        protected abstract double Crack_AcEff(double x);
+        protected abstract double Crack_AcEff(double x, bool lowerFace);
 
         /// <summary>
         /// Funkcja zwraca wartość naprężenia na poziomie z od środka cięzkości przekroju
@@ -507,7 +507,7 @@ namespace KalkulatorPrzekroju
 
                     for (int i = 0; i < NoB; i++)
                     {
-                        if (Asi[i] == 0.0)
+                    	if (Math.Abs(Asi[i]) < 0.0001)
                         {
                             SigmaStalAs[i] = 0;
                         }
@@ -564,11 +564,10 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Funkcja zwraca szerokość rozwarcia rysy dla zadanej siły podłużnej oraz momentu zginającego
         /// </summary>
-        /// <param name="section">klasa reprezentująca obliczany przekrój</param>
         /// <param name="NEd">siła osiowa w kN</param>
         /// <param name="MEd">moment zginający w kNm</param>
-        /// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC / 0.8 dla prętów żebrowanych)</param>
-        /// <param name="kt">współczynnik kt zależny od czasu trwania obciążenia (0.6 obc. krótkotrwałe, 0.4 obc. długotrwałe)</param>
+        /// <param name="factors">klasa ze współczynnikami</param>
+        /// <param name="lowerFace">prawda - funkcja liczy szerokość rysy na dolnej (prawej) powierzchni przekroju, fałsz - na górnej</param>
         /// <returns>Zwraca szerokość rozwarcia rysy w mm</returns>
         public double SLS_CrackWidth(double NEd, double MEd, Factors factors, bool lowerFace, bool cracked)
         {
@@ -654,7 +653,7 @@ namespace KalkulatorPrzekroju
             }
             */
 
-            AcEff = Crack_AcEff(x);      // w milimetrach kwadratowych!!  
+            AcEff = Crack_AcEff(x, lowerFace);      // w milimetrach kwadratowych!!  
             roPeff = As / AcEff;
 
             double deltaEpsilon1 = (sigmaS - kt * fctEff / roPeff * (1 + alfaE * roPeff)) / Es;
@@ -814,33 +813,54 @@ namespace KalkulatorPrzekroju
         /// dla którego szerokość rozwarcia rysy osiąga dopuszczalną wielkość
         /// </summary>
         /// <param name="NEd">siła osiowa w kN</param>
-        /// <param name="rysaGraniczna">graniczna szerokość rozwarcia rysy w mm</param>
-        /// <param name="k1">współczynnik k1 zależny od przyczepności zbrojenia (0.8 lub 1.6 patrz EC / 0.8 dla prętów żebrowanych)</param>
-        /// <param name="kt">współczynnik kt zależny od czasu trwania obciążenia (0.6 obc. krótkotrwałe, 0.4 obc. długotrwałe)</param>
+        /// <param name="factors">Klasa ze współczynnikami do obliczeń</param>
+        /// <param name="cracked">Prawda jeśli analizujesz przekrój zarysowany bez względy na wartość naprężeń rozciągających w przekroju</param>
         /// <returns>Zwraca moment krytycny w kNm</returns>
         public double SLS_MomentKrytycznyRysa(double NEd, Factors factors, bool cracked)
-        {/*
-            double tempFi = this.Fi;
-            if (considerFi4crack == false)
+        {
+        	if (!cracked)
             {
-                SetCreepFactor(0.0);
-            }*/
-            double rysaGraniczna = factors.Crack_wklim;
-            double AcTotal = this.AcTotal / Dimfactor / Dimfactor;
-            double AsTotal = this.AsTotal / Dimfactor / Dimfactor;
-
-            double alfaE = CurrentSteel.Es / CurrentConcrete.Ecm;
-
-            // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
-            double xc1 = SrCiezkPrzekr(HTotal / Dimfactor);
-
-            if (!cracked)
-            {
+        		double xc1 = SrCiezkPrzekr(HTotal / Dimfactor);
                 double A = SprowPolePrzekr(HTotal / Dimfactor);
                 double Iy = MomBezwPrzekr(HTotal / Dimfactor);
                 double Mkr = -(-CurrentConcrete.fctm - NEd / A / Dimfactor) * Iy / (HTotal / Dimfactor - xc1);
-                return Mkr * 1000;
+                return Mkr * Forcefactor;
             }
+            double wklim = factors.Crack_wklim;
+
+            double momP = SLS_MomentKrytycznyStal(NEd, factors);
+            double momL = -ReversedSection.SLS_MomentKrytycznyStal(NEd, factors);
+            double momC;
+
+            double wkP = SLS_CrackWidth(NEd, momP, factors, true, true);
+            double wkL = SLS_CrackWidth(NEd, momL, factors, true, true);
+            double wkC;
+
+            do
+            {
+                momC = (momL + momP) / 2;
+
+                wkC = SLS_CrackWidth(NEd, momC, factors, true, true);
+
+                if (wkC >= wklim)
+                {
+                    momP = momC;
+                    wkP = SLS_CrackWidth(NEd, momP, factors, true, true);
+                }
+                else if (wkC <= wklim)
+                {
+                    momL = momC;
+                    wkL = SLS_CrackWidth(NEd, momL, factors, true, true);
+                }
+            } while (Math.Abs(wkP - wkL) > 0.00001);
+
+
+                return momC;
+
+            /*
+            
+
+
 
             double Force1 = SLS_SilaRysujacaOsiowa();
             double Moment1 = Force1 * (HTotal / Dimfactor / 2 - xc1);
@@ -952,12 +972,8 @@ namespace KalkulatorPrzekroju
                 }
 
                 momC = (momP + momL) / 2;
-            }/*
-            if (considerFi4crack == false)
-            {
-                SetCreepFactor(tempFi);
             }*/
-            return momL;
+
         }
 
         /// <summary>
@@ -1019,14 +1035,95 @@ namespace KalkulatorPrzekroju
                 SetCreepFactor(0.0);
             }
             */
-            double rysaGraniczna = factors.Crack_wklim;
+    /*        double NEd = -627.56908;
+            double MEd1 = 1152.05704;
+            double MEd2 = 127.56908;
+            StressState nap1a = SLS_GetStresses(NEd, MEd1, true);
+            StressState nap1b = ReversedSection.SLS_GetStresses(NEd, -MEd1, true);
+            StressState nap2a = SLS_GetStresses(NEd, MEd2, true);
+            StressState nap2b = ReversedSection.SLS_GetStresses(NEd, -MEd2, true);
+            double wk1P = SLS_CrackWidth(NEd, MEd1, factors, true, true);
+            double wk1L = SLS_CrackWidth(NEd, MEd1, factors, false, true);
+            double wk2P = ReversedSection.SLS_CrackWidth(NEd, -MEd1, factors, false, true);
+            double wk2L = ReversedSection.SLS_CrackWidth(NEd, -MEd1, factors, true, true);
+      */     
             if (!cracked)
             {
                 return SLS_SilaRysujacaOsiowa();
             }
+            
+            double wklim = factors.Crack_wklim; 
+            double wkP, wkL;
+			
+            double Nmax = SLS_SilaOsiowaKrytycznaStal(factors);
+            
+            do{
+            	double Mom = SLS_MomentKrytycznyStal(Nmax, factors);
+            	
+            	wkP = SLS_CrackWidth(Nmax, Mom, factors, true, true);
+            	wkL = SLS_CrackWidth(Nmax, Mom, factors, false, true);
+            	
+            	double momL = Mom;
+            	double momP = Mom;
+            	
+            	bool prawaStrona;
+            	if (wkP >= wkL) {
+            		prawaStrona = true;
+            	}
+            	else {
+            		prawaStrona = false;
+            	}
+            	
+            	// pętla szukająca drugiego momentu aby znaleźć GRANICE ZAKRESU w którym będziemy szukać takiego momentu
+            	// dla którego rysy po obu stronach przekroju będą równe
+            	bool warunek;
+            	do
+            	{
+            		warunek = true;
+            		if (prawaStrona) {
+            			momL -= 100;
+            			wkP = SLS_CrackWidth(Nmax, momL, factors, true, true);
+            			wkL = SLS_CrackWidth(Nmax, momL, factors, false, true);
+            			if (wkP <= wkL) {
+            				warunek = false;
+            			}
+            		} else {
+            			momP += 100;
+            			wkP = SLS_CrackWidth(Nmax, momP, factors, true, true);
+            			wkL = SLS_CrackWidth(Nmax, momP, factors, false, true);
+            			if (wkL <= wkP) {
+            				warunek = false;
+            			}
+            		}
+            	} while (warunek);
+            	
+            	//pętla szukająca momentu dla którego RYSY PO OBU STRONACH przekroju będą RÓWNE
+            	do
+            	{
+            		double momC = (momL + momP) / 2;
 
-            double alfaE = CurrentSteel.Es / CurrentConcrete.Ecm;
-
+            		wkP = SLS_CrackWidth(Nmax, momC, factors, true, true);
+            		wkL = SLS_CrackWidth(Nmax, momC, factors, false, true);
+            		
+            		if (wkP >= wkL)
+            		{
+            			momP = momC;
+            		}
+            		else
+            		{
+            			momL = momC;
+            		}
+            	} while (Math.Abs(wkP - wkL) > 0.00001);
+            	
+            	double wk = (wkP+wkL)/2;
+            	Nmax = wklim/wk * Nmax;
+            	
+            } while (Math.Abs(Math.Max(wkP,wkL)-wklim) > 0.00001);
+            
+            return Nmax; 
+            
+            //double alfaE = CurrentSteel.Es / CurrentConcrete.Ecm;
+            /*
             double A_I = SprowPolePrzekr(HTotal / Dimfactor);                   // sprowadzone pole powierzchni przekroju w m2
             double xc1 = SrCiezkPrzekr(HTotal / Dimfactor);                                 // wysokosc srodka ciezkosci przekroju od gornej krawedzi przekroju w m
 
@@ -1113,7 +1210,7 @@ namespace KalkulatorPrzekroju
 
                 wk = Math.Max(wkP, wkL);
 
-                if (wk > rysaGraniczna)
+                if (wk > wklim)
                 {
                     minForce = Force;
                 }
@@ -1131,7 +1228,7 @@ namespace KalkulatorPrzekroju
                 SetCreepFactor(tempFi);
             }
             */
-            return maxForce;
+            //return maxForce;
         }
 
         /// <summary>

@@ -298,9 +298,9 @@ namespace KalkulatorPrzekroju
             return PoleSpr;
         }
 
-        protected override double Crack_AcEff(double x)
+        protected override double Crack_AcEff(double x, bool lowerFace)
         {
-            double hcEff1 = 2.5 * A;
+            double hcEff1 = 2.5 * A;	// to jest do poprawy! wg EC jest h-d czyli d się zmienia
 
             double hcEff2;
             if (x == 0)
@@ -692,7 +692,7 @@ namespace KalkulatorPrzekroju
             return 0;
         }
 
-        public override double ULS_ScinanieTotal(double NEd, double teta, double part, ULS_Set factors)
+        public override double ULS_ScinanieTotal(double NEd, double part, ULS_Set factors)
         {
             return 0;
         }

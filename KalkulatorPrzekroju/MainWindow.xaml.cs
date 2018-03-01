@@ -770,13 +770,13 @@ namespace KalkulatorPrzekroju
             
             tabVRdc1 = section1.ULS_VRdcN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabVRd1 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 1.0, wspolczynniki.NoOfPoints);
+            tabVRd1 = section1.ULS_VRdN_Curve(factors, 1.0, wspolczynniki.NoOfPoints);
 
-            tabVRd2 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 0.75, wspolczynniki.NoOfPoints);
+            tabVRd2 = section1.ULS_VRdN_Curve(factors, 0.75, wspolczynniki.NoOfPoints);
 
-            tabVRd3 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 0.5, wspolczynniki.NoOfPoints);
+            tabVRd3 = section1.ULS_VRdN_Curve(factors, 0.5, wspolczynniki.NoOfPoints);
 
-            tabVRd4 = section1.ULS_VRdN_Curve(factors, wspolczynniki.Shear_Teta, 0.25, wspolczynniki.NoOfPoints);
+            tabVRd4 = section1.ULS_VRdN_Curve(factors, 0.25, wspolczynniki.NoOfPoints);
 
             tabSLS_SteelStress = section1.SLS_StressSteel_Curve(wspolczynniki);
 

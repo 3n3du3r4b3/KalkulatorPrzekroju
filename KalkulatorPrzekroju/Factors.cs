@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 
 namespace KalkulatorPrzekroju
 {
+    public enum NationalAnnex { EN, BS, PN }
+
     [Serializable]
     public class Factors
     {
@@ -60,6 +62,8 @@ namespace KalkulatorPrzekroju
         public double Crack_kt { get; set; }
 
         public int NoOfPoints { get; set; }
+
+        public NationalAnnex Annex {get;set;}
 
         //static protected Factors fact = new Factors(Factors.Settings.zachowane);
         /*
@@ -118,6 +122,7 @@ namespace KalkulatorPrzekroju
                     Crack_k4 = zapisane.Crack_k4;
                     Crack_wklim = zapisane.Crack_wklim;
                     Crack_kt = zapisane.Crack_kt;
+                    Annex = zapisane.Annex;
                 }
                 catch (Exception)
                 {
@@ -154,12 +159,17 @@ namespace KalkulatorPrzekroju
             this.Crack_k3 = 3.4;
             this.Crack_k4 = 0.425;
             this.Crack_wklim = 0.3;
-            this.Crack_kt = 0.4;    
+            this.Crack_kt = 0.4;
+            this.Annex = NationalAnnex.EN;
         }
     }
 
     public class ULS_Set
     {
+        public NationalAnnex Annex { get; private set; }
+
+        public double teta { get; private set; }
+
         public double gammaC { get; private set; }
 
         public double gammaS { get; private set; }
@@ -186,6 +196,9 @@ namespace KalkulatorPrzekroju
                     this.alfaCT = factors.AlfaCT;
                     break;
             }
+
+            Annex = factors.Annex;
+            teta = factors.Shear_Teta;
         }
     } 
 }

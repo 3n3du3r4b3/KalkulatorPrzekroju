@@ -5,19 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="Factors" Height="700" Width="650" WindowStyle="ToolWindow" MinWidth="650" MaxWidth="600" MaxHeight="600" MinHeight="695">
+        Title="Factors" Height="750" Width="650" WindowStyle="ToolWindow" MinWidth="650" MaxWidth="600" MaxHeight="600" MinHeight="750">
     <Grid Margin="0">
-        <GroupBox x:Name="groupBoxULS_Shear" Header="Factors for shear resistance" VerticalAlignment="Top" Height="90" Margin="0,180,0,0">
+        <GroupBox x:Name="groupBoxULS_Shear" Header="Factors for shear resistance" VerticalAlignment="Top" Height="120" Margin="0,180,0,0">
             <Grid Margin="0">
-                <Label x:Name="label6_Copy4t" Content="Angle between shear reinforcement and the beam axis perpendicular to the shear force: θ =" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="textBox_ULS_Shear_teta" HorizontalAlignment="Left" Height="23" Margin="507,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_ULS_Shear_teta_LostFocus" TabIndex="10"/>
-                <Label x:Name="label6_Copy4t2" Content="deg" HorizontalAlignment="Left" Margin="560,10,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label_Cot_teta2" Content="According to EN 1992-1-1 p. 6.2.3 (2) the angle θ should be limited to: 1 ≤ cot(θ) ≤ 2.5." HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
-                <Label x:Name="label_Cot_teta" Content="Current cot(θ) = 2.5" HorizontalAlignment="Left" Margin="500,36,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label6_Copy4t" Content="Angle between shear reinforcement and the beam axis perpendicular to the shear force: θ =" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="textBox_ULS_Shear_teta" HorizontalAlignment="Left" Height="23" Margin="507,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_ULS_Shear_teta_LostFocus" TabIndex="10"/>
+                <Label x:Name="label6_Copy4t2" Content="deg" HorizontalAlignment="Left" Margin="560,34,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label_Cot_teta2" Content="According to EN 1992-1-1 p. 6.2.3 (2) the angle θ should be limited to: 1 ≤ cot(θ) ≤ 2.5" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label_Cot_teta" Content="Current cot(θ) = 2.5" HorizontalAlignment="Left" Margin="500,62,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="label6_Copy4t_Copy" Content="National Annex:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                <RadioButton x:Name="RadioButton_NA_EN" Content="EN (base)" HorizontalAlignment="Left" Margin="125,16,0,0" VerticalAlignment="Top" IsChecked="True" Click="RadioButton_NA_Checked"/>
+                <RadioButton x:Name="RadioButton_NA_PN" Content="PN-EN (Polish)" HorizontalAlignment="Left" Margin="220,16,0,0" VerticalAlignment="Top" Click="RadioButton_NA_Checked"/>
+                <RadioButton x:Name="RadioButton_NA_BS" Content="BS-EN (British)" HorizontalAlignment="Left" Margin="345,16,0,0" VerticalAlignment="Top" Click="RadioButton_NA_Checked"/>
             </Grid>
         </GroupBox>
 
-        <GroupBox x:Name="groupBoxSLS_Crack" Header="Factors for crack control according to EN 1992-1-1 p. 7.3.4." VerticalAlignment="Top" Height="115" Margin="0,280,-0.4,0">
+        <GroupBox x:Name="groupBoxSLS_Crack" Header="Factors for crack control according to EN 1992-1-1 p. 7.3.4." VerticalAlignment="Top" Height="115" Margin="0,305,0,0">
             <Grid Margin="0">
                 <Label x:Name="label6_Copy" Content="Coefficient which takes account of the bond properties of the bonded reinforcement: k =" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="textBox_crack_k1" HorizontalAlignment="Left" Height="23" Margin="490,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_crack_k1_LostFocus" TabIndex="7"/>
@@ -59,7 +63,7 @@
                 <Label x:Name="label4_Copy" Content="Coefficient according to EN 1992-1-1 p. 3.1.7." HorizontalAlignment="Left" Margin="10,122,0,0" VerticalAlignment="Top"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupBoxSLS_Stresses" Header="Factors for stress control according to EN 1992-1-1 p. 7.2." VerticalAlignment="Top" Height="90" Margin="0,400,-0.4,0">
+        <GroupBox x:Name="groupBoxSLS_Stresses" Header="Factors for stress control according to EN 1992-1-1 p. 7.2." VerticalAlignment="Top" Height="90" Margin="0,425,0,0">
             <Grid Margin="0">
                 <Label x:Name="label6_Copy4" Content="Factor for limitation of compressive stresses in concrete: k =" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label5_Copy6" Content="1" HorizontalAlignment="Left" Margin="314,17,0,0" VerticalAlignment="Top" FontSize="8"/>
@@ -70,7 +74,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox x:Name="groupBoxLimits" Header="Crack width limitation according to EN 1992-1-1 p. 7.3.1" VerticalAlignment="Top" Height="65" Margin="0,495,-0.4,0">
+        <GroupBox x:Name="groupBoxLimits" Header="Crack width limitation according to EN 1992-1-1 p. 7.3.1" VerticalAlignment="Top" Height="65" Margin="0,520,0,0">
             <Grid Margin="0">
                 <Label Content="Crack width w     =" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
                 <Label Content="max" HorizontalAlignment="Left" Margin="85,15,0,0" VerticalAlignment="Top" FontSize="8"/>
@@ -83,7 +87,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox x:Name="groupBoxGeneral" Header="General" VerticalAlignment="Top" Height="65" Margin="0,565,-0.4,0">
+        <GroupBox x:Name="groupBoxGeneral" Header="General" VerticalAlignment="Top" Height="65" Margin="0,590,0,0">
             <Grid Margin="0">
                 <Label x:Name="label6_Copy6" Content="No. of points per interaction curve per one side of graph: " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
                 <TextBox x:Name="textBox_general_NoOfPoints" HorizontalAlignment="Left" Height="23" Margin="325,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" TextAlignment="Center" MaxLength="5" MaxLines="1" LostFocus="textBox_general_NoOfPoints_LostFocus" TabIndex="12"/>
