@@ -26,6 +26,7 @@ namespace KalkulatorPrzekroju
         double[] day;
         double Ac;
         double fcm;
+        double fck;
         bool bridge;
         bool sfume;
         bool linear;
@@ -54,10 +55,17 @@ namespace KalkulatorPrzekroju
             public double day { get; set; }
             public double cr { get; set; }
 
-            public CreepAtDay(double Ac, double fcm, double RH, double u, double cst, double day, double cemcoeff)
+            public CreepAtDay(double Ac, double fcm, double fck, double RH, double u, double cst, double day, double cemcoeff, bool br, bool sfu)
             {
                 this.day = day;
-                cr = CreepCoefficient.CreepCoefficientCalc(Ac, fcm, RH, u, cst, day, cemcoeff);
+                if (br && fck > 50)
+                {
+                    cr = BridgeCreepCoefficient.BridgeCreepCoefficientCalc(Ac, fcm, fck, RH, u, cst, day, cemcoeff, sfu);
+                }
+                else
+                {
+                    cr = CreepCoefficient.CreepCoefficientCalc(Ac, fcm, RH, u, cst, day, cemcoeff);
+                }
             }
         }
 
@@ -73,7 +81,7 @@ namespace KalkulatorPrzekroju
             cemcoeff = crp.cemv;
             comboBox_Cement.SelectedValue = cemcoeff;
             textBox_u.Text = Convert.ToString(crp.u);
-            labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", 2 * Ac / crp.u);
+            labelu1.Content = String.Format("mm   (h\u2080 = {0} mm)", 2 * Ac / crp.u);
             ShowDialog();
         }
 
@@ -119,7 +127,7 @@ namespace KalkulatorPrzekroju
             double u = Double.Parse(textBox_u.Text);
             if (u<=0) { u = 1000; textBox_u.Text = Convert.ToString(u); }
             double h0 = 2 * Ac / u;
-            labelu1.Content = String.Format("mm (h\u2080 = {0} mm)", h0);
+            labelu1.Content = String.Format("mm   (h\u2080 = {0} mm)", h0);
         }
 
         private void textBox_RH_LostFocus(object sender, RoutedEventArgs e)
@@ -183,7 +191,7 @@ namespace KalkulatorPrzekroju
             double[][] points_Creep = new double[day.Length][];
             for (int i=0; i<day.Length; i++)
             {
-                CreepAtDay temp = new CreepAtDay(Ac, Double.Parse(textBox_fcm.Text), Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff);
+                CreepAtDay temp = new CreepAtDay(Ac, Double.Parse(textBox_fcm.Text), Double.Parse(textBox_fcm.Text) - 8, Double.Parse(textBox_RH.Text), Double.Parse(textBox_u.Text), Double.Parse(textBox_Cst.Text), day[i], cemcoeff, bridge, sfume);
                 creepResults.Add(temp);
                 points_Creep[i] = new double[] { temp.cr, day[i] };
             }
@@ -212,11 +220,13 @@ namespace KalkulatorPrzekroju
         private void radio_199211_Checked(object sender, RoutedEventArgs e)
         {
             bridge = false;
+            chbox_sfume.IsEnabled = false;
         }
 
         private void radio_19922_Checked(object sender, RoutedEventArgs e)
         {
             bridge = true;
+            chbox_sfume.IsEnabled = true;
         }
 
         private void radio_lin_Checked(object sender, RoutedEventArgs e)
