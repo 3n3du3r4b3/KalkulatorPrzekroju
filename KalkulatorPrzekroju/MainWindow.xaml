@@ -80,7 +80,7 @@
 					Margin="0,0,0,50"
 					TabIndex="1">
                     <TabItem
-						Header="Section 1"
+						Header="Section 1 (S1)"
 						TabIndex="2">
                         <Grid
 							x:Name="grid_Section_1"
@@ -714,7 +714,7 @@
                         </Grid>
                     </TabItem>
                     <TabItem
-						Header="Section 2"
+						Header="Section 2 (S2)"
 						TabIndex="3">
                         <Grid
 							x:Name="grid_Section_2"

@@ -868,46 +868,46 @@ namespace KalkulatorPrzekroju
 
             if (tabVRdc1 != null)
             {
-                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.c");
-                diagram_ULS_VN.AddLineSerie(tabVRdc1, "Section 1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
+                diagram_ULS_VN.RemoveSerie("S1 - VRd.c");
+                diagram_ULS_VN.AddLineSerie(tabVRdc1, "S1 - VRd.c", ustawienia.ULSVN_VrdcLineColor.GetMedia(), ustawienia.ULSVN_VrdcLineWeight);
             }
 
             Color thisColor = ustawienia.ULSVN_VrdLineColor.GetMedia();
 
             if (tabVRd1 != null)
             {
-                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 100% MRd");
-                diagram_ULS_VN.AddLineSerie(tabVRd1, "Section 1 - VRd.s - 100% MRd", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
+                diagram_ULS_VN.RemoveSerie("S1 - VRd.s - 100% MRd");
+                diagram_ULS_VN.AddLineSerie(tabVRd1, "S1 - VRd.s - 100% MRd", ustawienia.ULSVN_VrdLineColor.GetMedia(), ustawienia.ULSVN_VrdLineWeight);
             }
 
             if (tabVRd2 != null)
             {
-                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 75% MRd");
+                diagram_ULS_VN.RemoveSerie("S1 - VRd.s - 75% MRd");
                 float partR = thisColor.ScR * 0.75f;
                 float partG = thisColor.ScG * 0.75f;
                 float partB = thisColor.ScB * 0.75f;
                 Color myColor = Color.FromScRgb(thisColor.ScA, partR, partG, partB);
-                diagram_ULS_VN.AddLineSerie(tabVRd2, "Section 1 - VRd.s - 75% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
+                diagram_ULS_VN.AddLineSerie(tabVRd2, "S1 - VRd.s - 75% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
             }
 
             if (tabVRd3 != null)
             {
-                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 50% MRd");
+                diagram_ULS_VN.RemoveSerie("S1 - VRd.s - 50% MRd");
                 float partR = thisColor.ScR * 0.5f;
                 float partG = thisColor.ScG * 0.5f;
                 float partB = thisColor.ScB * 0.5f;
                 Color myColor = Color.FromScRgb(thisColor.ScA, partR, partG, partB);
-                diagram_ULS_VN.AddLineSerie(tabVRd3, "Section 1 - VRd.s - 50% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
+                diagram_ULS_VN.AddLineSerie(tabVRd3, "S1 - VRd.s - 50% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
             }
 
             if (tabVRd4 != null)
             {
-                diagram_ULS_VN.RemoveSerie("Section 1 - VRd.s - 25% MRd");
+                diagram_ULS_VN.RemoveSerie("S1 - VRd.s - 25% MRd");
                 float partR = thisColor.ScR * 0.25f;
                 float partG = thisColor.ScG * 0.25f;
                 float partB = thisColor.ScB * 0.25f;
                 Color myColor = Color.FromScRgb(thisColor.ScA, partR, partG, partB);
-                diagram_ULS_VN.AddLineSerie(tabVRd4, "Section 1 - VRd.s - 25% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
+                diagram_ULS_VN.AddLineSerie(tabVRd4, "S1 - VRd.s - 25% MRd", myColor, ustawienia.ULSVN_VrdLineWeight);
             }
 
             if (points_VN != null)
@@ -927,8 +927,8 @@ namespace KalkulatorPrzekroju
 
             if (tabSLS_NonCrack != null)
             {
-                diagram_SLS_Crack.RemoveSerie("Section 1 - non-cracked");
-                diagram_SLS_Crack.AddLineSerie(tabSLS_NonCrack, "Section 1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
+                diagram_SLS_Crack.RemoveSerie("S1 - non-cracked");
+                diagram_SLS_Crack.AddLineSerie(tabSLS_NonCrack, "S1 - non-cracked", ustawienia.SLS_Crack_NonCracked_LineColor.GetMedia(), ustawienia.SLS_Crack_NonCracked_LineWeight);
             }
 
             if (tabSLS_Crack != null)
@@ -939,10 +939,10 @@ namespace KalkulatorPrzekroju
 
             if (tabSLS_Crack_R != null && tabSLS_Crack_L != null)
             {
-                diagram_SLS_Crack.RemoveSerie("Section 1 bottom - wk.lim = " + wspolczynniki.Crack_wklim + " mm");
-                diagram_SLS_Crack.RemoveSerie("Section 1 top - wk.lim = " + wspolczynniki.Crack_wklim + " mm");
-                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack_R, "Section 1 bottom - wk.lim = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_Right_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
-                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack_L, "Section 1 top - wk.lim = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_Left_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+                diagram_SLS_Crack.RemoveSerie("S1 bottom - wk.lim = " + wspolczynniki.Crack_wklim + " mm");
+                diagram_SLS_Crack.RemoveSerie("S1 top - wk.lim = " + wspolczynniki.Crack_wklim + " mm");
+                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack_R, "S1 bottom - wk.lim = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_Right_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack_L, "S1 top - wk.lim = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_Left_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
             }
 
             if (points_SLS_QPR != null)
@@ -962,14 +962,14 @@ namespace KalkulatorPrzekroju
 
             if (tabSLS_ConcreteStress != null)
             {
-                diagram_SLS_Stressess.RemoveSerie("Section 1 - Concrete stress");
-                diagram_SLS_Stressess.AddLineSerie(tabSLS_ConcreteStress, "Section 1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
+                diagram_SLS_Stressess.RemoveSerie("S1 - Concrete stress");
+                diagram_SLS_Stressess.AddLineSerie(tabSLS_ConcreteStress, "S1 - Concrete stress", ustawienia.SLS_ConcreteStress_LineColor.GetMedia(), ustawienia.SLS_ConcreteStress_LineWeight);
             }
 
             if (tabSLS_SteelStress != null)
             {
-                diagram_SLS_Stressess.RemoveSerie("Section 1 - Steel stress");
-                diagram_SLS_Stressess.AddLineSerie(tabSLS_SteelStress, "Section 1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
+                diagram_SLS_Stressess.RemoveSerie("S1 - Steel stress");
+                diagram_SLS_Stressess.AddLineSerie(tabSLS_SteelStress, "S1 - Steel stress", ustawienia.SLS_SteelStress_LineColor.GetMedia(), ustawienia.SLS_SteelStress_LineWeight);
             }
             if (points_SLS_CHR != null)
             {
