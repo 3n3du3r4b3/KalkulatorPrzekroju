@@ -99,10 +99,10 @@ namespace KalkulatorPrzekroju
 			else
 				A2 = c2 + 0.5 * fi2;
 
-            SetCreepFactor(fi);
-            MyStirrups = stirrups;
-            draw = new DrawInfo(H, B, true);
-        }
+			SetCreepFactor(fi);
+			MyStirrups = stirrups;
+			draw = new DrawInfo(H, B, true);
+		}
 
 		/// <summary>
 		/// Konstruktor przekroju na podstawie rozstawu zbrojenia
@@ -130,34 +130,34 @@ namespace KalkulatorPrzekroju
 			CurrentConcrete = concrete;
 			CurrentSteel = steel;
 
-            if (fi1 == 0)
-            {
-                c1 = 0;
-                A1 = 0;
-                As1 = 0.000000001;
-            }
-            else
-            {
-                As1 = (fi1 / 2) * (fi1 / 2) * Math.PI * b / spacing1;
-                A1 = c1 + 0.5 * fi1;
-            }
-            
-            if (fi2 == 0)
-            {
-                A2 = 0;
-                c2 = 0;
-                As2 = 0.000000001;
-            }
-            else
-            {
-                As2 = (fi2 / 2) * (fi2 / 2) * Math.PI * b / spacing2;
-                A2 = c2 + 0.5 * fi2;
-            }
-            
-            SetCreepFactor(0);
-            MyStirrups = stirrups;
-            draw = new DrawInfo(H, B, true);
-        }
+			if (fi1 == 0)
+			{
+				c1 = 0;
+				A1 = 0;
+				As1 = 0.000000001;
+			}
+			else
+			{
+				As1 = (fi1 / 2) * (fi1 / 2) * Math.PI * b / spacing1;
+				A1 = c1 + 0.5 * fi1;
+			}
+			
+			if (fi2 == 0)
+			{
+				A2 = 0;
+				c2 = 0;
+				As2 = 0.000000001;
+			}
+			else
+			{
+				As2 = (fi2 / 2) * (fi2 / 2) * Math.PI * b / spacing2;
+				A2 = c2 + 0.5 * fi2;
+			}
+			
+			SetCreepFactor(0);
+			MyStirrups = stirrups;
+			draw = new DrawInfo(H, B, true);
+		}
 
 		/// <summary>
 		/// Konstruktor przekroju na podstawie ilości prętów zbrojenia w przekroju
@@ -211,10 +211,10 @@ namespace KalkulatorPrzekroju
 				A2 = c2 + 0.5 * fi2;
 			}
 
-            SetCreepFactor(0);
-            MyStirrups = stirrups;
-            draw = new DrawInfo(H, B, false);
-        }
+			SetCreepFactor(0);
+			MyStirrups = stirrups;
+			draw = new DrawInfo(H, B, false);
+		}
 
 		public override bool Equals(object obj)
 		{
