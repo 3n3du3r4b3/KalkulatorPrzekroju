@@ -78,7 +78,6 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Klasa przechowująca dane do liczenia creepa
         /// </summary>
-        public CreepParams crp { get; set; }
 
         protected double Dimfactor { get { return 1000.0; } }         // scale factor do wymiarow: 1000 - jedn podst to mmm
         protected double Forcefactor { get { return 1000.0; } }       // scale factor dla sil: 1000 - jedn podst to kN
@@ -828,9 +827,19 @@ namespace KalkulatorPrzekroju
             }
             double wklim = factors.Crack_wklim;
 
-            double momP = SLS_MomentKrytycznyStal(NEd, factors);
-            double momL = -ReversedSection.SLS_MomentKrytycznyStal(NEd, factors);
+            double momP = 0;// 100*SLS_MomentKrytycznyStal(NEd, factors);
+            double momL = 0;// -100*ReversedSection.SLS_MomentKrytycznyStal(NEd, factors);
             double momC;
+
+            do
+            {
+                momP += 100;
+            } while (SLS_CrackWidth(NEd, momP, factors, true, cracked) < wklim);
+
+            do
+            {
+                momL -= 100;
+            } while (SLS_CrackWidth(NEd, momL, factors, true, cracked) > wklim);
 
             double wkP = SLS_CrackWidth(NEd, momP, factors, true, true);
             double wkL = SLS_CrackWidth(NEd, momL, factors, true, true);
@@ -855,7 +864,7 @@ namespace KalkulatorPrzekroju
             } while (Math.Abs(wkP - wkL) > 0.00001);
 
 
-                return momC;
+            return momC;
 
             /*
             
@@ -1053,11 +1062,43 @@ namespace KalkulatorPrzekroju
             }
             
             double wklim = factors.Crack_wklim; 
-            double wkP, wkL;
+            //double wkP, wkL;
 			
             double Nmax = SLS_SilaOsiowaKrytycznaStal(factors);
-            
-            do{
+            // ALGORYTM 3
+            double Nmin = 0;
+            double momL, momP, Nc;
+            do
+            {
+                Nc = (Nmax + Nmin) / 2;
+
+                momL = SLS_MomentKrytycznyRysa(Nc, factors, cracked);
+                momP = -ReversedSection.SLS_MomentKrytycznyRysa(Nc, factors, cracked);
+
+                if (momP > momL)
+                {
+                    Nmax = Nc;
+                }
+                else if (momP < momL)
+                {
+                    Nmin = Nc;
+                }
+                else
+                {
+                    return Nc;
+                }
+
+            } while (Math.Abs(Nmax - Nmin) > 0.0001);
+
+            return Nc;
+
+            //ALGORYTM 3 - KONIEC
+
+            //ALGORYTM 2 - krótszy lepsze ale niedoskonały
+/*            double momC;
+
+            do
+            {
             	double Mom = SLS_MomentKrytycznyStal(Nmax, factors);
             	
             	wkP = SLS_CrackWidth(Nmax, Mom, factors, true, true);
@@ -1065,8 +1106,8 @@ namespace KalkulatorPrzekroju
             	
             	double momL = Mom;
             	double momP = Mom;
-            	
-            	bool prawaStrona;
+
+                bool prawaStrona;
             	if (wkP >= wkL) {
             		prawaStrona = true;
             	}
@@ -1096,11 +1137,12 @@ namespace KalkulatorPrzekroju
             			}
             		}
             	} while (warunek);
-            	
-            	//pętla szukająca momentu dla którego RYSY PO OBU STRONACH przekroju będą RÓWNE
-            	do
+
+                //pętla szukająca momentu dla którego RYSY PO OBU STRONACH przekroju będą RÓWNE
+                
+                do
             	{
-            		double momC = (momL + momP) / 2;
+            		momC = (momL + momP) / 2;
 
             		wkP = SLS_CrackWidth(Nmax, momC, factors, true, true);
             		wkL = SLS_CrackWidth(Nmax, momC, factors, false, true);
@@ -1119,9 +1161,20 @@ namespace KalkulatorPrzekroju
             	Nmax = wklim/wk * Nmax;
             	
             } while (Math.Abs(Math.Max(wkP,wkL)-wklim) > 0.00001);
-            
-            return Nmax; 
-            
+
+            double Nm = -1804.7586602836398;
+            double ML = -1082.6318409146525;
+            double MP = -663.10169633309511;
+            double wk1 = SLS_CrackWidth(Nm, ML, factors, true, true);
+            double wk2 = SLS_CrackWidth(Nm, ML, factors, false, true);
+
+            double wk3 = SLS_CrackWidth(Nm, MP, factors, true, true);
+            double wk4 = SLS_CrackWidth(Nm, MP, factors, false, true);
+
+            return Nmax;    */
+            // ALGORYTM 2 - koniec
+
+            // ALGORYTM 1 - POCZĄTKOWY
             //double alfaE = CurrentSteel.Es / CurrentConcrete.Ecm;
             /*
             double A_I = SprowPolePrzekr(HTotal / Dimfactor);                   // sprowadzone pole powierzchni przekroju w m2
@@ -1229,6 +1282,7 @@ namespace KalkulatorPrzekroju
             }
             */
             //return maxForce;
+            //ALGORYTM 1 - KONIEC
         }
 
         /// <summary>
@@ -1331,6 +1385,38 @@ namespace KalkulatorPrzekroju
                 results[results.Length - i - 1][0] = Ned;
                 results[i][1] = SLS_MomentKrytycznyRysa(Ned, factors, cracked);
                 results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyRysa(Ned, factors, cracked);
+            }
+
+            SetCreepFactor(tempFi);
+            return results;
+        }
+
+        public double[][] SLS_Crack_OneSide_Curve(Factors factors, bool cracked, bool positiveSide)
+        {
+            double tempFi = this.Fi;
+            if (!considerFi4crack)
+            {
+                SetCreepFactor(0.0);
+            }
+            int NoOfPoints = factors.NoOfPoints;
+            double rysaGraniczna = factors.Crack_wklim;
+            double max = 0.25 * SLS_SilaOsiowaKrytycznaBeton(factors);
+            double min = 1.01 * SLS_SilaOsiowaKrytycznaRysa(factors, true);
+            double[][] results = new double[NoOfPoints][];
+
+            for (int i = 0; i < NoOfPoints; i++)
+            {
+                double Ned = max - (max - min) / (NoOfPoints - 1) * i;
+                results[i] = new double[2];
+                results[i][0] = Ned;
+                if (positiveSide)
+                {
+                    results[i][1] = SLS_MomentKrytycznyRysa(Ned, factors, cracked);
+                }
+                else
+                {
+                    results[i][1] = -ReversedSection.SLS_MomentKrytycznyRysa(Ned, factors, cracked);
+                }
             }
 
             SetCreepFactor(tempFi);

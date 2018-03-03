@@ -32,7 +32,8 @@ namespace KalkulatorPrzekroju
 
         public MyColor SLS_Crack_NonCracked_LineColor { get; set; }
         public double SLS_Crack_NonCracked_LineWeight { get; set; }
-        public MyColor SLS_Crack_Cracked_LineColor { get; set; }
+        public MyColor SLS_Crack_Cracked_Left_LineColor { get; set; }
+        public MyColor SLS_Crack_Cracked_Right_LineColor { get; set; }
         public double SLS_Crack_Cracked_LineWeight { get; set; }
         public MyColor SLS_Crack_DataPointColor { get; set; }
         public double SLS_Crack_DataPointWeight { get; set; }
@@ -82,7 +83,8 @@ namespace KalkulatorPrzekroju
                 this.SLS_Crack_DataPointWeight = zapisane.SLS_Crack_DataPointWeight;
                 this.SLS_Crack_NonCracked_LineColor = zapisane.SLS_Crack_NonCracked_LineColor;
                 this.SLS_Crack_NonCracked_LineWeight = zapisane.SLS_Crack_NonCracked_LineWeight;
-                this.SLS_Crack_Cracked_LineColor = zapisane.SLS_Crack_Cracked_LineColor;
+                this.SLS_Crack_Cracked_Left_LineColor = zapisane.SLS_Crack_Cracked_Left_LineColor;
+                this.SLS_Crack_Cracked_Right_LineColor = zapisane.SLS_Crack_Cracked_Right_LineColor;
                 this.SLS_Crack_Cracked_LineWeight = zapisane.SLS_Crack_Cracked_LineWeight;
                 this.SLS_SteelStress_LineColor = zapisane.SLS_SteelStress_LineColor;
                 this.SLS_SteelStress_LineWeight = zapisane.SLS_SteelStress_LineWeight;
@@ -113,7 +115,8 @@ namespace KalkulatorPrzekroju
                 this.SLS_Crack_DataPointWeight = def.SLS_Crack_DataPointWeight;
                 this.SLS_Crack_NonCracked_LineColor = def.SLS_Crack_NonCracked_LineColor;
                 this.SLS_Crack_NonCracked_LineWeight = def.SLS_Crack_NonCracked_LineWeight;
-                this.SLS_Crack_Cracked_LineColor = def.SLS_Crack_Cracked_LineColor;
+                this.SLS_Crack_Cracked_Left_LineColor = def.SLS_Crack_Cracked_Left_LineColor;
+                this.SLS_Crack_Cracked_Right_LineColor = def.SLS_Crack_Cracked_Right_LineColor;
                 this.SLS_Crack_Cracked_LineWeight = def.SLS_Crack_Cracked_LineWeight;
                 this.SLS_SteelStress_LineColor = def.SLS_SteelStress_LineColor;
                 this.SLS_SteelStress_LineWeight = def.SLS_SteelStress_LineWeight;
@@ -150,9 +153,10 @@ namespace KalkulatorPrzekroju
             ULSVN_DataPointColor = new MyColor(OxyColors.YellowGreen);
             ULSVN_DataPointWeight = 2;
 
-            SLS_Crack_NonCracked_LineColor = new MyColor(OxyColors.DarkCyan);
+            SLS_Crack_NonCracked_LineColor = new MyColor(OxyColors.Green);
             SLS_Crack_NonCracked_LineWeight = 2;
-            SLS_Crack_Cracked_LineColor = new MyColor(OxyColors.DarkCyan);
+            SLS_Crack_Cracked_Left_LineColor = new MyColor(OxyColors.DarkSalmon);
+            SLS_Crack_Cracked_Right_LineColor = new MyColor(OxyColors.DarkMagenta);
             SLS_Crack_Cracked_LineWeight = 2;
             SLS_Crack_DataPointColor = new MyColor(OxyColors.YellowGreen);
             SLS_Crack_DataPointWeight = 2;

@@ -65,7 +65,8 @@ namespace KalkulatorPrzekroju
             slider_line2_ULS_VN.Value = mySettings.ULSVN_VrdLineWeight;
             slider_points_ULS_VN.Value = mySettings.ULSVN_DataPointWeight;
 
-            colorPicker_SLS_Crack_Cracked_Line.SelectedColor = mySettings.SLS_Crack_Cracked_LineColor.GetMedia();
+            colorPicker_SLS_Crack_Cracked_Line_Left.SelectedColor = mySettings.SLS_Crack_Cracked_Left_LineColor.GetMedia();
+            colorPicker_SLS_Crack_Cracked_Line_Right.SelectedColor = mySettings.SLS_Crack_Cracked_Right_LineColor.GetMedia();
             colorPicker_SLS_Crack_NonCracked_Line.SelectedColor = mySettings.SLS_Crack_NonCracked_LineColor.GetMedia();
             colorPicker_SLS_Crack_Points.SelectedColor = mySettings.SLS_Crack_DataPointColor.GetMedia();
             slider_SLS_Crack_Cracked_Line.Value = mySettings.SLS_Crack_Cracked_LineWeight;
@@ -96,7 +97,8 @@ namespace KalkulatorPrzekroju
             mySettings.ULSVN_VrdLineWeight = slider_line2_ULS_VN.Value;
             mySettings.ULSVN_DataPointWeight = slider_points_ULS_VN.Value;
 
-            mySettings.SLS_Crack_Cracked_LineColor = new MyColor((Color)colorPicker_SLS_Crack_Cracked_Line.SelectedColor);
+            mySettings.SLS_Crack_Cracked_Left_LineColor = new MyColor((Color)colorPicker_SLS_Crack_Cracked_Line_Left.SelectedColor);
+            mySettings.SLS_Crack_Cracked_Right_LineColor = new MyColor((Color)colorPicker_SLS_Crack_Cracked_Line_Right.SelectedColor);
             mySettings.SLS_Crack_NonCracked_LineColor = new MyColor((Color)colorPicker_SLS_Crack_NonCracked_Line.SelectedColor);
             mySettings.SLS_Crack_DataPointColor = new MyColor((Color)colorPicker_SLS_Crack_Points.SelectedColor);
             mySettings.SLS_Crack_Cracked_LineWeight = slider_SLS_Crack_Cracked_Line.Value;

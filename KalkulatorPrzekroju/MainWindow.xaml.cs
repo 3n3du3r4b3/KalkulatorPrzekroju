@@ -42,6 +42,9 @@ namespace KalkulatorPrzekroju
         MainPlotView diagram_SLS_Crack;
         MainPlotView diagram_SLS_Stressess;
         SavedFile thisInstance;
+        CreepParams section1crp;
+        CreepParams section2crp;
+        bool correctData;
 
         double[][] tabSLS_ConcreteStress;
         double[][] tabSLS_SteelStress;
@@ -54,6 +57,8 @@ namespace KalkulatorPrzekroju
         double[][] tabSLS_Crack;
         double[][] tab2_ULS;
         double[][] tab1_ULS;
+        double[][] tabSLS_Crack_L;
+        double[][] tabSLS_Crack_R;
 
         List<CasePoint> points_MN;
         List<CasePoint> points_VN;
@@ -358,6 +363,7 @@ namespace KalkulatorPrzekroju
             Double.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
+            //CorrectData();
         }
         
         private void TextBox_ToInt_LostFocus(object sender, RoutedEventArgs e)
@@ -367,7 +373,28 @@ namespace KalkulatorPrzekroju
             Int32.TryParse(tb.Text, out input);
             tb.Text = input.ToString(format);
             ShowToUpdate();
+            //CorrectData();
         }
+
+       /*private void TextBox_Cr1_TextChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            int input;
+            Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            //section1crp = null;
+            //ShowToUpdate();
+        }
+
+        private void TextBox_Cr2_TextChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            int input;
+            Int32.TryParse(tb.Text, out input);
+            tb.Text = input.ToString(format);
+            //section2crp = null;
+            //ShowToUpdate();
+        }*/
 
         private void ListBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -398,6 +425,8 @@ namespace KalkulatorPrzekroju
         //PRZYCISKI
         private void Button_UpdateGraph_Click(object sender, RoutedEventArgs e)
         {
+        	if (CorrectData()) {
+        	
             section1 = CreateSection(1);
             section2 = CreateSection(2);
             stirrups1 = CreateStirrups(1);
@@ -413,10 +442,13 @@ namespace KalkulatorPrzekroju
             Refresh_SLS_Stresses_Graph();
 
             ShowToUpdate();
+        	}
         }
 
         private void Button_Preview_Click(object sender, RoutedEventArgs e)
         {
+        	if (CorrectData()) {
+        	
             section1 = CreateSection(1);
             section2 = CreateSection(2);
             stirrups1 = CreateStirrups(1);
@@ -428,6 +460,7 @@ namespace KalkulatorPrzekroju
 
             Preview window;
             window = new Preview(ti,section1.draw,section2.draw);
+        	}
         }
 
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
@@ -520,6 +553,8 @@ namespace KalkulatorPrzekroju
 
         private void button_CalcCreep1_Click(object sender, RoutedEventArgs e)
         {
+        	if (CorrectData()) {
+        	
             section1 = CreateSection(1);
             section2 = CreateSection(2);
             stirrups1 = CreateStirrups(1);
@@ -530,14 +565,21 @@ namespace KalkulatorPrzekroju
             CreepWindow creepwin1 = new CreepWindow();
             double creep1;
             Double.TryParse(textBox_creep1.Text, out creep1);
-            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1, section1.crp);
+            if(section1crp == null)
+            {
+                section1crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
+            }
+            creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1, section1crp);
             textBox_creep1.Text = creepwin1.CrCoeff.ToString("F3");
-            section1.crp = creepwin1.crp;
-            ShowToUpdate();
+            section1crp = creepwin1.crp;
+            ShowToUpdate();	
+        	}
         }
 
         private void button_CalcCreep2_Click(object sender, RoutedEventArgs e)
         {
+        	if (CorrectData()) {
+        	
             section1 = CreateSection(1);
             section2 = CreateSection(2);
             stirrups1 = CreateStirrups(1);
@@ -548,10 +590,15 @@ namespace KalkulatorPrzekroju
             CreepWindow creepwin2 = new CreepWindow();
             double creep2;
             Double.TryParse(textBox_creep2.Text, out creep2);
-            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2.crp);
+            if (section2crp == null)
+            {
+                section1crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
+            }
+            creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2crp);
             textBox_creep2.Text = creepwin2.CrCoeff.ToString("F3");
-            section2.crp = creepwin2.crp;
+            section2crp = creepwin2.crp;
             ShowToUpdate();
+        	}
         }
 
         private void button_SaveToPDF_ULS_MN_Click(object sender, RoutedEventArgs e)
@@ -764,7 +811,9 @@ namespace KalkulatorPrzekroju
 
             tab2_ULS = section2.ULS_MN_Curve(factors, wspolczynniki.NoOfPoints);
 
-            tabSLS_Crack = section1.SLS_Crack_Curve(wspolczynniki, true);
+            //tabSLS_Crack = section1.SLS_Crack_Curve(wspolczynniki, true);
+            tabSLS_Crack_L = section1.SLS_Crack_OneSide_Curve(wspolczynniki, true, true);
+            tabSLS_Crack_R = section1.SLS_Crack_OneSide_Curve(wspolczynniki, true, false);
 
             tabSLS_NonCrack = section1.SLS_Crack_Curve(wspolczynniki, false);
             
@@ -884,8 +933,16 @@ namespace KalkulatorPrzekroju
 
             if (tabSLS_Crack != null)
             {
-                diagram_SLS_Crack.RemoveSerie("Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm");
-                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+                //diagram_SLS_Crack.RemoveSerie("Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm");
+                //diagram_SLS_Crack.AddLineSerie(tabSLS_Crack, "Section 1 - w.max = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+            }
+
+            if (tabSLS_Crack_R != null && tabSLS_Crack_L != null)
+            {
+                diagram_SLS_Crack.RemoveSerie("Section 1 bottom - wk.lim = " + wspolczynniki.Crack_wklim + " mm");
+                diagram_SLS_Crack.RemoveSerie("Section 1 top - wk.lim = " + wspolczynniki.Crack_wklim + " mm");
+                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack_R, "Section 1 bottom - wk.lim = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_Right_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
+                diagram_SLS_Crack.AddLineSerie(tabSLS_Crack_L, "Section 1 top - wk.lim = " + wspolczynniki.Crack_wklim + " mm", ustawienia.SLS_Crack_Cracked_Left_LineColor.GetMedia(), ustawienia.SLS_Crack_Cracked_LineWeight);
             }
 
             if (points_SLS_QPR != null)
@@ -1224,6 +1281,67 @@ namespace KalkulatorPrzekroju
             }
             else
                 MessageBox.Show("No picture to save!", "Saving as PDF", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        
+        private bool CorrectData(){
+        	if (tabControl1.SelectedIndex == 0) {
+        		if(radioBut_Rectangle_sec1.IsChecked == true) {
+        			double h,b,c1,c2,fi1,fi2;
+        			Double.TryParse(textBox_height_1.Text, out h);
+        			Double.TryParse(textBox_width_1.Text, out b);
+        			Double.TryParse(textBox_cover_As1_1.Text, out c1);
+        			Double.TryParse(textBox_cover_As2_1.Text, out c2);
+        			Double.TryParse(comboBox_diameter_As1_1.Text, out fi1);
+        			Double.TryParse(comboBox_diameter_As2_1.Text, out fi2);
+        			
+        			if (h < (c1+c2+fi1+fi2) || b< (2*Math.Max(c1,c2)+Math.Max(fi1,fi2))) {
+        				MessageBox.Show("Incorrect section geometry", "Section 1", MessageBoxButton.OK, MessageBoxImage.Error);
+        				return false;
+        			}
+        		}
+        		if (radioBut_Circular_sec1.IsChecked == true) {
+        			double d,c,fi;
+        			Double.TryParse(textBox_diameter_1.Text, out d);
+        			Double.TryParse(textBox_cover_Circ_1.Text, out c);
+        			Double.TryParse(comboBox_diameter_Circ_1.Text, out fi);
+        			
+        			if (d < (c+fi)) {
+        				MessageBox.Show("Incorrect section geometry", "Section 1", MessageBoxButton.OK, MessageBoxImage.Error);
+        				return false;
+        			}
+        		}
+
+        	}
+        	
+        	 if (tabControl1.SelectedIndex == 1) {
+        		if(radioBut_Rectangle_sec2.IsChecked == true) {
+        			double h,b,c1,c2,fi1,fi2;
+        			Double.TryParse(textBox_height_2.Text, out h);
+        			Double.TryParse(textBox_width_2.Text, out b);
+        			Double.TryParse(textBox_cover_As1_2.Text, out c1);
+        			Double.TryParse(textBox_cover_As2_2.Text, out c2);
+        			Double.TryParse(comboBox_diameter_As1_2.Text, out fi1);
+        			Double.TryParse(comboBox_diameter_As2_2.Text, out fi2);
+        			
+        			if (h < (c1+c2+fi1+fi2) || b< (2*Math.Max(c1,c2)+Math.Max(fi1,fi2))) {
+        				MessageBox.Show("Incorrect section geometry", "Section 2", MessageBoxButton.OK, MessageBoxImage.Error);
+        				return false;
+        			}
+        		}
+        		if (radioBut_Circular_sec1.IsChecked == true) {
+        			double d,c,fi;
+        			Double.TryParse(textBox_diameter_2.Text, out d);
+        			Double.TryParse(textBox_cover_Circ_2.Text, out c);
+        			Double.TryParse(comboBox_diameter_Circ_2.Text, out fi);
+        			
+        			if (d < (c+fi)) {
+        				MessageBox.Show("Incorrect section geometry", "Section 2", MessageBoxButton.OK, MessageBoxImage.Error);
+        				return false;
+        			}
+        		}
+
+        	}
+        	return true;
         }
 
     }

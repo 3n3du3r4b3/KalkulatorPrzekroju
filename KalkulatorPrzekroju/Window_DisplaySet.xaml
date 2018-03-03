@@ -86,9 +86,11 @@
                     <GroupBox Header="Section 1 - Limited crack width" Margin="250,10,0,0" VerticalAlignment="Top" Height="100" HorizontalAlignment="Left" Width="230">
                         <Grid Margin="0">
                             <Label Content="Line weight:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                            <Label Content="Line color:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
-                            <xctk:ColorPicker x:Name="colorPicker_SLS_Crack_Cracked_Line" Margin="90,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120"/>
+                            <Label Content="Line colors
+                                   :" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.586,-0.803"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_Crack_Cracked_Line_Left" Margin="90,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
                             <Slider x:Name="slider_SLS_Crack_Cracked_Line" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="118" Minimum="0.1" Value="2" TickFrequency="0.5" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1"/>
+                            <xctk:ColorPicker x:Name="colorPicker_SLS_Crack_Cracked_Line_Right" Margin="153,40,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Data points" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Height="70" Width="470">
