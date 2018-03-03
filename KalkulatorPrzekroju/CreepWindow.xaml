@@ -24,8 +24,8 @@
                 <Label x:Name="label1_Copy23" Content="days" HorizontalAlignment="Left" Margin="366,41,0,0" VerticalAlignment="Top" Height="26"/>
                 <Label x:Name="labelCem" Content="Cement Type:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
                 <ComboBox x:Name="comboBox_Cement" ItemsSource="{Binding cemdict}" DisplayMemberPath="Key" SelectedValuePath="Value" HorizontalAlignment="Left" Margin="99,72,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="comboBox_Cement_SelectionChanged" SelectedIndex="1"/>
-                <Label x:Name="label2_Copy4" Content="Use of silica-fume: " HorizontalAlignment="Left" Margin="214,72,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="label1_Copy234" HorizontalAlignment="Left" Margin="324,78,0,6" VerticalAlignment="Center" Checked="checkBox_sfume_Checked" Unchecked="checkBox_sfume_Unchecked" IsEnabled="False"/>
+                <Label x:Name="label_sfume" Content="Use of silica-fume: " HorizontalAlignment="Left" Margin="214,72,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="chbox_sfume" HorizontalAlignment="Left" Margin="324,78,0,6" VerticalAlignment="Center" Checked="checkBox_sfume_Checked" Unchecked="checkBox_sfume_Unchecked" IsEnabled="False"/>
                 <Label x:Name="labelu_Copy" Content="fcm:" HorizontalAlignment="Left" Margin="510,10,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
                 <TextBox x:Name="textBox_fcm" HorizontalAlignment="Left" Height="23" Margin="554,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="75" TextAlignment="Center" LostFocus="textBox_fcm_LostFocus" TabIndex="2" Text="38"/>
                 <Label x:Name="labelRH1_Copy" Content="MPa" HorizontalAlignment="Left" Margin="634,10,0,0" VerticalAlignment="Top" Height="26"/>
@@ -47,7 +47,7 @@
                     <ColumnDefinition Width="55*"/>
                 </Grid.ColumnDefinitions>
                 <RadioButton x:Name="radio_199211" GroupName="code" HorizontalAlignment="Left" Margin="100,0,0,0" VerticalAlignment="Top" Checked="radio_199211_Checked" IsChecked="True">EN 1992-1-1</RadioButton>
-                <RadioButton x:Name="radio_19922" GroupName="code" HorizontalAlignment="Left" Margin="100,0,0,8" VerticalAlignment="Bottom" Checked="radio_19922_Checked" IsEnabled="False">EN 1992-2</RadioButton>
+                <RadioButton x:Name="radio_19922" GroupName="code" HorizontalAlignment="Left" Margin="100,0,0,8" VerticalAlignment="Bottom" Checked="radio_19922_Checked">EN 1992-2</RadioButton>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="groupBox_CreepResults" Header="Results" Margin="10,208,518,0" Height="290" VerticalAlignment="Top">
