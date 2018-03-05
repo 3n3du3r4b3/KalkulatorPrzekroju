@@ -592,7 +592,7 @@ namespace KalkulatorPrzekroju
             Double.TryParse(textBox_creep2.Text, out creep2);
             if (section2crp == null)
             {
-                section1crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
+                section2crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
             }
             creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2crp);
             textBox_creep2.Text = creepwin2.CrCoeff.ToString("F3");

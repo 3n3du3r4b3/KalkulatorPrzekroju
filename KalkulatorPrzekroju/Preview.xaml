@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
         Title="Preview" Height="500" Width="500">
-    <Grid Width="{Binding ElementName=prCanvas, Path=ActualWidth}" Height="{Binding ElementName=prCanvas, Path=ActualHeight}" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Canvas Name="prCanvas" Height="500" Width="500">
-        
-        <Path Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow"/>
-      
+    
+    <Canvas Name="prCanvas">
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+            <Path Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow"/>
+        </Grid>
     </Canvas>
-    </Grid>
+    
 </Window>
