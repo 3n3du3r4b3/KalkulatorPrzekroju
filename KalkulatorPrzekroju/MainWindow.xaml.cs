@@ -458,9 +458,12 @@ namespace KalkulatorPrzekroju
 
             int ti = tabControl1.SelectedIndex;
 
-            Preview window;
-            window = new Preview(ti,section1.draw,section2.draw);
-        	}
+            PreviewModel drawSection;
+            drawSection = new PreviewModel(ti,section1.draw,section2.draw);
+            var pr = new Preview { DataContext = new PreviewViewModel() };
+            pr.Show();
+
+            }
         }
 
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)

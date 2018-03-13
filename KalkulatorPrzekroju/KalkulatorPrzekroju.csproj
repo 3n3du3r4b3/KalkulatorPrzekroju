@@ -99,6 +99,8 @@
     <Compile Include="Preview.xaml.cs">
       <DependentUpon>Preview.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PreviewModel.cs" />
+    <Compile Include="PreviewViewModel.cs" />
     <Compile Include="RectangleSection.cs" />
     <Compile Include="SavedFile.cs" />
     <Compile Include="Section.cs" />

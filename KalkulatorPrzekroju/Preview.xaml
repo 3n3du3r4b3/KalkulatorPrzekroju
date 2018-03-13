@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="Preview" Height="500" Width="500">
-    
+        Title="Preview" Height="500" Width="500" Background="{Binding WindowBackground}">
+
     <Canvas Name="prCanvas">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
+        <!--<Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0">
             <Path Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow"/>
-        </Grid>
+        </Grid>-->
     </Canvas>
     
 </Window>
