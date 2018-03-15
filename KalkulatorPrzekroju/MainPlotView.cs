@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OxyPlot;
 using OxyPlot.Series;
 using System.Windows.Media;
+using System.Collections.ObjectModel;
 
 namespace KalkulatorPrzekroju
 {
@@ -50,14 +51,17 @@ namespace KalkulatorPrzekroju
             wykres.Series.Add(punkty);
         }
 
-        public void AddPointSerie(List<CasePoint> dataPoints, string name, Color color, double size)
+        public void AddPointSerie(ObservableCollection<CasePoint> dataPoints, string name, Color color, double size)
         {
             ScatterSeries punkty = new ScatterSeries();
             punkty.Title = name;
 
             for (int i = 0; i < dataPoints.Count; i++)
             {
-                punkty.Points.Add(new ScatterPoint(dataPoints[i].X, dataPoints[i].Y));
+                if (dataPoints[i].X != null && dataPoints[i].Y != null)
+                {
+                    punkty.Points.Add(new ScatterPoint((double)dataPoints[i].X, (double)dataPoints[i].Y));
+                }
             }
             punkty.MarkerStroke = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
             punkty.MarkerSize = size;

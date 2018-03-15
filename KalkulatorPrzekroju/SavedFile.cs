@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace KalkulatorPrzekroju
 {
@@ -78,10 +79,10 @@ namespace KalkulatorPrzekroju
         public double[][] tab2_ULS { get; set; }
         public double[][] tab1_ULS { get; set; }
 
-        public List<CasePoint> points_MN { get; set; }
-        public List<CasePoint> points_VN { get; set; }
-        public List<CasePoint> points_SLS_QPR { get; set; }
-        public List<CasePoint> points_SLS_CHR { get; set; }
+        public ObservableCollection<CasePoint> points_MN { get; set; }
+        public ObservableCollection<CasePoint> points_VN { get; set; }
+        public ObservableCollection<CasePoint> points_SLS_QPR { get; set; }
+        public ObservableCollection<CasePoint> points_SLS_CHR { get; set; }
         
         public string creep1 { get; set; }
         public string creep2 { get; set; }

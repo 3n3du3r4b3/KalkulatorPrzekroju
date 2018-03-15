@@ -56,7 +56,7 @@ namespace KalkulatorPrzekroju
 
             for (int i = 0; i < dataPoints.Count; i++)
             {
-                punkty.Points.Add(new ScatterPoint(dataPoints[i].X, dataPoints[i].Y));
+                punkty.Points.Add(new ScatterPoint((double)dataPoints[i].X, (double)dataPoints[i].Y));
             }
             punkty.MarkerStroke = OxyColor.FromArgb(color.A, color.R, color.G, color.B);
             punkty.MarkerSize = size;
