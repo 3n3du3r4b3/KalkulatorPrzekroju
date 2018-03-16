@@ -24,8 +24,6 @@ namespace KalkulatorPrzekroju
         public Preview()
         {
             InitializeComponent();
-            //DataContext = new PreviewViewModel();
-            //this.Show();
         }
     }
 }

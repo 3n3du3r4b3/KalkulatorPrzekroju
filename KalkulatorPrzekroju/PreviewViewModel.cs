@@ -42,8 +42,55 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        private Brush _windowBackground;
 
+        private GeometryGroup _sectionoutline;
+        public GeometryGroup sectionOutline
+        {
+            set
+            {
+                _sectionoutline = value;
+                NotifyPropertyChanged();
+            }
+            get
+            { 
+                return _sectionoutline;
+            }
+        }
+
+        private double _aH;
+        public double AH
+        {
+            get { return _aH; }
+            set
+            {
+                _aH = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _aW;
+        public double AW
+        {
+            get { return _aW; }
+            set
+            {
+                _aW = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private GeometryGroup _outline;
+        public GeometryGroup Outline
+        {
+            get { return _outline; }
+            set
+            {
+                _outline = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private Brush _windowBackground;
         public Brush WindowBackground
         {
             get { return _windowBackground; }
@@ -64,9 +111,12 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        public PreviewViewModel()
+        public PreviewViewModel(PreviewModel drs)
         {
             WindowBackground = GradientBackground;
+            Outline = drs.sec[drs.index].Shape;
+            AH = 500;
+            AW = 500;
         }
     }
 }

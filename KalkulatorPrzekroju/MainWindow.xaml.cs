@@ -492,7 +492,7 @@ namespace KalkulatorPrzekroju
 
                 PreviewModel drawSection;
                 drawSection = new PreviewModel(ti, section1.draw, section2.draw);
-                var pr = new Preview { DataContext = new PreviewViewModel() };
+                var pr = new Preview { DataContext = new PreviewViewModel(drawSection) };
                 pr.Show();
             }
         }
