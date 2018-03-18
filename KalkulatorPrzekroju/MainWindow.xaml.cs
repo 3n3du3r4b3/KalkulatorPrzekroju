@@ -708,8 +708,12 @@ namespace KalkulatorPrzekroju
                 }
             }
 
-            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
+            if (result == MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+            }
             if (result == MessageBoxResult.Yes)
             {
                 MenuItem_Save_Click(sender, null);
