@@ -489,18 +489,19 @@ namespace KalkulatorPrzekroju
         {
             if (CorrectData())
             {
-
-                section1 = CreateSection(1);
-                section2 = CreateSection(2);
-                stirrups1 = CreateStirrups(1);
-                stirrups2 = CreateStirrups(2);
-
-                CalcCurves();
+                tempSection1 = CreateSection(1);
+                tempSection2 = CreateSection(2);
+                tempStir1 = CreateStirrups(1);
+                tempStir2 = CreateStirrups(2);
+                Section sec1 = tempSection1;
+                Section sec2 = tempSection2;
+                Stirrups stir1 = tempStir1;
+                Stirrups stir2 = tempStir2;
 
                 int ti = tabControl1.SelectedIndex;
 
                 PreviewModel drawSection;
-                drawSection = new PreviewModel(ti, section1.draw, section2.draw);
+                drawSection = new PreviewModel(ti, sec1.draw, sec2.draw);
                 var pr = new Preview { DataContext = new PreviewViewModel(drawSection) };
                 pr.Show();
             }
@@ -615,12 +616,10 @@ namespace KalkulatorPrzekroju
             if (CorrectData())
             {
 
-                section1 = CreateSection(1);
-                section2 = CreateSection(2);
-                stirrups1 = CreateStirrups(1);
-                stirrups2 = CreateStirrups(2);
-
-                CalcCurves();
+                tempSection1 = CreateSection(1);
+                tempSection2 = CreateSection(2);
+                tempStir1 = CreateStirrups(1);
+                tempStir2 = CreateStirrups(2);
 
                 CreepWindow creepwin1 = new CreepWindow();
                 double creep1;
@@ -629,10 +628,10 @@ namespace KalkulatorPrzekroju
                 {
                     section1crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
                 }
-                creepwin1.Show(section1.AcTotal, section1.CurrentConcrete.fcm, creep1, section1crp);
+                creepwin1.Show(tempSection1.AcTotal, tempSection1.CurrentConcrete.fcm, creep1, section1crp);
                 textBox_creep1.Text = creepwin1.CrCoeff.ToString("F3");
                 section1crp = creepwin1.crp;
-                ShowToUpdate();
+                //ShowToUpdate();
             }
         }
 
@@ -641,12 +640,10 @@ namespace KalkulatorPrzekroju
             if (CorrectData())
             {
 
-                section1 = CreateSection(1);
-                section2 = CreateSection(2);
-                stirrups1 = CreateStirrups(1);
-                stirrups2 = CreateStirrups(2);
-
-                CalcCurves();
+                tempSection1 = CreateSection(1);
+                tempSection2 = CreateSection(2);
+                tempStir1 = CreateStirrups(1);
+                tempStir2 = CreateStirrups(2);
 
                 CreepWindow creepwin2 = new CreepWindow();
                 double creep2;
@@ -655,10 +652,10 @@ namespace KalkulatorPrzekroju
                 {
                     section2crp = new CreepParams(70, 1000, 14, 10000, 0, false, false);
                 }
-                creepwin2.Show(section2.AcTotal, section2.CurrentConcrete.fcm, creep2, section2crp);
+                creepwin2.Show(tempSection2.AcTotal, tempSection2.CurrentConcrete.fcm, creep2, section2crp);
                 textBox_creep2.Text = creepwin2.CrCoeff.ToString("F3");
                 section2crp = creepwin2.crp;
-                ShowToUpdate();
+                //ShowToUpdate();
             }
         }
 
