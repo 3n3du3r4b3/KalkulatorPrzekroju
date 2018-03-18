@@ -22,17 +22,17 @@ namespace KalkulatorPrzekroju
         public DrawInfo[] sec = new DrawInfo[2];
         public int index;
 
-        public PreviewModel(int ind, DrawInfo s1, DrawInfo s2)
+        public PreviewModel(int ind, DrawInfo section1, DrawInfo section2)
         {
             index = ind;
             GeometryGroup sectionOutline = new GeometryGroup();
-            GeometryGroup rebar = new GeometryGroup();
+            GeometryGroup Rebar = new GeometryGroup();
             GeometryGroup dimline = new GeometryGroup();
             GeometryDrawing sectionDrawing = new GeometryDrawing();
             Label secName = new Label();
             secName.Content = String.Format("Section {0}", index + 1);
-            sec[0] = s1;
-            sec[1] = s2;
+            sec[0] = section1;
+            sec[1] = section2;
 
             //Outline.Data = sectionOutline;
         }
@@ -60,7 +60,7 @@ namespace KalkulatorPrzekroju
                 */
 
         
-
+            /*
         private RectangleGeometry DrawRectangle(double B, double H, double aH, double aB)
         {
 
@@ -89,7 +89,7 @@ namespace KalkulatorPrzekroju
             rsec.Rect = myRect1;
             return rsec;
         }
-        /*
+        
         private EllipseGeometry DrawCircle(double D)
         {
             double aH = prCanvas.ActualHeight;

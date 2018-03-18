@@ -42,18 +42,17 @@ namespace KalkulatorPrzekroju
             }
         }
 
-
-        private GeometryGroup _sectionoutline;
-        public GeometryGroup sectionOutline
+        private GeometryGroup _rebar;
+        public GeometryGroup Rebar
         {
             set
             {
-                _sectionoutline = value;
+                _rebar = value;
                 NotifyPropertyChanged();
             }
             get
-            { 
-                return _sectionoutline;
+            {
+                return _rebar;
             }
         }
 
@@ -75,6 +74,28 @@ namespace KalkulatorPrzekroju
             set
             {
                 _aW = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _SCAH;
+        public double SCAH
+        {
+            get { return _SCAH; }
+            set
+            {
+                _SCAH = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _SCAW;
+        public double SCAW
+        {
+            get { return _SCAW; }
+            set
+            {
+                _SCAW = value;
                 NotifyPropertyChanged();
             }
         }
@@ -115,8 +136,12 @@ namespace KalkulatorPrzekroju
         {
             WindowBackground = GradientBackground;
             Outline = drs.sec[drs.index].Shape;
+            Rebar = drs.sec[drs.index].Reinforcement;
             AH = 500;
             AW = 500;
+            SCAH = 400;
+            SCAW = 400;
+            
         }
     }
 }
