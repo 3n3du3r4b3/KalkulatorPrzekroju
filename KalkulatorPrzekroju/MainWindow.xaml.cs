@@ -144,18 +144,22 @@ namespace KalkulatorPrzekroju
             points_MN = new ObservableCollection<CasePoint>();
             dataGrid_ULS_MN.ItemsSource = points_MN;
             AddEmptyRow(dataGrid_ULS_MN);
+            dataGrid_ULS_MN.SelectedIndex = 0;
 
             points_SLS_CHR = new ObservableCollection<CasePoint>();
             dataGrid_SLS_CHR.ItemsSource = points_SLS_CHR;
             AddEmptyRow(dataGrid_SLS_CHR);
+            dataGrid_SLS_CHR.SelectedIndex = 0;
 
             points_SLS_QPR = new ObservableCollection<CasePoint>();
             dataGrid_SLS_QPR.ItemsSource = points_SLS_QPR;
             AddEmptyRow(dataGrid_SLS_QPR);
+            dataGrid_SLS_QPR.SelectedIndex = 0;
 
             points_VN = new ObservableCollection<CasePoint>();
             dataGrid_ULS_VN.ItemsSource = points_VN;
             AddEmptyRow(dataGrid_ULS_VN);
+            dataGrid_ULS_VN.SelectedIndex = 0;
         }
         // załadowanie średnic pretow z pliku
         private List<double> LoadBarDiameters()
@@ -423,17 +427,22 @@ namespace KalkulatorPrzekroju
             ShowToUpdate();
         }
 
-        void dataGrid_CurrentCellChanged(object sender, EventArgs e)
+        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            DataGrid dataGrid = sender as DataGrid;
+           DataGrid dataGrid = sender as DataGrid;
             ObservableCollection<CasePoint> punkty = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
-            /*
-            if (points_MN[dataGrid_ULS_MN.SelectedIndex].Row == null)
-            {
-                points_MN[dataGrid_ULS_MN.SelectedIndex].Row = points_MN.Count;
-                AddEmptyRow(dataGrid_ULS_MN);
-            }*/
 
+            int index = e.Row.GetIndex();
+
+            CasePoint selectedpoint = dataGrid.Items[index] as CasePoint;
+
+            if (e.EditAction == DataGridEditAction.Commit && selectedpoint.Row == null && (selectedpoint.X == null || selectedpoint.Y == null))
+            {
+                //points_MN[dataGrid_ULS_MN.SelectedIndex].Row = points_MN.Count;
+                selectedpoint.Row = punkty.Count;
+                AddEmptyRow(dataGrid);
+            }
+            
             if (!punkty.Contains(new CasePoint(null, null, null)))
             {
                 AddEmptyRow(dataGrid);
@@ -485,7 +494,7 @@ namespace KalkulatorPrzekroju
                 section2 = CreateSection(2);
                 stirrups1 = CreateStirrups(1);
                 stirrups2 = CreateStirrups(2);
-                
+
                 CalcCurves();
 
                 int ti = tabControl1.SelectedIndex;
@@ -500,12 +509,13 @@ namespace KalkulatorPrzekroju
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
-            ObservableCollection<CasePoint> temp_points_MN = ReadFileCSV();
-            if (temp_points_MN.Count > 0)
+            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            if (temp_points.Count > 0)
             {
-                for (int i = 0; i < temp_points_MN.Count; i++)
+                for (int i = 0; i < temp_points.Count; i++)
                 {
-                    points_MN.Insert(points_MN.Count - 1, temp_points_MN[i]);
+                    temp_points[i].Row = points_MN.Count;
+                    points_MN.Insert(points_MN.Count-1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -513,35 +523,50 @@ namespace KalkulatorPrzekroju
         }
 
         private void Button_Import_VN_Click(object sender, RoutedEventArgs e)
-        {/*
-            tabControl.SelectedIndex = 1;
-            ObservableCollection<CasePoint> temp_points_VN = ReadFileCSV();
-            if (temp_points_VN.Count > 0)
+        {
+            tabControl.SelectedIndex = 0;
+            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            if (temp_points.Count > 0)
             {
-                points_VN.InsertRange(0, temp_points_VN);
-            }*/
+                for (int i = 0; i < temp_points.Count; i++)
+                {
+                    temp_points[i].Row = points_MN.Count;
+                    points_VN.Insert(points_MN.Count-1, temp_points[i]);
+                }
+                //points_MN.InsertRange(0, temp_points_MN);
+            }
             Refresh_ULS_VN_Graph();
         }
 
         private void Button_Import_QPR_Click(object sender, RoutedEventArgs e)
-        {/*
-            tabControl.SelectedIndex = 2;
-            ObservableCollection<CasePoint> temp_points_QPR = ReadFileCSV();
-            if (temp_points_QPR.Count > 0)
+        {
+            tabControl.SelectedIndex = 0;
+            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            if (temp_points.Count > 0)
             {
-                points_SLS_QPR.InsertRange(0, temp_points_QPR);
-            }*/
+                for (int i = 0; i < temp_points.Count; i++)
+                {
+                    temp_points[i].Row = points_MN.Count;
+                    points_SLS_QPR.Insert(points_MN.Count-1, temp_points[i]);
+                }
+                //points_MN.InsertRange(0, temp_points_MN);
+            }
             Refresh_SLS_Crack_Graph();
         }
 
         private void Button_Import_CHR_Click(object sender, RoutedEventArgs e)
-        {/*
-            tabControl.SelectedIndex = 3;
-            ObservableCollection<CasePoint> temp_points_CHR = ReadFileCSV();
-            if (temp_points_CHR.Count > 0)
+        {
+            tabControl.SelectedIndex = 0;
+            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            if (temp_points.Count > 0)
             {
-                points_SLS_CHR.InsertRange(0, temp_points_CHR);
-            }*/
+                for (int i = 0; i < temp_points.Count; i++)
+                {
+                    temp_points[i].Row = points_MN.Count;
+                    points_SLS_CHR.Insert(points_MN.Count-1, temp_points[i]);
+                }
+                //points_MN.InsertRange(0, temp_points_MN);
+            }
             Refresh_SLS_Stresses_Graph();
         }
 
@@ -683,8 +708,12 @@ namespace KalkulatorPrzekroju
                 }
             }
 
-            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Do you want to save your work?", "Saving", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
 
+            if (result == MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+            }
             if (result == MessageBoxResult.Yes)
             {
                 MenuItem_Save_Click(sender, null);
