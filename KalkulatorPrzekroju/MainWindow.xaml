@@ -1397,22 +1397,21 @@
 								AllowDrop="True"
 								RowHeaderWidth="37"
 								MinRowHeight="10"
-								SelectionUnit="Cell"
-                                ItemsSource="{Binding Source=local:points_MN}"
-								CurrentCellChanged="dataGrid_CurrentCellChanged"
+                                ItemsSource="{Binding ElementName=points_MN}"
                                 CanUserAddRows="True"
-                                CanUserDeleteRows="True">
+                                CanUserDeleteRows="True" 
+                                CellEditEnding="dataGrid_CellEditEnding">
                                 <DataGrid.Columns>
 									<DataGridTextColumn
-										Binding="{Binding Path=Row}"
+										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
 									<DataGridTextColumn
-										Binding="{Binding Path=Y}"
+										Binding="{Binding Path=Y, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Axial Force [kN]" />
 									<DataGridTextColumn
-										Binding="{Binding Path=X}"
+										Binding="{Binding Path=X, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Bending Moment [kNm]" />
 								</DataGrid.Columns>
 							</DataGrid>
@@ -1460,23 +1459,24 @@
 								AllowDrop="True"
 								RowHeaderWidth="37"
 								MinRowHeight="10"
-								SelectionUnit="Cell"
-                                ItemsSource="{Binding Source=points_VN}" CurrentCellChanged="dataGrid_CurrentCellChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
-										Binding="{Binding row}"
+                                ItemsSource="{Binding ElementName=points_MN}"
+                                CanUserAddRows="True"
+                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
-										Binding="{Binding Y}"
+                                    <DataGridTextColumn
+										Binding="{Binding Path=Y, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
-										Binding="{Binding X}"
-										Header="Shear Force [kN]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                    <DataGridTextColumn
+										Binding="{Binding Path=X, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+										Header="Bending Moment [kNm]" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_VN"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
@@ -1521,23 +1521,24 @@
 								AllowDrop="True"
 								RowHeaderWidth="37"
 								MinRowHeight="10"
-								SelectionUnit="Cell"
-                                ItemsSource="{Binding Source=points_SLS_QPR}" CurrentCellChanged="dataGrid_CurrentCellChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
-										Binding="{Binding row}"
+                                ItemsSource="{Binding ElementName=points_MN}"
+                                CanUserAddRows="True"
+                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
-										Binding="{Binding Y}"
+                                    <DataGridTextColumn
+										Binding="{Binding Path=Y, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
-										Binding="{Binding X}"
+                                    <DataGridTextColumn
+										Binding="{Binding Path=X, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Bending Moment [kNm]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_QPR"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
@@ -1581,23 +1582,24 @@
 								AllowDrop="True"
 								RowHeaderWidth="37"
 								MinRowHeight="10"
-								SelectionUnit="Cell"
-                                ItemsSource="{Binding Source=points_SLS_CHR}" CurrentCellChanged="dataGrid_CurrentCellChanged">
-								<DataGrid.Columns>
-									<DataGridTextColumn
-										Binding="{Binding row}"
+                                ItemsSource="{Binding ElementName=points_MN}"
+                                CanUserAddRows="True"
+                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn
+										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
-										Binding="{Binding Y}"
+                                    <DataGridTextColumn
+										Binding="{Binding Path=Y, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Axial Force [kN]" />
-									<DataGridTextColumn
-										Binding="{Binding X}"
+                                    <DataGridTextColumn
+										Binding="{Binding Path=X, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Bending Moment [kNm]" />
-								</DataGrid.Columns>
-							</DataGrid>
-							<Button
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button
 								x:Name="button_Import_CHR"
 								Content="Import from CSV File"
 								Margin="0,0,10,10"
