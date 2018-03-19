@@ -1400,7 +1400,7 @@
                                 ItemsSource="{Binding ElementName=points_MN}"
                                 CanUserAddRows="True"
                                 CanUserDeleteRows="True" 
-                                CellEditEnding="dataGrid_CellEditEnding">
+                                CellEditEnding="dataGrid_CellEditEnding" Sorting="dataGrid_Sorting">
                                 <DataGrid.Columns>
 									<DataGridTextColumn
 										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"

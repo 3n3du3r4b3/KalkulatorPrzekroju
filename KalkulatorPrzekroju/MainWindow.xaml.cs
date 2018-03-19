@@ -454,6 +454,13 @@ namespace KalkulatorPrzekroju
             Refresh_ULS_VN_Graph();
         }
 
+        private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            DataGrid dataGrid = sender as DataGrid;
+            ObservableCollection<CasePoint> punkty = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
+
+        }
+
         void AddEmptyRow(DataGrid dataGrid)
         {
             ObservableCollection<CasePoint> lista = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
@@ -531,8 +538,8 @@ namespace KalkulatorPrzekroju
             {
                 for (int i = 0; i < temp_points.Count; i++)
                 {
-                    temp_points[i].Row = points_MN.Count;
-                    points_VN.Insert(points_MN.Count-1, temp_points[i]);
+                    temp_points[i].Row = points_VN.Count;
+                    points_VN.Insert(points_VN.Count-1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -547,8 +554,8 @@ namespace KalkulatorPrzekroju
             {
                 for (int i = 0; i < temp_points.Count; i++)
                 {
-                    temp_points[i].Row = points_MN.Count;
-                    points_SLS_QPR.Insert(points_MN.Count-1, temp_points[i]);
+                    temp_points[i].Row = points_SLS_QPR.Count;
+                    points_SLS_QPR.Insert(points_SLS_QPR.Count-1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -563,8 +570,8 @@ namespace KalkulatorPrzekroju
             {
                 for (int i = 0; i < temp_points.Count; i++)
                 {
-                    temp_points[i].Row = points_MN.Count;
-                    points_SLS_CHR.Insert(points_MN.Count-1, temp_points[i]);
+                    temp_points[i].Row = points_SLS_CHR.Count;
+                    points_SLS_CHR.Insert(points_SLS_CHR.Count-1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
