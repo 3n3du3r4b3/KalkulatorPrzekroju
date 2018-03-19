@@ -111,6 +111,28 @@ namespace KalkulatorPrzekroju
             }
         }
 
+        private GeometryGroup _dimv;
+        public GeometryGroup Dimv
+        {
+            get { return _dimv; }
+            set
+            {
+                _dimv = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private GeometryGroup _dimh;
+        public GeometryGroup Dimh
+        {
+            get { return _dimh; }
+            set
+            {
+                _dimh = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private Brush _windowBackground;
         public Brush WindowBackground
         {
@@ -137,6 +159,7 @@ namespace KalkulatorPrzekroju
             WindowBackground = GradientBackground;
             Outline = drs.sec[drs.index].Shape;
             Rebar = drs.sec[drs.index].Reinforcement;
+            Dimv = drs.sec[drs.index].Dimv;
             AH = 500;
             AW = 500;
             SCAH = 400;

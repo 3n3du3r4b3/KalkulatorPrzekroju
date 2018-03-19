@@ -12,6 +12,7 @@
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Path Data="{Binding Outline}" Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow"/>
                 <Path Data="{Binding Rebar}" Name="Rebar" Stroke="Black" StrokeThickness="0.5" Fill="Gray"/>
+                <Path Data="{Binding Dimv}" Name="Dimv" Stroke="Black" StrokeThickness="1" Fill="Black"/>
             </Grid>
         </Viewbox>
     </Canvas>
