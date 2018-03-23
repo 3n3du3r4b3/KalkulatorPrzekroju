@@ -143,22 +143,22 @@ namespace KalkulatorPrzekroju
 
             points_MN = new ObservableCollection<CasePoint>();
             dataGrid_ULS_MN.ItemsSource = points_MN;
-            AddEmptyRow(dataGrid_ULS_MN);
+            //AddEmptyRow(dataGrid_ULS_MN);
             dataGrid_ULS_MN.SelectedIndex = 0;
 
             points_SLS_CHR = new ObservableCollection<CasePoint>();
             dataGrid_SLS_CHR.ItemsSource = points_SLS_CHR;
-            AddEmptyRow(dataGrid_SLS_CHR);
+            //AddEmptyRow(dataGrid_SLS_CHR);
             dataGrid_SLS_CHR.SelectedIndex = 0;
 
             points_SLS_QPR = new ObservableCollection<CasePoint>();
             dataGrid_SLS_QPR.ItemsSource = points_SLS_QPR;
-            AddEmptyRow(dataGrid_SLS_QPR);
+            //AddEmptyRow(dataGrid_SLS_QPR);
             dataGrid_SLS_QPR.SelectedIndex = 0;
 
             points_VN = new ObservableCollection<CasePoint>();
             dataGrid_ULS_VN.ItemsSource = points_VN;
-            AddEmptyRow(dataGrid_ULS_VN);
+            //AddEmptyRow(dataGrid_ULS_VN);
             dataGrid_ULS_VN.SelectedIndex = 0;
         }
         // załadowanie średnic pretow z pliku
@@ -429,8 +429,8 @@ namespace KalkulatorPrzekroju
 
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-           DataGrid dataGrid = sender as DataGrid;
-            ObservableCollection<CasePoint> punkty = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
+            DataGrid dataGrid = sender as DataGrid;
+            /*ObservableCollection<CasePoint> punkty = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
 
             int index = e.Row.GetIndex();
 
@@ -440,25 +440,28 @@ namespace KalkulatorPrzekroju
             {
                 //points_MN[dataGrid_ULS_MN.SelectedIndex].Row = points_MN.Count;
                 selectedpoint.Row = punkty.Count;
-                AddEmptyRow(dataGrid);
+                //AddEmptyRow(dataGrid);
             }
             
             if (!punkty.Contains(new CasePoint(null, null, null)))
             {
-                AddEmptyRow(dataGrid);
+                //AddEmptyRow(dataGrid);
             }
-
+            */
             Refresh_ULS_MN_Graph();
             Refresh_SLS_Crack_Graph();
             Refresh_SLS_Stresses_Graph();
             Refresh_ULS_VN_Graph();
         }
 
-        private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+        private void dataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            DataGrid dataGrid = sender as DataGrid;
-            ObservableCollection<CasePoint> punkty = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
-
+            ObservableCollection<CasePoint> source = (sender as DataGrid).ItemsSource as ObservableCollection<CasePoint>;
+            if (e.Row.GetIndex() != (sender as DataGrid).Items.Count-1)
+            {
+                //e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+                source[e.Row.GetIndex()].Row = e.Row.GetIndex() + 1;
+            }
         }
 
         void AddEmptyRow(DataGrid dataGrid)
@@ -523,7 +526,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_MN.Count;
-                    points_MN.Insert(points_MN.Count-1, temp_points[i]);
+                    points_MN.Insert(points_MN.Count - 1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -539,7 +542,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_VN.Count;
-                    points_VN.Insert(points_VN.Count-1, temp_points[i]);
+                    points_VN.Insert(points_VN.Count - 1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -555,7 +558,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_SLS_QPR.Count;
-                    points_SLS_QPR.Insert(points_SLS_QPR.Count-1, temp_points[i]);
+                    points_SLS_QPR.Insert(points_SLS_QPR.Count - 1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -571,7 +574,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_SLS_CHR.Count;
-                    points_SLS_CHR.Insert(points_SLS_CHR.Count-1, temp_points[i]);
+                    points_SLS_CHR.Insert(points_SLS_CHR.Count - 1, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }

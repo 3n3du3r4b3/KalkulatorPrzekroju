@@ -1392,22 +1392,21 @@
 								RowHeight="20"
 								AutoGenerateColumns="False"
 								MinColumnWidth="50"
-								CanUserReorderColumns="False"
 								IsSynchronizedWithCurrentItem="True"
 								AllowDrop="True"
 								RowHeaderWidth="37"
 								MinRowHeight="10"
                                 ItemsSource="{Binding ElementName=points_MN}"
                                 CanUserAddRows="True"
-                                CanUserDeleteRows="True" 
-                                CellEditEnding="dataGrid_CellEditEnding" Sorting="dataGrid_Sorting">
+                                CanUserDeleteRows="True"
+                                CellEditEnding="dataGrid_CellEditEnding" LoadingRow="dataGrid_LoadingRow">
                                 <DataGrid.Columns>
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="No."
 										IsReadOnly="True"
 										FontWeight="Bold" />
-									<DataGridTextColumn
+                                    <DataGridTextColumn
 										Binding="{Binding Path=Y, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
 										Header="Axial Force [kN]" />
 									<DataGridTextColumn
@@ -1461,7 +1460,7 @@
 								MinRowHeight="10"
                                 ItemsSource="{Binding ElementName=points_MN}"
                                 CanUserAddRows="True"
-                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding">
+                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding" LoadingRow="dataGrid_LoadingRow">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
 										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
@@ -1523,7 +1522,7 @@
 								MinRowHeight="10"
                                 ItemsSource="{Binding ElementName=points_MN}"
                                 CanUserAddRows="True"
-                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding">
+                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding" LoadingRow="dataGrid_LoadingRow">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
 										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
@@ -1584,7 +1583,7 @@
 								MinRowHeight="10"
                                 ItemsSource="{Binding ElementName=points_MN}"
                                 CanUserAddRows="True"
-                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding">
+                                CanUserDeleteRows="True" CellEditEnding="dataGrid_CellEditEnding" LoadingRow="dataGrid_LoadingRow">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
 										Binding="{Binding Path=Row, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"

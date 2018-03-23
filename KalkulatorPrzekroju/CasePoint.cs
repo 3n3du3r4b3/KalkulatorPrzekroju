@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 namespace KalkulatorPrzekroju
 {
     [Serializable]
-    public class CasePoint:INotifyPropertyChanged
+    public class CasePoint : INotifyPropertyChanged
     {
         private double? x, y;
         private int? row;
@@ -25,11 +25,18 @@ namespace KalkulatorPrzekroju
             this.y = Y;
         }
 
+        public CasePoint()
+        {
+            this.row = null;
+            this.x = null;
+            this.y = null;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string nameProperty)
         {
-            if (PropertyChanged !=null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(nameProperty));
             }
@@ -38,13 +45,16 @@ namespace KalkulatorPrzekroju
         public override bool Equals(object obj)
         {
             CasePoint CS = obj as CasePoint;
-            if (CS.X == this.x &&
-                CS.Y == this.y)
+            if (CS != null && this != null)
             {
-                return true;
+                if (CS.X == this.x &&
+                    CS.Y == this.y)
+                {
+                    return true;
+                }
             }
-            else
-                return false;
+
+            return false;
         }
 
         public override int GetHashCode()
