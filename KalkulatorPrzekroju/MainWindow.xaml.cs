@@ -62,10 +62,10 @@ namespace KalkulatorPrzekroju
         double[][] tabSLS_Crack_L;
         double[][] tabSLS_Crack_R;
 
-        ObservableCollection<CasePoint> points_MN;
-        ObservableCollection<CasePoint> points_VN;
-        ObservableCollection<CasePoint> points_SLS_QPR;
-        ObservableCollection<CasePoint> points_SLS_CHR;
+        CasePointsCollection points_MN;
+        CasePointsCollection points_VN;
+        CasePointsCollection points_SLS_QPR;
+        CasePointsCollection points_SLS_CHR;
 
         string format = "0.###";
         string thisFile = "";
@@ -141,22 +141,22 @@ namespace KalkulatorPrzekroju
             comboBox_DesignSituation_1.SelectedIndex = 1;
             comboBox_DesignSituation_2.SelectedIndex = 1;
 
-            points_MN = new ObservableCollection<CasePoint>();
+            points_MN = new CasePointsCollection();
             dataGrid_ULS_MN.ItemsSource = points_MN;
             //AddEmptyRow(dataGrid_ULS_MN);
             dataGrid_ULS_MN.SelectedIndex = 0;
 
-            points_SLS_CHR = new ObservableCollection<CasePoint>();
+            points_SLS_CHR = new CasePointsCollection();
             dataGrid_SLS_CHR.ItemsSource = points_SLS_CHR;
             //AddEmptyRow(dataGrid_SLS_CHR);
             dataGrid_SLS_CHR.SelectedIndex = 0;
 
-            points_SLS_QPR = new ObservableCollection<CasePoint>();
+            points_SLS_QPR = new CasePointsCollection();
             dataGrid_SLS_QPR.ItemsSource = points_SLS_QPR;
             //AddEmptyRow(dataGrid_SLS_QPR);
             dataGrid_SLS_QPR.SelectedIndex = 0;
 
-            points_VN = new ObservableCollection<CasePoint>();
+            points_VN = new CasePointsCollection();
             dataGrid_ULS_VN.ItemsSource = points_VN;
             //AddEmptyRow(dataGrid_ULS_VN);
             dataGrid_ULS_VN.SelectedIndex = 0;
@@ -430,7 +430,7 @@ namespace KalkulatorPrzekroju
         private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             DataGrid dataGrid = sender as DataGrid;
-            /*ObservableCollection<CasePoint> punkty = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
+            /*CasePointsCollection punkty = dataGrid.ItemsSource as CasePointsCollection;
 
             int index = e.Row.GetIndex();
 
@@ -456,7 +456,7 @@ namespace KalkulatorPrzekroju
 
         private void dataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
-            ObservableCollection<CasePoint> source = (sender as DataGrid).ItemsSource as ObservableCollection<CasePoint>;
+            CasePointsCollection source = (sender as DataGrid).ItemsSource as CasePointsCollection;
             if (e.Row.GetIndex() != (sender as DataGrid).Items.Count - 1)
             {
                 //e.Row.Header = (e.Row.GetIndex() + 1).ToString();
@@ -466,7 +466,7 @@ namespace KalkulatorPrzekroju
 
         void AddEmptyRow(DataGrid dataGrid)
         {
-            ObservableCollection<CasePoint> lista = dataGrid.ItemsSource as ObservableCollection<CasePoint>;
+            CasePointsCollection lista = dataGrid.ItemsSource as CasePointsCollection;
             lista.Add(new CasePoint(null, null, null));
         }
         ///koniec kontrola wprowadzania danych
@@ -520,7 +520,7 @@ namespace KalkulatorPrzekroju
         private void Button_Import_MN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
-            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            CasePointsCollection temp_points = ReadFileCSV();
             if (temp_points.Count > 0)
             {
                 for (int i = 0; i < temp_points.Count; i++)
@@ -536,7 +536,7 @@ namespace KalkulatorPrzekroju
         private void Button_Import_VN_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
-            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            CasePointsCollection temp_points = ReadFileCSV();
             if (temp_points.Count > 0)
             {
                 for (int i = 0; i < temp_points.Count; i++)
@@ -552,7 +552,7 @@ namespace KalkulatorPrzekroju
         private void Button_Import_QPR_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
-            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            CasePointsCollection temp_points = ReadFileCSV();
             if (temp_points.Count > 0)
             {
                 for (int i = 0; i < temp_points.Count; i++)
@@ -568,7 +568,7 @@ namespace KalkulatorPrzekroju
         private void Button_Import_CHR_Click(object sender, RoutedEventArgs e)
         {
             tabControl.SelectedIndex = 0;
-            ObservableCollection<CasePoint> temp_points = ReadFileCSV();
+            CasePointsCollection temp_points = ReadFileCSV();
             if (temp_points.Count > 0)
             {
                 for (int i = 0; i < temp_points.Count; i++)
@@ -1105,9 +1105,9 @@ namespace KalkulatorPrzekroju
             button_SaveToCSV_SLS_CHR.Visibility = Visibility.Visible;
         }
 
-        private ObservableCollection<CasePoint> ReadFileCSV()
+        private CasePointsCollection ReadFileCSV()
         {
-            ObservableCollection<CasePoint> taLista = new ObservableCollection<CasePoint>();
+            CasePointsCollection taLista = new CasePointsCollection();
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 Filter = "Text files (.txt)|*.txt|CSV Files (.csv)|*.csv",

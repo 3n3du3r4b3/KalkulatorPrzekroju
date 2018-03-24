@@ -216,10 +216,10 @@ namespace KalkulatorPrzekroju
             alfaCC = factors.alfaCC;
             gammaS = factors.gammaS;
             gammaC = factors.gammaC;
-            
+
             double epsilon = CurrentConcrete.epsilon_cu2;
             double fyd = CurrentSteel.fyk / gammaS;
-            
+
             return (((AcTotal * CurrentConcrete.fck / gammaC * alfaCC) / Forcefactor) + (AsTotal * CurrentSteel.SigmaS(epsilon, fyd)) / Forcefactor);
         }
 
@@ -287,7 +287,7 @@ namespace KalkulatorPrzekroju
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-            	double Ned = max - (max - min) / (NoOfPoints - 1) * i;
+                double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = ULS_ScinanieBeton(Ned, factors);
@@ -314,7 +314,7 @@ namespace KalkulatorPrzekroju
 
             for (int i = 0; i < NoOfPoints; i++)
             {
-            	double Ned = max - (max - min) / (NoOfPoints - 1) * i;
+                double Ned = max - (max - min) / (NoOfPoints - 1) * i;
                 results[i] = new double[2];
                 results[i][0] = Ned;
                 results[i][1] = ULS_ScinanieTotal(Ned, part, factors);
@@ -367,6 +367,47 @@ namespace KalkulatorPrzekroju
         protected double SLS_Naprezenie(double N, double M, double z, double Iy, double A)
         {
             return N / A * (Forcefactor / (Dimfactor * Dimfactor)) + M / Iy * (Forcefactor / (Dimfactor * Dimfactor)) * z;
+        }
+
+        private double[] GetReversedSteelStresses(double[] SigmaStalAs)
+        {
+            double[] SigmaStalAsRev = new double[SigmaStalAs.Length];
+
+            if (this is RectangleSection)
+            {
+                for (int i = 0; i < NoB / 2; i++)
+                {
+                    SigmaStalAsRev[i] = SigmaStalAs[NoB - i - 1];
+                }
+            }
+            else if (this is CircleSection)
+            {
+                if (NoB % 2 == 0)
+                {
+                    for (int i = 0; i < NoB / 2; i++)
+                    {
+                        SigmaStalAsRev[i] = SigmaStalAs[NoB / 2 - i];
+                        SigmaStalAsRev[NoB - 1] = SigmaStalAs[NoB / 2 - i];
+                    }
+                }
+                else
+                {
+                    SigmaStalAsRev[NoB / 2] = SigmaStalAs[NoB - 1];
+                    SigmaStalAsRev[NoB / 2 - 1] = SigmaStalAs[NoB - 1];
+                    SigmaStalAsRev[NoB - 1] = SigmaStalAs[NoB / 2];
+
+                    for (int i = NoB - 2; i > NoB / 2; i--)
+                    {
+                        SigmaStalAsRev[i] = SigmaStalAs[i - (NoB / 2 + 1)];
+                        SigmaStalAsRev[i - (NoB / 2 + 1)] = SigmaStalAs[i];
+                    }
+                    
+                }
+            }
+            else
+                SigmaStalAsRev = null;
+
+            return SigmaStalAsRev;
         }
 
         /// <summary>Funkcja zwraca naprężenia w MPa</summary>
@@ -506,7 +547,7 @@ namespace KalkulatorPrzekroju
 
                     for (int i = 0; i < NoB; i++)
                     {
-                    	if (Math.Abs(Asi[i]) < 0.0001)
+                        if (Math.Abs(Asi[i]) < 0.0001)
                         {
                             SigmaStalAs[i] = 0;
                         }
@@ -535,11 +576,7 @@ namespace KalkulatorPrzekroju
                         return new StressState(0, 0, SigmaStalAs, x, 0.5 * HTotal - xc, faza);
                     else
                     {
-                        double[] SigmaStalAsRev = new double[NoB];
-                        for (int i = 0; i < NoB; i++)
-                        {
-                            SigmaStalAsRev[i] = SigmaStalAs[NoB - i - 1];
-                        }
+                        double[] SigmaStalAsRev = GetReversedSteelStresses(SigmaStalAs);
                         return new StressState(0, 0, SigmaStalAsRev, x, -(0.5 * HTotal - xc), faza);
                     }
                 }
@@ -549,11 +586,7 @@ namespace KalkulatorPrzekroju
                         return new StressState(SigmaBetonTop, SigmaBetonBottom, SigmaStalAs, x, 0.5 * HTotal - xc, faza);
                     else
                     {
-                        double[] SigmaStalAsRev = new double[NoB];
-                        for (int i = 0; i < NoB; i++)
-                        {
-                            SigmaStalAsRev[i] = SigmaStalAs[NoB - i - 1];
-                        }
+                        double[] SigmaStalAsRev = GetReversedSteelStresses(SigmaStalAs);
                         return new StressState(SigmaBetonBottom, SigmaBetonTop, SigmaStalAsRev, x, -(0.5 * HTotal - xc), faza);
                     }
                 }
@@ -817,9 +850,9 @@ namespace KalkulatorPrzekroju
         /// <returns>Zwraca moment krytycny w kNm</returns>
         public double SLS_MomentKrytycznyRysa(double NEd, Factors factors, bool cracked)
         {
-        	if (!cracked)
+            if (!cracked)
             {
-        		double xc1 = SrCiezkPrzekr(HTotal / Dimfactor);
+                double xc1 = SrCiezkPrzekr(HTotal / Dimfactor);
                 double A = SprowPolePrzekr(HTotal / Dimfactor);
                 double Iy = MomBezwPrzekr(HTotal / Dimfactor);
                 double Mkr = -(-CurrentConcrete.fctm - NEd / A / Dimfactor) * Iy / (HTotal / Dimfactor - xc1);
@@ -861,7 +894,7 @@ namespace KalkulatorPrzekroju
                     momL = momC;
                     wkL = SLS_CrackWidth(NEd, momL, factors, true, true);
                 }
-            } while (Math.Abs(wkP - wkL) > 0.00001);
+            } while (Math.Abs(wkP - wkL) > 0.00001 && Math.Abs(momP - momL) > 0.001);
 
 
             return momC;
@@ -1025,7 +1058,7 @@ namespace KalkulatorPrzekroju
 
             double Force1 = A_I * CurrentConcrete.fctm;
             double Force2 = AsTotal * wspRedukcji * CurrentSteel.fyk;
-            
+
             return -Math.Max(Force1, Force2) * Forcefactor;
         }
 
@@ -1044,26 +1077,26 @@ namespace KalkulatorPrzekroju
                 SetCreepFactor(0.0);
             }
             */
-    /*        double NEd = -627.56908;
-            double MEd1 = 1152.05704;
-            double MEd2 = 127.56908;
-            StressState nap1a = SLS_GetStresses(NEd, MEd1, true);
-            StressState nap1b = ReversedSection.SLS_GetStresses(NEd, -MEd1, true);
-            StressState nap2a = SLS_GetStresses(NEd, MEd2, true);
-            StressState nap2b = ReversedSection.SLS_GetStresses(NEd, -MEd2, true);
-            double wk1P = SLS_CrackWidth(NEd, MEd1, factors, true, true);
-            double wk1L = SLS_CrackWidth(NEd, MEd1, factors, false, true);
-            double wk2P = ReversedSection.SLS_CrackWidth(NEd, -MEd1, factors, false, true);
-            double wk2L = ReversedSection.SLS_CrackWidth(NEd, -MEd1, factors, true, true);
-      */     
+         /*        double NEd = -627.56908;
+                 double MEd1 = 1152.05704;
+                 double MEd2 = 127.56908;
+                 StressState nap1a = SLS_GetStresses(NEd, MEd1, true);
+                 StressState nap1b = ReversedSection.SLS_GetStresses(NEd, -MEd1, true);
+                 StressState nap2a = SLS_GetStresses(NEd, MEd2, true);
+                 StressState nap2b = ReversedSection.SLS_GetStresses(NEd, -MEd2, true);
+                 double wk1P = SLS_CrackWidth(NEd, MEd1, factors, true, true);
+                 double wk1L = SLS_CrackWidth(NEd, MEd1, factors, false, true);
+                 double wk2P = ReversedSection.SLS_CrackWidth(NEd, -MEd1, factors, false, true);
+                 double wk2L = ReversedSection.SLS_CrackWidth(NEd, -MEd1, factors, true, true);
+           */
             if (!cracked)
             {
                 return SLS_SilaRysujacaOsiowa();
             }
-            
-            double wklim = factors.Crack_wklim; 
+
+            double wklim = factors.Crack_wklim;
             //double wkP, wkL;
-			
+
             double Nmax = SLS_SilaOsiowaKrytycznaStal(factors);
             // ALGORYTM 3
             double Nmin = 0;
@@ -1095,83 +1128,83 @@ namespace KalkulatorPrzekroju
             //ALGORYTM 3 - KONIEC
 
             //ALGORYTM 2 - krótszy lepsze ale niedoskonały
-/*            double momC;
+            /*            double momC;
 
-            do
-            {
-            	double Mom = SLS_MomentKrytycznyStal(Nmax, factors);
-            	
-            	wkP = SLS_CrackWidth(Nmax, Mom, factors, true, true);
-            	wkL = SLS_CrackWidth(Nmax, Mom, factors, false, true);
-            	
-            	double momL = Mom;
-            	double momP = Mom;
+                        do
+                        {
+                            double Mom = SLS_MomentKrytycznyStal(Nmax, factors);
 
-                bool prawaStrona;
-            	if (wkP >= wkL) {
-            		prawaStrona = true;
-            	}
-            	else {
-            		prawaStrona = false;
-            	}
-            	
-            	// pętla szukająca drugiego momentu aby znaleźć GRANICE ZAKRESU w którym będziemy szukać takiego momentu
-            	// dla którego rysy po obu stronach przekroju będą równe
-            	bool warunek;
-            	do
-            	{
-            		warunek = true;
-            		if (prawaStrona) {
-            			momL -= 100;
-            			wkP = SLS_CrackWidth(Nmax, momL, factors, true, true);
-            			wkL = SLS_CrackWidth(Nmax, momL, factors, false, true);
-            			if (wkP <= wkL) {
-            				warunek = false;
-            			}
-            		} else {
-            			momP += 100;
-            			wkP = SLS_CrackWidth(Nmax, momP, factors, true, true);
-            			wkL = SLS_CrackWidth(Nmax, momP, factors, false, true);
-            			if (wkL <= wkP) {
-            				warunek = false;
-            			}
-            		}
-            	} while (warunek);
+                            wkP = SLS_CrackWidth(Nmax, Mom, factors, true, true);
+                            wkL = SLS_CrackWidth(Nmax, Mom, factors, false, true);
 
-                //pętla szukająca momentu dla którego RYSY PO OBU STRONACH przekroju będą RÓWNE
-                
-                do
-            	{
-            		momC = (momL + momP) / 2;
+                            double momL = Mom;
+                            double momP = Mom;
 
-            		wkP = SLS_CrackWidth(Nmax, momC, factors, true, true);
-            		wkL = SLS_CrackWidth(Nmax, momC, factors, false, true);
-            		
-            		if (wkP >= wkL)
-            		{
-            			momP = momC;
-            		}
-            		else
-            		{
-            			momL = momC;
-            		}
-            	} while (Math.Abs(wkP - wkL) > 0.00001);
-            	
-            	double wk = (wkP+wkL)/2;
-            	Nmax = wklim/wk * Nmax;
-            	
-            } while (Math.Abs(Math.Max(wkP,wkL)-wklim) > 0.00001);
+                            bool prawaStrona;
+                            if (wkP >= wkL) {
+                                prawaStrona = true;
+                            }
+                            else {
+                                prawaStrona = false;
+                            }
 
-            double Nm = -1804.7586602836398;
-            double ML = -1082.6318409146525;
-            double MP = -663.10169633309511;
-            double wk1 = SLS_CrackWidth(Nm, ML, factors, true, true);
-            double wk2 = SLS_CrackWidth(Nm, ML, factors, false, true);
+                            // pętla szukająca drugiego momentu aby znaleźć GRANICE ZAKRESU w którym będziemy szukać takiego momentu
+                            // dla którego rysy po obu stronach przekroju będą równe
+                            bool warunek;
+                            do
+                            {
+                                warunek = true;
+                                if (prawaStrona) {
+                                    momL -= 100;
+                                    wkP = SLS_CrackWidth(Nmax, momL, factors, true, true);
+                                    wkL = SLS_CrackWidth(Nmax, momL, factors, false, true);
+                                    if (wkP <= wkL) {
+                                        warunek = false;
+                                    }
+                                } else {
+                                    momP += 100;
+                                    wkP = SLS_CrackWidth(Nmax, momP, factors, true, true);
+                                    wkL = SLS_CrackWidth(Nmax, momP, factors, false, true);
+                                    if (wkL <= wkP) {
+                                        warunek = false;
+                                    }
+                                }
+                            } while (warunek);
 
-            double wk3 = SLS_CrackWidth(Nm, MP, factors, true, true);
-            double wk4 = SLS_CrackWidth(Nm, MP, factors, false, true);
+                            //pętla szukająca momentu dla którego RYSY PO OBU STRONACH przekroju będą RÓWNE
 
-            return Nmax;    */
+                            do
+                            {
+                                momC = (momL + momP) / 2;
+
+                                wkP = SLS_CrackWidth(Nmax, momC, factors, true, true);
+                                wkL = SLS_CrackWidth(Nmax, momC, factors, false, true);
+
+                                if (wkP >= wkL)
+                                {
+                                    momP = momC;
+                                }
+                                else
+                                {
+                                    momL = momC;
+                                }
+                            } while (Math.Abs(wkP - wkL) > 0.00001);
+
+                            double wk = (wkP+wkL)/2;
+                            Nmax = wklim/wk * Nmax;
+
+                        } while (Math.Abs(Math.Max(wkP,wkL)-wklim) > 0.00001);
+
+                        double Nm = -1804.7586602836398;
+                        double ML = -1082.6318409146525;
+                        double MP = -663.10169633309511;
+                        double wk1 = SLS_CrackWidth(Nm, ML, factors, true, true);
+                        double wk2 = SLS_CrackWidth(Nm, ML, factors, false, true);
+
+                        double wk3 = SLS_CrackWidth(Nm, MP, factors, true, true);
+                        double wk4 = SLS_CrackWidth(Nm, MP, factors, false, true);
+
+                        return Nmax;    */
             // ALGORYTM 2 - koniec
 
             // ALGORYTM 1 - POCZĄTKOWY
@@ -1349,7 +1382,7 @@ namespace KalkulatorPrzekroju
                 results[results.Length - i - 1][0] = Ned;
                 results[results.Length - i - 1][1] = -ReversedSection.SLS_MomentKrytycznyStal(Ned, factors);
             }
-            
+
             SetCreepFactor(tempFi);
 
             return results;

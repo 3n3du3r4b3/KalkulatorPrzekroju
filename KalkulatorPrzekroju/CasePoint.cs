@@ -62,4 +62,10 @@ namespace KalkulatorPrzekroju
             return base.GetHashCode();
         }
     }
+
+    [Serializable]
+    public class CasePointsCollection : ObservableCollection<CasePoint>
+    {
+
+    }
 }
