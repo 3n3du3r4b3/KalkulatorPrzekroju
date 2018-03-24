@@ -457,7 +457,7 @@ namespace KalkulatorPrzekroju
         private void dataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             ObservableCollection<CasePoint> source = (sender as DataGrid).ItemsSource as ObservableCollection<CasePoint>;
-            if (e.Row.GetIndex() != (sender as DataGrid).Items.Count-1)
+            if (e.Row.GetIndex() != (sender as DataGrid).Items.Count - 1)
             {
                 //e.Row.Header = (e.Row.GetIndex() + 1).ToString();
                 source[e.Row.GetIndex()].Row = e.Row.GetIndex() + 1;
@@ -526,7 +526,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_MN.Count;
-                    points_MN.Insert(points_MN.Count - 1, temp_points[i]);
+                    points_MN.Insert(points_MN.Count, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -542,7 +542,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_VN.Count;
-                    points_VN.Insert(points_VN.Count - 1, temp_points[i]);
+                    points_VN.Insert(points_VN.Count, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -558,7 +558,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_SLS_QPR.Count;
-                    points_SLS_QPR.Insert(points_SLS_QPR.Count - 1, temp_points[i]);
+                    points_SLS_QPR.Insert(points_SLS_QPR.Count, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -574,7 +574,7 @@ namespace KalkulatorPrzekroju
                 for (int i = 0; i < temp_points.Count; i++)
                 {
                     temp_points[i].Row = points_SLS_CHR.Count;
-                    points_SLS_CHR.Insert(points_SLS_CHR.Count - 1, temp_points[i]);
+                    points_SLS_CHR.Insert(points_SLS_CHR.Count, temp_points[i]);
                 }
                 //points_MN.InsertRange(0, temp_points_MN);
             }
@@ -666,6 +666,37 @@ namespace KalkulatorPrzekroju
                 textBox_creep2.Text = creepwin2.CrCoeff.ToString("F3");
                 section2crp = creepwin2.crp;
                 //ShowToUpdate();
+            }
+        }
+
+        private void button_SaveToCSV_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            switch (button.Name)
+            {
+                case "button_SaveToCSV_SLS_CHR":
+                    SaveToCSV(tabSLS_SteelStress, "SLS Steel Stress Limit", "Axial Force [kN]", "Bending Moment [kNm]");
+                    SaveToCSV(tabSLS_ConcreteStress, "SLS Concrete Stress Limit", "Axial Force [kN]", "Bending Moment [kNm]");
+                    break;
+                case "button_SaveToCSV_SLS_QPR":
+                    SaveToCSV(tabSLS_NonCrack, "SLS Noncracked section", "Axial Force [kN]", "Bending Moment [kNm]");
+                    SaveToCSV(tabSLS_Crack_L, "SLS Cracked section wk_lim="+wspolczynniki.Crack_wklim+"mm - upper face", "Axial Force [kN]", "Bending Moment [kNm]");
+                    SaveToCSV(tabSLS_Crack_R, "SLS Cracked section wk_lim=" + wspolczynniki.Crack_wklim + "mm - lower face", "Axial Force [kN]", "Bending Moment [kNm]");
+                    break;
+                case "button_SaveToCSV_ULS_MN":
+                    SaveToCSV(tab1_ULS, "ULS Section 1 M-N Capacity Curve", "Axial Force [kN]", "Bending Moment [kNm]");
+                    SaveToCSV(tab2_ULS, "ULS Section 2 M-N Capacity Curve", "Axial Force [kN]", "Bending Moment [kNm]");
+                    break;
+                case "button_SaveToCSV_ULS_VN":
+                    SaveToCSV(tabVRdc1, "ULS V-N Capacity Curve - VRd.c", "Axial Force [kN]", "Shear Force [kN]");
+                    SaveToCSV(tabVRd1, "ULS V-N Capacity Curve - VRd - Bending 100% MRd", "Axial Force [kN]", "Shear Force [kN]");
+                    SaveToCSV(tabVRd2, "ULS V-N Capacity Curve - VRd - Bending 75% MRd", "Axial Force [kN]", "Shear Force [kN]");
+                    SaveToCSV(tabVRd3, "ULS V-N Capacity Curve - VRd - Bending 50% MRd", "Axial Force [kN]", "Shear Force [kN]");
+                    SaveToCSV(tabVRd4, "ULS V-N Capacity Curve - VRd - Bending 25% MRd", "Axial Force [kN]", "Shear Force [kN]");
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -948,6 +979,7 @@ namespace KalkulatorPrzekroju
             }
             PlotView_ULS_MN.Model = diagram_ULS_MN.wykres;
             button_SaveToPDF_ULS_MN.Visibility = Visibility.Visible;
+            button_SaveToCSV_ULS_MN.Visibility = Visibility.Visible;
         }
 
         private void Refresh_ULS_VN_Graph()
@@ -1007,6 +1039,7 @@ namespace KalkulatorPrzekroju
             }
             PlotView_ULS_VN.Model = diagram_ULS_VN.wykres;
             button_SaveToPDF_ULS_VN.Visibility = Visibility.Visible;
+            button_SaveToCSV_ULS_VN.Visibility = Visibility.Visible;
         }
 
         private void Refresh_SLS_Crack_Graph()
@@ -1042,6 +1075,7 @@ namespace KalkulatorPrzekroju
             }
             PlotView_SLS_Crack.Model = diagram_SLS_Crack.wykres;
             button_SaveToPDF_SLS_Crack.Visibility = Visibility.Visible;
+            button_SaveToCSV_SLS_QPR.Visibility = Visibility.Visible;
         }
 
         private void Refresh_SLS_Stresses_Graph()
@@ -1068,6 +1102,7 @@ namespace KalkulatorPrzekroju
             }
             PlotView_SLS_Stresess.Model = diagram_SLS_Stressess.wykres;
             button_SaveToPDF_SLS_Stresses.Visibility = Visibility.Visible;
+            button_SaveToCSV_SLS_CHR.Visibility = Visibility.Visible;
         }
 
         private ObservableCollection<CasePoint> ReadFileCSV()
@@ -1122,6 +1157,52 @@ namespace KalkulatorPrzekroju
                 }
             }
             return taLista;
+        }
+
+        private void SaveToCSV(double[][] points, string name, string column1, string column2)
+        {
+            string separator = CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator;
+            char columnSeparator;
+
+            if (String.Equals(separator, "."))
+            {
+                columnSeparator = ',';
+            }
+            else
+            {
+                columnSeparator = ';';
+            }
+
+            string line;
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "Text files (.txt)|*.txt|CSV Files (.csv)|*.csv",
+                FilterIndex = 2,
+                FileName = name + ".csv"
+            };
+
+            string path = "";
+
+            if ((bool)saveFileDialog1.ShowDialog())
+            {
+                path = saveFileDialog1.FileName;
+
+                try
+                {
+                    StreamWriter file = new StreamWriter(@path);
+                    file.WriteLine(name);
+                    file.WriteLine(column1 + columnSeparator + column2);
+                    for (int i = 0; i < points.Length; i++)
+                    {
+                        file.WriteLine(points[i][0].ToString() + columnSeparator + points[i][1].ToString());
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Cannot save file!", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void ReadFromInstance(SavedFile instance)

@@ -1724,6 +1724,16 @@
 						Opacity="0.5"
 						Click="button_SaveToPDF_ULS_MN_Click"
 						Visibility="Hidden" />
+                    <Button
+						x:Name="button_SaveToCSV_ULS_MN"
+						Content="Export points to CSV"
+						HorizontalAlignment="Right"
+						Margin="0,0,5,5"
+						VerticalAlignment="Bottom"
+						Width="120"
+						Opacity="0.5"
+						Click="button_SaveToCSV_Click"
+						Visibility="Hidden" />
 				</Grid>
 			</TabItem>
 			<TabItem
@@ -1743,7 +1753,17 @@
 						Opacity="0.5"
 						Click="button_SaveToPDF_ULS_VN_Click"
 						Visibility="Hidden" />
-				</Grid>
+                    <Button
+						x:Name="button_SaveToCSV_ULS_VN"
+						Content="Export points to CSV"
+						HorizontalAlignment="Right"
+						Margin="0,0,5,5"
+						VerticalAlignment="Bottom"
+						Width="120"
+						Opacity="0.5"
+						Click="button_SaveToCSV_Click"
+						Visibility="Hidden" />
+                </Grid>
 			</TabItem>
 			<TabItem
 				Header="SLS Crack Width">
@@ -1762,6 +1782,16 @@
 						Opacity="0.5"
 						Visibility="Hidden"
 						Click="button_SaveToPDF_SLS_Crack_Click" />
+                    <Button
+						x:Name="button_SaveToCSV_SLS_QPR"
+						Content="Export points to CSV"
+						HorizontalAlignment="Right"
+						Margin="0,0,5,5"
+						VerticalAlignment="Bottom"
+						Width="120"
+						Opacity="0.5"
+						Click="button_SaveToCSV_Click"
+						Visibility="Hidden" />
 				</Grid>
 			</TabItem>
 			<TabItem
@@ -1781,6 +1811,16 @@
 						Opacity="0.5"
 						Click="button_SaveToPDF_SLS_Stresses_Click"
 						Visibility="Hidden" />
+                    <Button
+						x:Name="button_SaveToCSV_SLS_CHR"
+						Content="Export points to CSV"
+						HorizontalAlignment="Right"
+						Margin="0,0,5,5"
+						VerticalAlignment="Bottom"
+						Width="120"
+						Opacity="0.5"
+						Click="button_SaveToCSV_Click"
+						Visibility="Visible" />
 				</Grid>
 			</TabItem>
 		</TabControl>
