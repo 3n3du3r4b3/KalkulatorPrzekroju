@@ -6,118 +6,127 @@ using System.Threading.Tasks;
 
 namespace KalkulatorPrzekroju
 {
-	[Serializable]
-	class RectangleSection : Section
-	{
-		/// <summary>
-		/// Szerokość przekroju w mm
-		/// </summary>
-		public double B { get; private set; }
-		/// <summary>
-		/// Wysokość przekroju w mm
-		/// </summary>
-		public double H { get; private set; }
-		/// <summary>
-		/// Odległość środka ciężkości zbrojenia As1 od najbliższej krawędzi betonu w mm
-		/// </summary>
-		public double A1 { get; private set; }
-		/// <summary>
-		/// Odległość środka ciężkości zbrojenia As2 od najbliższej krawędzi betonu w mm
-		/// </summary>
-		public double A2 { get; private set; }
-		/// <summary>
-		/// Pole powierzchni zbrojenia As1 w mm2
-		/// </summary>
-		public double As1 { get; private set; }
-		/// <summary>
-		/// Pole powierzchni zbrojenia As2 w mm2
-		/// </summary>
-		public double As2 { get; private set; }
-		/// <summary>
-		/// Średnica zbrojenia As1 w mm
-		/// </summary>
-		public double Fi1 { get; private set; }
-		/// <summary>
-		/// Średnica zbrojenia As2 w mm
-		/// </summary>
-		public double Fi2 { get; private set; }
-		/// <summary>
-		/// Otulina zbrojenia As1 w mm
-		/// </summary>
-		public double C1 { get; private set; }
-		/// <summary>
-		/// Otulina zbrojenia As2 w mm
-		/// </summary>
-		public double C2 { get; private set; }
-		/// <summary>
-		/// Rozstaw prętów zbrojenia As1 w mm
-		/// </summary>
-		public double Spacing1 { get; private set; }
-		/// <summary>
-		/// Rozstaw prętów zbrojenia As2 w mm
-		/// </summary>
-		public double Spacing2 { get; private set; }
-		
-		public override double HTotal { get {return H;}}
+    [Serializable]
+    class RectangleSection : Section
+    {
+        /// <summary>
+        /// Szerokość przekroju w mm
+        /// </summary>
+        public double B { get; private set; }
+        /// <summary>
+        /// Wysokość przekroju w mm
+        /// </summary>
+        public double H { get; private set; }
+        /// <summary>
+        /// Odległość środka ciężkości zbrojenia As1 od najbliższej krawędzi betonu w mm
+        /// </summary>
+        public double A1 { get; private set; }
+        /// <summary>
+        /// Odległość środka ciężkości zbrojenia As2 od najbliższej krawędzi betonu w mm
+        /// </summary>
+        public double A2 { get; private set; }
+        /// <summary>
+        /// Pole powierzchni zbrojenia As1 w mm2
+        /// </summary>
+        public double As1 { get; private set; }
+        /// <summary>
+        /// Pole powierzchni zbrojenia As2 w mm2
+        /// </summary>
+        public double As2 { get; private set; }
+        /// <summary>
+        /// Średnica zbrojenia As1 w mm
+        /// </summary>
+        public double Fi1 { get; private set; }
+        /// <summary>
+        /// Średnica zbrojenia As2 w mm
+        /// </summary>
+        public double Fi2 { get; private set; }
+        /// <summary>
+        /// Otulina zbrojenia As1 w mm
+        /// </summary>
+        public double C1 { get; private set; }
+        /// <summary>
+        /// Otulina zbrojenia As2 w mm
+        /// </summary>
+        public double C2 { get; private set; }
+        /// <summary>
+        /// Rozstaw prętów zbrojenia As1 w mm
+        /// </summary>
+        public double Spacing1 { get; private set; }
+        /// <summary>
+        /// Rozstaw prętów zbrojenia As2 w mm
+        /// </summary>
+        public double Spacing2 { get; private set; }
+        /// <summary>
+        /// Rozstaw prętów zbrojenia As2 w mm
+        /// </summary>
+        private bool byspacing { get; set; }
 
-		public override int NoB { get {return 2;} protected set { } }
+    public override double HTotal { get { return H; } }
 
-		public override double[] Asi { get { return new double[] { As2 / Dimfactor / Dimfactor, As1 / Dimfactor / Dimfactor }; } }
+        public override int NoB { get { return 2; } protected set { } }
 
-		public override double AcTotal { get { return B * H; } }
+        public override double[] Asi { get { return new double[] { As2 / Dimfactor / Dimfactor, As1 / Dimfactor / Dimfactor }; } }
 
-		public override double AsTotal { get { return As1 + As2; } }
+        public override double AcTotal { get { return B * H; } }
 
-		public override Section ReversedSection { get { Section sec = new RectangleSection(CurrentConcrete, CurrentSteel, B, H, Fi2, Spacing2, C2, As2, Fi1, Spacing1, C1, As1, MyStirrups, Fi); return sec; } }
+        public override double AsTotal { get { return As1 + As2; } }
 
-		RectangleSection(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double As1, double fi2, double spacing2, double c2, double As2, Stirrups stirrups, double fi)
-		{
-			this.B = b;
-			this.H = h;
-			this.Fi1 = fi1;
-			this.C1 = c1;
-			this.Spacing1 = spacing1;
-			this.Fi2 = fi2;
-			this.C2 = c2;
-			this.Spacing2 = spacing2;
-			CurrentConcrete = concrete;
-			CurrentSteel = steel;
-			this.As1 = As1;
-			this.As2 = As2;
-			if (As1 == 0)
-			{
-				c1 = 0;
-				A1 = 0;
-			}
-			else
-				A1 = c1 + 0.5 * fi1;
-			if (As2 == 0)
-			{
-				A2 = 0;
-				c2 = 0;
-			}
-			else
-				A2 = c2 + 0.5 * fi2;
+        public override DrawInfo draw()
+        {
+            return new DrawInfo(this.H, this.B, this.byspacing, this.Fi1, this.Fi2, this.C1, this.C2, this.Spacing1, this.Spacing2);
+        }
 
-			SetCreepFactor(fi);
-			MyStirrups = stirrups;
-			draw = new DrawInfo(h, b, true, Fi1, Fi2, c1, c2, spacing1, spacing2);
-		}
+        public override Section ReversedSection { get { Section sec = new RectangleSection(CurrentConcrete, CurrentSteel, B, H, Fi2, Spacing2, C2, As2, Fi1, Spacing1, C1, As1, MyStirrups, Fi); return sec; } }
 
-		/// <summary>
-		/// Konstruktor przekroju na podstawie rozstawu zbrojenia
-		/// </summary>
-		/// <param name="concrete">Obiekt reprezentujący klasę betonu dla przekroju</param>
-		/// <param name="steel">Obiekt reprezentujący klasę stali zbrojeniowej w przekroju</param>
-		/// <param name="b">Szerokość przekroju w milimetrach</param>
-		/// <param name="h">Wysokość przekroju w milimetrach</param>
-		/// <param name="fi1">Średnica zbrojenia As1 w mm</param>
-		/// <param name="spacing1">Rozstaw prętów zbrojenia As1 w mm</param>
-		/// <param name="c1">Otulina zbrojenia As1 w mm</param>
-		/// <param name="fi2">Średnica zbrojenia As2 w mm</param>
-		/// <param name="spacing2">Rozstaw prętów zbrojenia As2 w mm</param>
-		/// <param name="c2">Otulina zbrojenia As2 w mm</param>
-		public RectangleSection(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double fi2, double spacing2, double c2, Stirrups stirrups)
+        RectangleSection(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double As1, double fi2, double spacing2, double c2, double As2, Stirrups stirrups, double fi)
+        {
+            this.B = b;
+            this.H = h;
+            this.Fi1 = fi1;
+            this.C1 = c1;
+            this.Spacing1 = spacing1;
+            this.Fi2 = fi2;
+            this.C2 = c2;
+            this.Spacing2 = spacing2;
+            CurrentConcrete = concrete;
+            CurrentSteel = steel;
+            this.As1 = As1;
+            this.As2 = As2;
+            if (As1 == 0)
+            {
+                c1 = 0;
+                A1 = 0;
+            }
+            else
+                A1 = c1 + 0.5 * fi1;
+            if (As2 == 0)
+            {
+                A2 = 0;
+                c2 = 0;
+            }
+            else
+                A2 = c2 + 0.5 * fi2;
+
+            SetCreepFactor(fi);
+            MyStirrups = stirrups;
+            byspacing = true;
+    }
+
+    /// <summary>
+    /// Konstruktor przekroju na podstawie rozstawu zbrojenia
+    /// </summary>
+    /// <param name="concrete">Obiekt reprezentujący klasę betonu dla przekroju</param>
+    /// <param name="steel">Obiekt reprezentujący klasę stali zbrojeniowej w przekroju</param>
+    /// <param name="b">Szerokość przekroju w milimetrach</param>
+    /// <param name="h">Wysokość przekroju w milimetrach</param>
+    /// <param name="fi1">Średnica zbrojenia As1 w mm</param>
+    /// <param name="spacing1">Rozstaw prętów zbrojenia As1 w mm</param>
+    /// <param name="c1">Otulina zbrojenia As1 w mm</param>
+    /// <param name="fi2">Średnica zbrojenia As2 w mm</param>
+    /// <param name="spacing2">Rozstaw prętów zbrojenia As2 w mm</param>
+    /// <param name="c2">Otulina zbrojenia As2 w mm</param>
+    public RectangleSection(Concrete concrete, Steel steel, double b, double h, double fi1, double spacing1, double c1, double fi2, double spacing2, double c2, Stirrups stirrups)
 		{
 			this.B = b;
 			this.H = h;
@@ -156,7 +165,7 @@ namespace KalkulatorPrzekroju
 			
 			SetCreepFactor(0);
 			MyStirrups = stirrups;
-			draw = new DrawInfo(h, b, true, Fi1, Fi2, c1, c2, spacing1, spacing2);
+            byspacing = true;
 		}
 
 		/// <summary>
@@ -213,7 +222,7 @@ namespace KalkulatorPrzekroju
 
 			SetCreepFactor(0);
 			MyStirrups = stirrups;
-			draw = new DrawInfo(h, b, false, Fi1, Fi2, c1, c2, Spacing1, Spacing2);
+            byspacing = false;
 		}
 
 		public override bool Equals(object obj)

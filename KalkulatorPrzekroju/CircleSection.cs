@@ -39,6 +39,11 @@ namespace KalkulatorPrzekroju
 
         public override int NoB { get; protected set; }
 
+        public override DrawInfo draw()
+        {
+            return new DrawInfo(this.D);
+        }
+
         public override double[] Asi
         {
             get
@@ -80,7 +85,7 @@ namespace KalkulatorPrzekroju
             this.Ab = (fiB / 2) * (fiB / 2) * Math.PI;
             this.A = c + fiB / 2;
             SetCreepFactor(0);
-            draw = new DrawInfo(D);
+            //draw = new DrawInfo(D);
 
         }
 
@@ -107,7 +112,7 @@ namespace KalkulatorPrzekroju
             this.Ab = (fiB / 2) * (fiB / 2) * Math.PI;
             this.A = c + fiB / 2;
             SetCreepFactor(Fi);
-            draw = new DrawInfo(D);
+            //draw = new DrawInfo(D);
         }
 
         public override bool Equals(object obj)

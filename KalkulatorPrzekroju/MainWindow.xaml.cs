@@ -511,7 +511,7 @@ namespace KalkulatorPrzekroju
                 int ti = tabControl1.SelectedIndex;
 
                 PreviewModel drawSection;
-                drawSection = new PreviewModel(ti, sec1.draw, sec2.draw);
+                drawSection = new PreviewModel(ti, sec1.draw(), sec2.draw());
                 var pr = new Preview { DataContext = new PreviewViewModel(drawSection) };
                 pr.Show();
             }

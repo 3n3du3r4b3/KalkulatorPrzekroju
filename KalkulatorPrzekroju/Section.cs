@@ -74,7 +74,7 @@ namespace KalkulatorPrzekroju
         /// <summary>
         /// Klasa dająca informacje do rysowania
         /// </summary>
-        public DrawInfo draw { get; set; }
+        public abstract DrawInfo draw();
         /// <summary>
         /// Klasa przechowująca dane do liczenia creepa
         /// </summary>
