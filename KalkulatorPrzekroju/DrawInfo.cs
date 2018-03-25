@@ -44,7 +44,7 @@ namespace KalkulatorPrzekroju
             bySpacing = spac;
             this.Shape = CreateShape(H, B);
             this.Reinforcement = CreateBar(H, B, f1, f2, c1, c2, sp1, sp2, true, bySpacing);
-            this.Dimv = DimLineV(B, B, 0, H, B/4, H/4);
+            this.Dimv = DimLineV(B/2, B/2, -H/2, H/2, B/4, H/4);
         }
 
         public DrawInfo(double Dd)
@@ -54,14 +54,14 @@ namespace KalkulatorPrzekroju
             bySpacing = false;
             this.Shape = CreateShape(D);
             this.Reinforcement = CreateBar(D, f1, c1, sp1);
-            this.Dimv = DimLineV(D/2, D/2, 0, D, D, D/2);
+            this.Dimv = DimLineV(0, 0, -D/2, D/2, D, D/2);
         }
 
         public GeometryGroup CreateShape(double H, double B)
         {
             GeometryGroup aaa = new GeometryGroup();
                 RectangleGeometry aa = new RectangleGeometry();
-                aa.Rect = new Rect(0, 0, B, H);
+                aa.Rect = new Rect(-B/2, -H/2, B, H);
                 aaa.Children.Add(aa);
             return aaa;
         }
@@ -70,7 +70,7 @@ namespace KalkulatorPrzekroju
         {
             GeometryGroup aaa = new GeometryGroup();
             EllipseGeometry bb = new EllipseGeometry();
-                bb.Center = new Point(D/2, D / 2);
+                bb.Center = new Point(0, 0);
                 bb.RadiusX = D / 2;
                 bb.RadiusY = D / 2;
                 aaa.Children.Add(bb);
@@ -109,7 +109,7 @@ namespace KalkulatorPrzekroju
                 for (double i = 0; i <= no1; i++)
                 {
                     EllipseGeometry bb = new EllipseGeometry();
-                    bb.Center = new Point(edge1 + i * sp1, h - c1 - f1 / 2);
+                    bb.Center = new Point(edge1 + i * sp1 - b/2, h - c1 - f1 / 2 - h/2);
                     bb.RadiusX = f1 / 2;
                     bb.RadiusY = f1 / 2;
                     bbb.Children.Add(bb);
@@ -117,7 +117,7 @@ namespace KalkulatorPrzekroju
                 for (double j = 0; j <= no2; j++)
                 {
                     EllipseGeometry cc = new EllipseGeometry();
-                    cc.Center = new Point(edge2 + j * sp2, c2 + f2 / 2);
+                    cc.Center = new Point(edge2 + j * sp2 - b/2, c2 + f2 / 2 - h/2);
                     cc.RadiusX = f2 / 2;
                     cc.RadiusY = f2 / 2;
                     bbb.Children.Add(cc);
