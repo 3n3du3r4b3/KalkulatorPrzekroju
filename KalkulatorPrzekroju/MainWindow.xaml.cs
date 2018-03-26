@@ -1269,7 +1269,8 @@ namespace KalkulatorPrzekroju
             tabVRd4 = instance.tabVRd4;
             tabVRdc1 = instance.tabVRdc1;
             tabSLS_NonCrack = instance.tabSLS_NonCrack;
-            tabSLS_Crack = instance.tabSLS_Crack;
+            tabSLS_Crack_L = instance.tabSLS_Crack_L;
+            tabSLS_Crack_R = instance.tabSLS_Crack_R;
             tab1_ULS = instance.tab1_ULS;
             tab2_ULS = instance.tab2_ULS;
 
@@ -1355,7 +1356,8 @@ namespace KalkulatorPrzekroju
             instance.tabVRd4 = tabVRd4;
             instance.tabVRdc1 = tabVRdc1;
             instance.tabSLS_NonCrack = tabSLS_NonCrack;
-            instance.tabSLS_Crack = tabSLS_Crack;
+            instance.tabSLS_Crack_L = tabSLS_Crack_L;
+            instance.tabSLS_Crack_R = tabSLS_Crack_R;
             instance.tab1_ULS = tab1_ULS;
             instance.tab2_ULS = tab2_ULS;
 
