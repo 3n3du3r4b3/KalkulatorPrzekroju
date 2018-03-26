@@ -75,7 +75,8 @@ namespace KalkulatorPrzekroju
         public double[][] tabVRd4 { get; set; }
         public double[][] tabVRdc1 { get; set; }
         public double[][] tabSLS_NonCrack { get; set; }
-        public double[][] tabSLS_Crack { get; set; }
+        public double[][] tabSLS_Crack_L { get; set; }
+        public double[][] tabSLS_Crack_R { get; set; }
         public double[][] tab2_ULS { get; set; }
         public double[][] tab1_ULS { get; set; }
 
