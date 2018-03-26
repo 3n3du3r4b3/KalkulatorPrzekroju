@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="Preview" Height="{Binding AH, Mode=TwoWay}" Width="{Binding AW, Mode=TwoWay}" Background="{Binding WindowBackground}" HorizontalAlignment="Center" VerticalAlignment="Center">
+        Title="Preview" Name="prWindow" Height="{Binding AH, Mode=TwoWay}" Width="{Binding AW, Mode=TwoWay}" Background="{Binding WindowBackground}" HorizontalAlignment="Center" VerticalAlignment="Center">
 
     <Canvas Name="prCanvas" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Path Data="{Binding Outline}" Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow"/>
-            <Path Data="{Binding Rebar}" Name="Rebar" Stroke="Black" StrokeThickness="0.5" Fill="Gray"/>
-            <Path Data="{Binding Dimv}" Name="Dimv" Stroke="Black" StrokeThickness="1" Fill="Black"/>
-        </Grid>
+
+        <Path Data="{Binding Outline}" Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow" >
+        </Path>
+        <Path Data="{Binding Rebar}" Name="Rebar" Stroke="Black" StrokeThickness="0.5" Fill="Gray">
+        </Path>
+        <Path Data="{Binding Dimv}" Name="Dimv" Stroke="Black" StrokeThickness="1" Fill="Black">
+        </Path>
+        <Label Content="{Binding LDimv}" Name="LDimv" Height="89" Width="155" Canvas.Left="208" Canvas.Top="145"></Label>
+
     </Canvas>
-    
+
 </Window>

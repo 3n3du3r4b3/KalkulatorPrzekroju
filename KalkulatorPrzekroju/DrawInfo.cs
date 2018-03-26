@@ -23,6 +23,7 @@ namespace KalkulatorPrzekroju
         public double c2;
         public double sp1;
         public double sp2;
+        public double size;
 
         public DrawInfo()
         {
@@ -45,6 +46,7 @@ namespace KalkulatorPrzekroju
             this.Shape = CreateShape(H, B);
             this.Reinforcement = CreateBar(H, B, f1, f2, c1, c2, sp1, sp2, true, bySpacing);
             this.Dimv = DimLineV(B/2, B/2, -H/2, H/2, B/4, H/4);
+            this.size = Math.Max(this.H, this.B);
         }
 
         public DrawInfo(double Dd)
@@ -55,6 +57,7 @@ namespace KalkulatorPrzekroju
             this.Shape = CreateShape(D);
             this.Reinforcement = CreateBar(D, f1, c1, sp1);
             this.Dimv = DimLineV(0, 0, -D/2, D/2, D, D/2);
+            this.size = this.D;
         }
 
         public GeometryGroup CreateShape(double H, double B)

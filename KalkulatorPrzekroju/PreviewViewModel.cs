@@ -133,6 +133,17 @@ namespace KalkulatorPrzekroju
             }
         }
 
+        private ScaleTransform _scale1;
+        public ScaleTransform Scale1
+        {
+            get { return _scale1; }
+            set
+            {
+                _scale1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private Brush _windowBackground;
         public Brush WindowBackground
         {
@@ -140,6 +151,17 @@ namespace KalkulatorPrzekroju
             set
             {
                 _windowBackground = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private String _ldimv;
+        public String LDimv
+        {
+            get { return _ldimv; }
+            set
+            {
+                _ldimv = value;
                 NotifyPropertyChanged();
             }
         }
@@ -156,15 +178,18 @@ namespace KalkulatorPrzekroju
 
         public PreviewViewModel(PreviewModel drs)
         {
-            WindowBackground = GradientBackground;
-            Outline = drs.sec[drs.index].Shape;
-            Rebar = drs.sec[drs.index].Reinforcement;
-            Dimv = drs.sec[drs.index].Dimv;
+            double sc = 0.8;
             AH = 500;
             AW = 500;
-            SCAH = 400;
-            SCAW = 400;
-            
+            Scale1 = new ScaleTransform(sc * Math.Max(AH, AW) / drs.sec[drs.index].size, sc * Math.Max(AH, AW) / drs.sec[drs.index].size);
+            WindowBackground = GradientBackground;
+            Outline = drs.sec[drs.index].Shape;
+            Outline.Transform = Scale1;
+            Rebar = drs.sec[drs.index].Reinforcement;
+            Rebar.Transform = Scale1;
+            Dimv = drs.sec[drs.index].Dimv;
+            Dimv.Transform = Scale1;
+            LDimv = drs.sec[drs.index].size.ToString();               
         }
     }
 }
