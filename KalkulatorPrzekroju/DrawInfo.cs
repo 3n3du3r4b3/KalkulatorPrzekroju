@@ -24,6 +24,14 @@ namespace KalkulatorPrzekroju
         public double sp1;
         public double sp2;
         public double size;
+        public double vert;
+        public double hor;
+        public double[] bindtop1;
+        public double[] bindtop2;
+        public double[] bindbot1;
+        public double[] bindbot2;
+
+
 
         public DrawInfo()
         {
@@ -45,8 +53,14 @@ namespace KalkulatorPrzekroju
             bySpacing = spac;
             this.Shape = CreateShape(H, B);
             this.Reinforcement = CreateBar(H, B, f1, f2, c1, c2, sp1, sp2, true, bySpacing);
-            this.Dimv = DimLineV(B/2, B/2, -H/2, H/2, B/4, H/4);
+            //this.Dimv = DimLineV(B/2, B/2, -H/2, H/2, B/4, H/4);
             this.size = Math.Max(this.H, this.B);
+            this.vert = h;
+            this.hor = b;
+            this.bindtop1 = new double[] { B / 2, H / 2 };
+            this.bindtop2 = new double[] { B / 2, -H / 2 };
+            this.bindbot1 = new double[] { -B / 2, H / 2 };
+            this.bindbot2 = new double[] { B / 2, H / 2 };
         }
 
         public DrawInfo(double Dd)
@@ -56,27 +70,27 @@ namespace KalkulatorPrzekroju
             bySpacing = false;
             this.Shape = CreateShape(D);
             this.Reinforcement = CreateBar(D, f1, c1, sp1);
-            this.Dimv = DimLineV(0, 0, -D/2, D/2, D, D/2);
+            //this.Dimv = DimLineV(0, 0, -D/2, D/2, D, D/2);
             this.size = this.D;
         }
 
         public GeometryGroup CreateShape(double H, double B)
         {
             GeometryGroup aaa = new GeometryGroup();
-                RectangleGeometry aa = new RectangleGeometry();
-                aa.Rect = new Rect(-B/2, -H/2, B, H);
-                aaa.Children.Add(aa);
+            RectangleGeometry aa = new RectangleGeometry();
+            aa.Rect = new Rect(-B / 2, -H / 2, B, H);
+            aaa.Children.Add(aa);
             return aaa;
         }
 
-            public GeometryGroup CreateShape(double D)
+        public GeometryGroup CreateShape(double D)
         {
             GeometryGroup aaa = new GeometryGroup();
             EllipseGeometry bb = new EllipseGeometry();
-                bb.Center = new Point(0, 0);
-                bb.RadiusX = D / 2;
-                bb.RadiusY = D / 2;
-                aaa.Children.Add(bb);
+            bb.Center = new Point(0, 0);
+            bb.RadiusX = D / 2;
+            bb.RadiusY = D / 2;
+            aaa.Children.Add(bb);
             return aaa;
         }
 
@@ -112,7 +126,7 @@ namespace KalkulatorPrzekroju
                 for (double i = 0; i <= no1; i++)
                 {
                     EllipseGeometry bb = new EllipseGeometry();
-                    bb.Center = new Point(edge1 + i * sp1 - b/2, h - c1 - f1 / 2 - h/2);
+                    bb.Center = new Point(edge1 + i * sp1 - b / 2, h - c1 - f1 / 2 - h / 2);
                     bb.RadiusX = f1 / 2;
                     bb.RadiusY = f1 / 2;
                     bbb.Children.Add(bb);
@@ -120,7 +134,7 @@ namespace KalkulatorPrzekroju
                 for (double j = 0; j <= no2; j++)
                 {
                     EllipseGeometry cc = new EllipseGeometry();
-                    cc.Center = new Point(edge2 + j * sp2 - b/2, c2 + f2 / 2 - h/2);
+                    cc.Center = new Point(edge2 + j * sp2 - b / 2, c2 + f2 / 2 - h / 2);
                     cc.RadiusX = f2 / 2;
                     cc.RadiusY = f2 / 2;
                     bbb.Children.Add(cc);
@@ -154,25 +168,5 @@ namespace KalkulatorPrzekroju
             }
             return bbb;
         }
-
-        public GeometryGroup DimLineV(double x1, double x2, double y1, double y2, double offset, double size)
-        {
-            GeometryGroup dimv = new GeometryGroup();
-            double extoffset = size / 4;
-            double dimoffset = size / 4;
-            Point ext11 = new Point(x1 + extoffset, y1);
-            Point ext12 = new Point(x1 + offset + extoffset, y1);
-            Point ext21 = new Point(x2 + extoffset, y2);
-            Point ext22 = new Point(x2 + offset + extoffset, y2);
-            Point dim1 = new Point(x1 + offset, y1 - dimoffset);
-            Point dim2 = new Point(x2 + offset, y2 + dimoffset);
-            LineGeometry extl1 = new LineGeometry(ext11, ext12);
-            LineGeometry extl2 = new LineGeometry(ext21, ext22);
-            LineGeometry dim = new LineGeometry(dim1, dim2);
-            dimv.Children.Add(extl1);
-            dimv.Children.Add(extl2);
-            dimv.Children.Add(dim);
-            return dimv;
-            }
-        }
     }
+}

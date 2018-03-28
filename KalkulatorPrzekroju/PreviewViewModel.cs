@@ -42,6 +42,83 @@ namespace KalkulatorPrzekroju
             }
         }
 
+        private StreamGeometry Arrow(Point p1, Point p2, Point p3)
+        {
+            StreamGeometry streamGeometry = new StreamGeometry();
+            using (StreamGeometryContext geometryContext = streamGeometry.Open())
+            {
+                geometryContext.BeginFigure(p1, true, true);
+                PointCollection points = new PointCollection { p2, p3 };
+                geometryContext.PolyLineTo(points, true, true);
+            }
+
+            streamGeometry.Freeze();
+
+            return streamGeometry;
+        }
+
+        public GeometryGroup DimLineV(double x1, double x2, double y1, double y2, double offset, double size)
+        {
+
+            {
+                GeometryGroup dimv = new GeometryGroup();
+                double extoffset = 30;
+                double dimoffset = 0;
+                Point ext11 = new Point(x1 + extoffset, y1);
+                Point ext12 = new Point(x1 + offset + extoffset, y1);
+                Point ext21 = new Point(x2 + extoffset, y2);
+                Point ext22 = new Point(x2 + offset + extoffset, y2);
+                Point dim1 = new Point(x1 + offset, y1 - dimoffset);
+                Point dimp11 = new Point(x1 + offset + 6, y1 - dimoffset - 30);
+                Point dimp12 = new Point(x1 + offset - 6, y1 - dimoffset - 30);
+                Point dim2 = new Point(x2 + offset, y2 + dimoffset);
+                Point dimp21 = new Point(x2 + offset + 6, y2 + dimoffset + 30);
+                Point dimp22 = new Point(x2 + offset - 6, y2 + dimoffset + 30);
+                StreamGeometry topArrow = Arrow(dim1, dimp11, dimp12);
+                StreamGeometry botArrow = Arrow(dim2, dimp21, dimp22);
+                LineGeometry extl1 = new LineGeometry(ext11, ext12);
+                LineGeometry extl2 = new LineGeometry(ext21, ext22);
+                LineGeometry dim = new LineGeometry(dim1, dim2);
+                dimv.Children.Add(extl1);
+                dimv.Children.Add(extl2);
+                dimv.Children.Add(dim);
+                dimv.Children.Add(topArrow);
+                dimv.Children.Add(botArrow);
+                return dimv;
+            }
+        }
+
+        public GeometryGroup DimLineL(double x1, double x2, double y1, double y2, double offset, double size)
+        {
+
+            {
+                GeometryGroup dimv = new GeometryGroup();
+                double extoffset = 30;
+                double dimoffset = 0;
+                Point ext11 = new Point(x1, y1 + extoffset);
+                Point ext12 = new Point(x1, y1 + offset + extoffset);
+                Point ext21 = new Point(x2, y2 + extoffset);
+                Point ext22 = new Point(x2, y2 + offset + extoffset);
+                Point dim1 = new Point(x1 - dimoffset, y1  + offset);
+                Point dimp11 = new Point(x1 - dimoffset + 30, y1 + offset + 6);
+                Point dimp12 = new Point(x1 - dimoffset + 30, y1 + offset - 6);
+                Point dim2 = new Point(x2 - dimoffset, y2 + offset);
+                Point dimp21 = new Point(x2 - dimoffset - 30, y2 + offset + 6);
+                Point dimp22 = new Point(x2 - dimoffset - 30, y2 + offset - 6);
+                StreamGeometry topArrow = Arrow(dim1, dimp11, dimp12);
+                StreamGeometry botArrow = Arrow(dim2, dimp21, dimp22);
+                LineGeometry extl1 = new LineGeometry(ext11, ext12);
+                LineGeometry extl2 = new LineGeometry(ext21, ext22);
+                LineGeometry dim = new LineGeometry(dim1, dim2);
+                dimv.Children.Add(extl1);
+                dimv.Children.Add(extl2);
+                dimv.Children.Add(dim);
+                dimv.Children.Add(topArrow);
+                dimv.Children.Add(botArrow);
+                return dimv;
+            }
+        }
+
         private GeometryGroup _rebar;
         public GeometryGroup Rebar
         {
@@ -100,6 +177,50 @@ namespace KalkulatorPrzekroju
             }
         }
 
+        private double _ldimvx;
+        public double LDimvX
+        {
+            get { return _ldimvx; }
+            set
+            {
+                _ldimvx = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _ldimvy;
+        public double LDimvY
+        {
+            get { return _ldimvy; }
+            set
+            {
+                _ldimvy = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _ldimlx;
+        public double LDimlX
+        {
+            get { return _ldimlx; }
+            set
+            {
+                _ldimlx = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private double _ldimly;
+        public double LDimlY
+        {
+            get { return _ldimly; }
+            set
+            {
+                _ldimly = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         private GeometryGroup _outline;
         public GeometryGroup Outline
         {
@@ -112,7 +233,7 @@ namespace KalkulatorPrzekroju
         }
 
         private GeometryGroup _dimv;
-        public GeometryGroup Dimv
+        public GeometryGroup DimV
         {
             get { return _dimv; }
             set
@@ -122,13 +243,13 @@ namespace KalkulatorPrzekroju
             }
         }
 
-        private GeometryGroup _dimh;
-        public GeometryGroup Dimh
+        private GeometryGroup _diml;
+        public GeometryGroup DimL
         {
-            get { return _dimh; }
+            get { return _diml; }
             set
             {
-                _dimh = value;
+                _diml = value;
                 NotifyPropertyChanged();
             }
         }
@@ -140,6 +261,28 @@ namespace KalkulatorPrzekroju
             set
             {
                 _scale1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private TranslateTransform _offset1;
+        public TranslateTransform Offset1
+        {
+            get { return _offset1; }
+            set
+            {
+                _offset1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private TransformGroup _shapeTransform1;
+        public TransformGroup ShapeTransform1
+        {
+            get { return _shapeTransform1; }
+            set
+            {
+                _shapeTransform1 = value;
                 NotifyPropertyChanged();
             }
         }
@@ -166,6 +309,17 @@ namespace KalkulatorPrzekroju
             }
         }
 
+        private String _ldiml;
+        public String LDiml
+        {
+            get { return _ldiml; }
+            set
+            {
+                _ldiml = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
@@ -178,18 +332,34 @@ namespace KalkulatorPrzekroju
 
         public PreviewViewModel(PreviewModel drs)
         {
-            double sc = 0.8;
-            AH = 500;
-            AW = 500;
-            Scale1 = new ScaleTransform(sc * Math.Max(AH, AW) / drs.sec[drs.index].size, sc * Math.Max(AH, AW) / drs.sec[drs.index].size);
+            double sc = 0.6;
+            AH = 700;
+            AW = 700;
+
+            double scf = sc * Math.Max(AH, AW) / drs.sec[drs.index].size;
+            double off = -50;// -0.15 * AH * sc * Math.Max(AH, AW) / drs.sec[drs.index].size;
+
+            Scale1 = new ScaleTransform(scf, scf);
+            Offset1 = new TranslateTransform(off, off);
+            ShapeTransform1 = new TransformGroup();
             WindowBackground = GradientBackground;
+            ShapeTransform1.Children.Add(Scale1);
+            ShapeTransform1.Children.Add(Offset1);
             Outline = drs.sec[drs.index].Shape;
-            Outline.Transform = Scale1;
+            Outline.Transform = ShapeTransform1;
             Rebar = drs.sec[drs.index].Reinforcement;
-            Rebar.Transform = Scale1;
-            Dimv = drs.sec[drs.index].Dimv;
-            Dimv.Transform = Scale1;
-            LDimv = drs.sec[drs.index].size.ToString();               
+            
+            Rebar.Transform = ShapeTransform1;
+            DimV = DimLineV(scf * drs.sec[drs.index].bindtop1[0] + off, scf * drs.sec[drs.index].bindtop2[0] + off, scf * drs.sec[drs.index].bindtop1[1] + off, scf * drs.sec[drs.index].bindtop2[1] + off, 100, 1);
+            DimL = DimLineL(scf * drs.sec[drs.index].bindbot1[0] + off, scf * drs.sec[drs.index].bindbot2[0] + off, scf * drs.sec[drs.index].bindbot1[1] + off, scf * drs.sec[drs.index].bindbot2[1] + off, 100, 1);
+            //GeometryGroup DimLineV(double x1, double x2, double y1, double y2, double offset, double size)
+            //Dimv.Transform = ShapeTransform1;
+            LDimv = drs.sec[drs.index].vert.ToString();
+            LDimvX = scf * (drs.sec[drs.index].bindtop1[0] + drs.sec[drs.index].bindtop2[0]) / 2;
+            LDimvY = scf * (drs.sec[drs.index].bindtop1[1] + drs.sec[drs.index].bindtop2[1]) / 2 + 2.25 * off;
+            LDiml = drs.sec[drs.index].hor.ToString();
+            LDimlX = scf * (drs.sec[drs.index].bindbot1[0] + drs.sec[drs.index].bindbot2[0]) / 2 + 2.25 * off;
+            LDimlY = scf * (drs.sec[drs.index].bindbot1[1] + drs.sec[drs.index].bindbot2[1]) / 2;
         }
     }
 }

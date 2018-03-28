@@ -5,18 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KalkulatorPrzekroju"
         mc:Ignorable="d"
-        Title="Preview" Name="prWindow" Height="{Binding AH, Mode=TwoWay}" Width="{Binding AW, Mode=TwoWay}" Background="{Binding WindowBackground}" HorizontalAlignment="Center" VerticalAlignment="Center">
+        Title="Preview" Name="prWindow" Height="{Binding AH, Mode=TwoWay}" Width="{Binding AW, Mode=TwoWay}" Background="{Binding WindowBackground}" HorizontalAlignment="Right" VerticalAlignment="Center">
 
     <Canvas Name="prCanvas" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-        <Path Data="{Binding Outline}" Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow" >
-        </Path>
-        <Path Data="{Binding Rebar}" Name="Rebar" Stroke="Black" StrokeThickness="0.5" Fill="Gray">
-        </Path>
-        <Path Data="{Binding Dimv}" Name="Dimv" Stroke="Black" StrokeThickness="1" Fill="Black">
-        </Path>
-        <Label Content="{Binding LDimv}" Name="LDimv" Height="89" Width="155" Canvas.Left="208" Canvas.Top="145"></Label>
-
+        <Path Data="{Binding Outline}" Name="Outline" Stroke="Black" StrokeThickness="1" Fill="LightGoldenrodYellow" ></Path>
+        <Path Data="{Binding Rebar}" Name="Rebar" Stroke="Black" StrokeThickness="0.5" Fill="Gray"></Path>
+        <!--<Path Data="{Binding Dimv}" Name="Dimv" Stroke="Black" StrokeThickness="1" Fill="Black"></Path>-->
+        <Path Data="{Binding DimV}" Name="DimV" Stroke="Black" StrokeThickness="1" Fill="Black"></Path>
+        <Path Data="{Binding DimL}" Name="DimL" Stroke="Black" StrokeThickness="1" Fill="Black"></Path>
+        <TextBlock Text="{Binding LDimv}" Name="LDimv" Height="120" Width="120" Canvas.Left="{Binding LDimvX}" Canvas.Top="{Binding LDimvY}" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="35">
+            <TextBlock.LayoutTransform>
+                <TransformGroup>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.LayoutTransform>
+        </TextBlock>
+        <TextBlock Text="{Binding LDiml}" Name="LDiml" Height="120" Width="120" Canvas.Left="{Binding LDimlX}" Canvas.Top="{Binding LDimlY}" TextAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="35">
+            <TextBlock.LayoutTransform>
+                <TransformGroup>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.LayoutTransform>
+        </TextBlock>
     </Canvas>
 
 </Window>
