@@ -350,16 +350,18 @@ namespace KalkulatorPrzekroju
             Rebar = drs.sec[drs.index].Reinforcement;
             
             Rebar.Transform = ShapeTransform1;
-            DimV = DimLineV(scf * drs.sec[drs.index].bindtop1[0] + off, scf * drs.sec[drs.index].bindtop2[0] + off, scf * drs.sec[drs.index].bindtop1[1] + off, scf * drs.sec[drs.index].bindtop2[1] + off, 100, 1);
-            DimL = DimLineL(scf * drs.sec[drs.index].bindbot1[0] + off, scf * drs.sec[drs.index].bindbot2[0] + off, scf * drs.sec[drs.index].bindbot1[1] + off, scf * drs.sec[drs.index].bindbot2[1] + off, 100, 1);
-            //GeometryGroup DimLineV(double x1, double x2, double y1, double y2, double offset, double size)
-            //Dimv.Transform = ShapeTransform1;
+            DimV = DimLineV(scf * drs.sec[drs.index].bindtop1[0] + off, scf * drs.sec[drs.index].bindtop2[0] + off, scf * drs.sec[drs.index].bindtop1[1] + off, scf * drs.sec[drs.index].bindtop2[1] + off, 100, 1);  
             LDimv = drs.sec[drs.index].vert.ToString();
             LDimvX = scf * (drs.sec[drs.index].bindtop1[0] + drs.sec[drs.index].bindtop2[0]) / 2;
             LDimvY = scf * (drs.sec[drs.index].bindtop1[1] + drs.sec[drs.index].bindtop2[1]) / 2 + 2.25 * off;
-            LDiml = drs.sec[drs.index].hor.ToString();
-            LDimlX = scf * (drs.sec[drs.index].bindbot1[0] + drs.sec[drs.index].bindbot2[0]) / 2 + 2.25 * off;
-            LDimlY = scf * (drs.sec[drs.index].bindbot1[1] + drs.sec[drs.index].bindbot2[1]) / 2;
+
+            if (drs.sec[drs.index].isRectangle)
+            {
+                DimL = DimLineL(scf * drs.sec[drs.index].bindbot1[0] + off, scf * drs.sec[drs.index].bindbot2[0] + off, scf * drs.sec[drs.index].bindbot1[1] + off, scf * drs.sec[drs.index].bindbot2[1] + off, 100, 1);
+                LDiml = drs.sec[drs.index].hor.ToString();
+                LDimlX = scf * (drs.sec[drs.index].bindbot1[0] + drs.sec[drs.index].bindbot2[0]) / 2 + 2.25 * off;
+                LDimlY = scf * (drs.sec[drs.index].bindbot1[1] + drs.sec[drs.index].bindbot2[1]) / 2;
+            }
         }
     }
 }

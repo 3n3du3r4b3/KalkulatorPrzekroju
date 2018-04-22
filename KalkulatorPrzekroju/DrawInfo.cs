@@ -53,7 +53,6 @@ namespace KalkulatorPrzekroju
             bySpacing = spac;
             this.Shape = CreateShape(H, B);
             this.Reinforcement = CreateBar(H, B, f1, f2, c1, c2, sp1, sp2, true, bySpacing);
-            //this.Dimv = DimLineV(B/2, B/2, -H/2, H/2, B/4, H/4);
             this.size = Math.Max(this.H, this.B);
             this.vert = h;
             this.hor = b;
@@ -70,8 +69,14 @@ namespace KalkulatorPrzekroju
             bySpacing = false;
             this.Shape = CreateShape(D);
             this.Reinforcement = CreateBar(D, f1, c1, sp1);
-            //this.Dimv = DimLineV(0, 0, -D/2, D/2, D, D/2);
             this.size = this.D;
+            this.vert = D;
+            this.hor = D;
+            this.bindtop1 = new double[] { D / 2, D / 2 };
+            this.bindtop2 = new double[] { D / 2, -D / 2 };
+            this.bindbot1 = new double[] { -D / 2, D / 2 };
+            this.bindbot2 = new double[] { D / 2, D / 2 };
+
         }
 
         public GeometryGroup CreateShape(double H, double B)
