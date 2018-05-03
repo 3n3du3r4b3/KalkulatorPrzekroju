@@ -41,7 +41,7 @@ namespace KalkulatorPrzekroju
 
         public override DrawInfo draw()
         {
-            return new DrawInfo(this.D);
+            return new DrawInfo(this.D, this.NoB, this.FiB, this.C);
         }
 
         public override double[] Asi

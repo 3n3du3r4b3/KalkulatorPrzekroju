@@ -62,13 +62,15 @@ namespace KalkulatorPrzekroju
             this.bindbot2 = new double[] { B / 2, H / 2 };
         }
 
-        public DrawInfo(double Dd)
+        public DrawInfo(double Dd, double no1, double fi1, double co1)
         {
             this.D = Dd;
+            this.f1 = fi1;
+            this.c1 = co1;
             isRectangle = false;
             bySpacing = false;
             this.Shape = CreateShape(D);
-            this.Reinforcement = CreateBar(D, f1, c1, sp1);
+            this.Reinforcement = CreateBar(D, f1, c1, no1);
             this.size = this.D;
             this.vert = D;
             this.hor = D;
@@ -148,28 +150,21 @@ namespace KalkulatorPrzekroju
             return bbb;
         }
 
-        public GeometryGroup CreateBar(double d, double f1, double c1, double sp1)
+        public GeometryGroup CreateBar(double d, double f1, double c1, double no1)
         {
             GeometryGroup bbb = new GeometryGroup();
             {
+                double divide = 360 / no1;
                 double edge1 = c1 + f1 / 2;
 
-                /*for (int i = 0; i < b / sp1; i++)
+                for (double i = 0; i < no1; i++)
                 {
                     EllipseGeometry bb = new EllipseGeometry();
-                    bb.Center = new Point(edge1 + i * sp1, c1 + f1 / 2);
+                    bb.Center = new Point((d - c1*2 - f1/2)/2 * Math.Cos((Math.PI / 180) * i * divide), (d - c1 * 2 - f1/2) / 2 * Math.Sin((Math.PI / 180) * i * divide));
                     bb.RadiusX = f1 / 2;
                     bb.RadiusY = f1 / 2;
                     bbb.Children.Add(bb);
                 }
-                for (int i = 0; i < b / sp2; i++)
-                {
-                    EllipseGeometry bb = new EllipseGeometry();
-                    bb.Center = new Point(edge2 + i * sp2, h - c2 + f2 / 2);
-                    bb.RadiusX = f2 / 2;
-                    bb.RadiusY = f2 / 2;
-                    bbb.Children.Add(bb);
-                }*/
             }
             return bbb;
         }
